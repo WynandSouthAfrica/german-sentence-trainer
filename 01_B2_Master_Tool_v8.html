@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch B2 — Master Lernzentrum | Persönlich</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --surface2: #f0ede6;
+  --border: rgba(0,0,0,0.1);
+  --border2: rgba(0,0,0,0.18);
+  --text: #1a1814;
+  --text2: #5a5650;
+  --text3: #8a8680;
+  --accent: #2d5a3d;
+  --accent-light: #e8f0ea;
+  --accent2: #8b3a1a;
+  --accent2-light: #f5ebe6;
+  --gold: #b5820a;
+  --gold-light: #fdf3dc;
+  --blue: #1a3a5c;
+  --blue-light: #e6edf5;
+  --red: #8b1a1a;
+  --red-light: #f5e6e6;
+  --warn: #7a5a0a;
+  --warn-light: #fdf5dc;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+}
+body.dark {
+  --bg: #161412;
+  --surface: #1f1c19;
+  --surface2: #2a2620;
+  --border: rgba(255,255,255,0.08);
+  --border2: rgba(255,255,255,0.15);
+  --text: #e8e4dc;
+  --text2: #a09890;
+  --text3: #6a6258;
+  --accent: #5a9e72;
+  --accent-light: #1a2e20;
+  --gold: #d4a020;
+  --gold-light: #2a2010;
+  --blue: #6a9fd4;
+  --blue-light: #101e2e;
+  --red: #d46060;
+  --red-light: #2a1010;
+  --warn: #c4a030;
+  --warn-light: #2a2010;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Source Serif 4', serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background .3s, color .3s; }
+
+/* ── NAV ── */
+.nav { background: var(--text); padding: 0 1.5rem; display: flex; align-items: center; gap: 0; overflow-x: auto; border-bottom: 3px solid var(--accent); position: sticky; top: 0; z-index: 100; }
+.nav-brand { font-family: 'Playfair Display', serif; font-size: 15px; color: #fff; font-weight: 700; padding: 14px 0; margin-right: 1.5rem; white-space: nowrap; flex-shrink: 0; }
+.nav-brand span { color: #c8d8a8; }
+.nav-btn { padding: 14px 14px; font-size: 12px; color: rgba(255,255,255,0.6); cursor: pointer; border: none; background: none; font-family: 'Source Serif 4', serif; white-space: nowrap; border-bottom: 3px solid transparent; margin-bottom: -3px; transition: all .2s; flex-shrink: 0; }
+.nav-btn:hover { color: rgba(255,255,255,0.9); }
+.nav-btn.active { color: #fff; border-bottom-color: #c8d8a8; font-weight: 500; }
+
+/* ── PANELS ── */
+.panel { display: none; padding: 1.5rem; max-width: 960px; margin: 0 auto; }
+.panel.active { display: block; }
+
+/* ── SECTION TITLE ── */
+.section-head { margin-bottom: 1.5rem; }
+.section-head h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text); margin-bottom: 4px; }
+.section-head p { font-size: 13px; color: var(--text2); }
+
+/* ── CARDS ── */
+.card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.4rem; margin-bottom: 1rem; box-shadow: var(--shadow); }
+.card-sm { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: .9rem 1.1rem; }
+
+/* ── STATS ROW ── */
+.stats-row { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
+.stat { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; flex: 1; min-width: 70px; text-align: center; }
+.stat-val { font-size: 22px; font-weight: 700; font-family: 'DM Mono', monospace; color: var(--text); }
+.stat-lbl { font-size: 10px; color: var(--text3); margin-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
+
+/* ── PROGRESS ── */
+.prog-wrap { height: 5px; background: var(--surface2); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s; }
+
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+btn, button { font-family: 'Source Serif 4', serif; }
+.btn { padding: 9px 18px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: transparent; color: var(--text); font-size: 13px; cursor: pointer; font-family: 'Source Serif 4', serif; transition: all .15s; }
+.btn:hover { background: var(--surface2); }
+.btn-primary { background: var(--accent); color: #fff; border-color: transparent; }
+.btn-primary:hover { opacity: .85; }
+.btn-gold { background: var(--gold); color: #fff; border-color: transparent; }
+.btn-danger { background: var(--red-light); color: var(--red); border-color: transparent; }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* ── BADGES ── */
+.badge { display: inline-block; font-size: 11px; padding: 2px 9px; border-radius: 10px; font-weight: 500; }
+.badge-noun { background: var(--blue-light); color: var(--blue); }
+.badge-verb { background: var(--accent-light); color: var(--accent); }
+.badge-spell { background: var(--warn-light); color: var(--warn); }
+.badge-end { background: var(--red-light); color: var(--red); }
+.badge-phrase { background: var(--surface2); color: var(--text2); border: 0.5px solid var(--border); }
+.badge-b2 { background: var(--gold-light); color: var(--gold); }
+
+/* ── INPUTS ── */
+input[type=text], textarea {
+  width: 100%; padding: 11px 14px; font-size: 15px; font-family: 'Source Serif 4', serif;
+  border: 0.5px solid var(--border2); border-radius: var(--radius-sm); background: var(--surface);
+  color: var(--text); outline: none; transition: border-color .15s;
+}
+input[type=text]:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: vertical; line-height: 1.8; }
+input.inp-correct { border-color: var(--accent); background: var(--accent-light); }
+input.inp-wrong { border-color: var(--red); background: var(--red-light); }
+
+/* ── TOPIC PILLS ── */
+.topic-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 1rem; }
+.topic-pill { padding: 5px 13px; border-radius: 14px; border: 0.5px solid var(--border2); font-size: 12px; cursor: pointer; background: transparent; color: var(--text2); font-family: 'Source Serif 4', serif; transition: all .15s; }
+.topic-pill.active { background: var(--accent); color: #fff; border-color: transparent; }
+.topic-pill:hover { background: var(--surface2); }
+
+/* ── PROMPT BOX ── */
+.prompt-box { background: var(--accent-light); border: 0.5px solid rgba(45,90,61,.25); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.prompt-title { font-size: 13px; font-weight: 500; color: var(--accent); margin-bottom: 5px; }
+.prompt-text { font-size: 13px; color: var(--text); line-height: 1.7; }
+.req-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.req-pill { font-size: 11px; padding: 2px 9px; border-radius: 9px; background: var(--surface); color: var(--accent); border: 0.5px solid rgba(45,90,61,.3); }
+
+/* ── MODEL BOX ── */
+.model-toggle { font-size: 12px; color: var(--text3); cursor: pointer; background: none; border: none; text-decoration: underline; text-underline-offset: 2px; font-family: 'Source Serif 4', serif; margin-bottom: 8px; display: block; padding: 0; }
+.model-box { display: none; background: var(--surface2); border-radius: var(--radius-sm); padding: 1rem 1.2rem; margin-bottom: 1rem; border: 0.5px solid var(--border); }
+.model-box.open { display: block; }
+.model-sec { margin-bottom: 10px; }
+.model-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+.model-text { font-size: 13px; color: var(--text); line-height: 1.75; padding: 8px 10px; background: var(--surface); border-radius: var(--radius-sm); border-left: 3px solid var(--accent); }
+.conn-tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 6px; background: var(--gold-light); color: var(--gold); font-family: 'DM Mono', monospace; font-weight: 500; margin-top: 4px; }
+
+/* ── WRITING AREA ── */
+.write-wrap { position: relative; margin-bottom: 8px; }
+.write-wrap textarea { min-height: 260px; font-size: 15px; }
+.overlay { position: absolute; top: 0; left: 0; width: 100%; min-height: 260px; padding: 11px 14px; font-size: 15px; font-family: 'Source Serif 4', serif; line-height: 1.8; pointer-events: none; color: transparent; white-space: pre-wrap; word-wrap: break-word; border-radius: var(--radius-sm); border: 0.5px solid transparent; overflow: hidden; }
+.overlay .err-spell  { border-bottom: 2.5px solid #cc2222; border-radius: 2px; background: rgba(200,40,40,.12); }
+.overlay .err-article{ border-bottom: 2.5px solid #cc7700; border-radius: 2px; background: rgba(200,120,0,.12); }
+.overlay .err-cap    { border-bottom: 2.5px solid #b8a000; border-radius: 2px; background: rgba(180,160,0,.1); }
+.checker-legend { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; font-size: 12px; }
+.legend-item { display: flex; align-items: center; gap: 5px; color: var(--text2); }
+.legend-dot { width: 14px; height: 4px; border-radius: 2px; }
+.legend-red    { background: #cc2222; }
+.legend-orange { background: #cc7700; }
+.legend-yellow { background: #b8a000; }
+.checker-toggles { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; align-items: center; }
+.toggle-label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text2); cursor: pointer; user-select: none; }
+.toggle-label input { cursor: pointer; accent-color: var(--accent); width: 14px; height: 14px; }
+.wc-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text3); margin-top: 5px; }
+.wc-val { font-family: 'DM Mono', monospace; font-weight: 500; }
+.wc-green { color: var(--accent); }
+.wc-red { color: var(--red); }
+
+/* ── TIMER ── */
+.timer { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; }
+.timer.ok { color: var(--accent); }
+.timer.warn { color: var(--gold); }
+.timer.danger { color: var(--red); }
+
+/* ── FEEDBACK ── */
+.feedback { margin-top: 10px; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; line-height: 1.75; display: none; }
+.feedback.show { display: block; }
+.feedback.good { background: var(--accent-light); color: var(--accent); border: 0.5px solid rgba(45,90,61,.25); }
+.feedback.warn { background: var(--warn-light); color: var(--warn); border: 0.5px solid rgba(122,90,10,.25); }
+
+/* ── SPELLING TRAINER ── */
+.spell-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 2rem 1.5rem; text-align: center; margin-bottom: 1rem; box-shadow: var(--shadow); }
+.spell-english { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.spell-hint { font-size: 13px; color: var(--text3); margin-bottom: 1rem; min-height: 20px; }
+.spell-input-wrap input { text-align: center; font-size: 20px; font-family: 'DM Mono', monospace; letter-spacing: .02em; }
+.answer-reveal { display: none; margin-top: 10px; padding: 12px; border-radius: var(--radius-sm); text-align: center; }
+.answer-reveal.show { display: block; }
+.answer-correct { background: var(--accent-light); }
+.answer-wrong { background: var(--red-light); }
+.answer-word { font-size: 22px; font-family: 'DM Mono', monospace; font-weight: 500; margin-bottom: 4px; }
+.answer-diff { font-size: 14px; font-family: 'DM Mono', monospace; margin-bottom: 4px; }
+.diff-ok { color: var(--accent); }
+.diff-err { color: var(--red); text-decoration: underline; text-decoration-color: var(--red); }
+.answer-rule { font-size: 12px; color: var(--text2); font-style: italic; }
+.kb-row { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.kb-btn { padding: 5px 11px; border-radius: 8px; border: 0.5px solid var(--border2); font-size: 15px; cursor: pointer; background: var(--surface2); color: var(--text); font-family: 'DM Mono', monospace; transition: all .15s; }
+.kb-btn:hover { background: var(--accent-light); border-color: var(--accent); }
+
+/* ── GRAMMAR TABLE ── */
+.g-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.g-table th { text-align: left; padding: 8px 10px; background: var(--surface2); border-bottom: 1px solid var(--border); font-weight: 500; color: var(--text2); }
+.g-table td { padding: 8px 10px; border-bottom: 0.5px solid var(--border); color: var(--text); }
+.g-table tr:last-child td { border-bottom: none; }
+.g-table .hl { font-weight: 600; color: var(--accent); font-family: 'DM Mono', monospace; }
+
+/* ── PHRASES ── */
+.phrase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 8px; }
+.ph-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 9px 12px; cursor: pointer; transition: all .15s; }
+.ph-card:hover { border-color: var(--accent); background: var(--accent-light); }
+.ph-card.copied { border-color: var(--accent); background: var(--accent-light); }
+.ph-cat { font-size: 10px; font-family: 'DM Mono', monospace; color: var(--gold); margin-bottom: 3px; }
+.ph-de { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.ph-en { font-size: 11px; color: var(--text3); }
+
+/* ── MISTAKES LIST ── */
+.mistake-row { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.mistake-count { font-size: 11px; padding: 2px 8px; border-radius: 8px; background: var(--red-light); color: var(--red); font-weight: 600; font-family: 'DM Mono', monospace; }
+
+/* ── TYPING TRAINER ── */
+.type-display { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 1.2rem 1.4rem; font-size: 18px; line-height: 1.9; letter-spacing: .01em; margin-bottom: 1rem; min-height: 70px; font-family: 'Source Serif 4', serif; }
+.ch-correct { color: var(--accent); }
+.ch-wrong { color: var(--red); background: var(--red-light); border-radius: 2px; }
+.ch-current { background: var(--blue-light); border-radius: 2px; animation: blink 1s infinite; }
+.ch-pending { color: var(--text3); }
+@keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
+.type-input { font-size: 16px; font-family: 'DM Mono', monospace; }
+
+/* ── GRID LAYOUTS ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:640px){ .two-col { grid-template-columns: 1fr; } }
+.divider { height: 0.5px; background: var(--border); margin: 1rem 0; }
+
+/* ── EMPTY STATE ── */
+.empty-state { text-align: center; color: var(--text3); font-size: 14px; padding: 2rem; }
+
+/* ── CAT FILTERS ── */
+.cat-filters { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1rem; }
+.cf-btn { padding: 4px 11px; border-radius: 12px; border: 0.5px solid var(--border2); font-size: 11px; cursor: pointer; background: transparent; color: var(--text2); font-family: 'Source Serif 4', serif; transition: all .15s; }
+.cf-btn.active { background: var(--accent); color: #fff; border-color: transparent; }
+
+/* ── STOMPVI ── */
+.stompvi-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.stompvi-cell { background: var(--surface2); border: 0.5px solid var(--border); border-radius: var(--radius-sm); padding: 6px 10px; font-size: 12px; flex: 1; min-width: 60px; text-align: center; }
+.stompvi-cell .pos { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--accent); font-size: 11px; }
+.stompvi-cell .word { font-size: 13px; color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">Deutsch <span>B2</span></div>
+  <button class="nav-btn active" onclick="goTo('home',this)">🏠 Start</button>
+  <button class="nav-btn" onclick="goTo('grammar',this)">📐 Grammatik</button>
+  <button class="nav-btn" onclick="goTo('spelling',this)">🔤 Rechtschreibung</button>
+  <button class="nav-btn" onclick="goTo('writing',this)">📝 Aufsatz</button>
+  <button class="nav-btn" onclick="goTo('email',this)">📧 E-Mail</button>
+  <button class="nav-btn" onclick="goTo('typing',this)">⌨️ Tippen</button>
+  <button class="nav-btn" onclick="goTo('phrases',this)">💡 Phrasen</button>
+  <button class="nav-btn" onclick="toggleDark()" id="dark-btn" style="margin-left:auto;font-size:16px;padding:14px 12px;">🌙</button>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HOME
+════════════════════════════════════════ -->
+<div id="panel-home" class="panel active">
+  <div style="max-width:600px;margin:2rem auto;text-align:center;">
+    <div style="font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:var(--text);margin-bottom:8px;">Willkommen! 👋</div>
+    <div style="font-size:15px;color:var(--text2);margin-bottom:2rem;line-height:1.7;">Dein persönliches Goethe B2 Lernzentrum.<br>Alles an einem Ort — Grammatik, Rechtschreibung, Schreiben, Tippen.</div>
+    <div style="background:var(--accent-light);border:0.5px solid rgba(45,90,61,.25);border-radius:var(--radius);padding:.9rem 1.2rem;margin-bottom:1.5rem;font-size:13px;color:var(--accent);display:flex;gap:10px;align-items:center;">
+      <span style="font-size:20px;">🎯</span>
+      <div><strong>Session 1 — 21. März 2026:</strong> 50 persönliche Fehler hinzugefügt.<br><strong>Session 2 — 22. März 2026:</strong> 47 neue Fehler hinzugefügt (Homeoffice + Digitalisierung).<br><span style="font-size:12px;opacity:.8">Insgesamt: 97 persönliche Fehler. Gehe zu Rechtschreibung → "Meine Fehler" um sie zu üben.</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;text-align:left;margin-bottom:2rem;">
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('grammar',document.querySelectorAll('.nav-btn')[1])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">📐</div>
+        <div style="font-weight:500;margin-bottom:3px;">Grammatik</div>
+        <div style="font-size:12px;color:var(--text3);">Sugar Table, STOMPVI, Fälle, Konnektoren</div>
+      </div>
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('spelling',document.querySelectorAll('.nav-btn')[2])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">🔤</div>
+        <div style="font-weight:500;margin-bottom:3px;">Rechtschreibung</div>
+        <div style="font-size:12px;color:var(--text3);">Artikel, Verben, Endungen, Fehler</div>
+      </div>
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('writing',document.querySelectorAll('.nav-btn')[3])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">📝</div>
+        <div style="font-weight:500;margin-bottom:3px;">Aufsatz</div>
+        <div style="font-size:12px;color:var(--text3);">~150 Wörter, Timer, Muster</div>
+      </div>
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('email',document.querySelectorAll('.nav-btn')[4])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">📧</div>
+        <div style="font-weight:500;margin-bottom:3px;">E-Mail</div>
+        <div style="font-size:12px;color:var(--text3);">Förmliche E-Mail, Sie-Form</div>
+      </div>
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('typing',document.querySelectorAll('.nav-btn')[5])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">⌨️</div>
+        <div style="font-weight:500;margin-bottom:3px;">Tippen</div>
+        <div style="font-size:12px;color:var(--text3);">B2 Sätze tippen, WPM messen</div>
+      </div>
+      <div class="card" style="cursor:pointer;transition:all .2s" onclick="goTo('phrases',document.querySelectorAll('.nav-btn')[6])" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+        <div style="font-size:24px;margin-bottom:6px;">💡</div>
+        <div style="font-weight:500;margin-bottom:3px;">Phrasen</div>
+        <div style="font-size:12px;color:var(--text3);">B2 Schlüsselphrasen kopieren</div>
+      </div>
+    </div>
+    <div style="background:var(--gold-light);border:0.5px solid rgba(181,130,10,.3);border-radius:var(--radius);padding:1rem 1.4rem;font-size:13px;color:var(--warn);text-align:left;">
+      <strong>💡 Tipp:</strong> Schreib deinen Aufsatz oder deine E-Mail hier, dann kopiere den Text in den Chat — Claude korrigiert alles im Detail!
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     GRAMMAR
+════════════════════════════════════════ -->
+<div id="panel-grammar" class="panel">
+  <div class="section-head"><h2>📐 Grammatik-Referenz</h2><p>Sugar Table · STOMPVI · Fälle · Verb-Konjugation · Konnektoren</p></div>
+
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">Der Zuckertisch — Artikel nach Fall</div>
+        <table class="g-table">
+          <tr><th>Fall</th><th>Mask.</th><th>Fem.</th><th>Neutr.</th><th>Plural</th></tr>
+          <tr><td>Nominativ</td><td class="hl">der</td><td class="hl">die</td><td class="hl">das</td><td class="hl">die</td></tr>
+          <tr><td>Akkusativ</td><td class="hl">den</td><td class="hl">die</td><td class="hl">das</td><td class="hl">die</td></tr>
+          <tr><td>Dativ</td><td class="hl">dem</td><td class="hl">der</td><td class="hl">dem</td><td class="hl">den</td></tr>
+          <tr><td>Genitiv</td><td class="hl">des</td><td class="hl">der</td><td class="hl">des</td><td class="hl">der</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:12px;color:var(--text2);background:var(--warn-light);padding:8px 10px;border-radius:var(--radius-sm);">⚠️ Nur Maskulin ändert sich im Akkusativ: <strong>der → den</strong></div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">Fall-Logik — Die Fragen</div>
+        <table class="g-table">
+          <tr><th>Fall</th><th>Frage</th><th>Funktion</th></tr>
+          <tr><td><span class="badge badge-noun">Nominativ</span></td><td class="hl">Wer/Was?</td><td>Subjekt</td></tr>
+          <tr><td><span class="badge badge-verb">Akkusativ</span></td><td class="hl">Wen/Was?</td><td>Direktes Objekt</td></tr>
+          <tr><td><span class="badge badge-spell">Dativ</span></td><td class="hl">Wem?</td><td>Indirektes Objekt</td></tr>
+          <tr><td><span class="badge badge-end">Genitiv</span></td><td class="hl">Wessen?</td><td>Besitz</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:12px;color:var(--text2);">Beispiel: <em>Der Mechaniker gibt <strong>dem</strong> Fahrer <strong>den</strong> Schlüssel <strong>des</strong> Motorrads.</em></div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">Verb-Konjugation (Präsens)</div>
+        <table class="g-table">
+          <tr><th>Subjekt</th><th>Endung</th><th>Beispiel: lernen</th></tr>
+          <tr><td>ich</td><td class="hl">-e</td><td>ich lerne</td></tr>
+          <tr><td>du</td><td class="hl">-st</td><td>du lernst</td></tr>
+          <tr><td>er/sie/es</td><td class="hl">-t</td><td>er lernt</td></tr>
+          <tr><td>wir</td><td class="hl">-en</td><td>wir lernen</td></tr>
+          <tr><td>ihr</td><td class="hl">-t</td><td>ihr lernt</td></tr>
+          <tr><td>sie/Sie</td><td class="hl">-en</td><td>sie lernen</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">STOMPVI — Satzstellung</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:10px;">Das konjugierte Verb steht immer an Position 2.</div>
+        <div class="stompvi-row">
+          <div class="stompvi-cell"><div class="pos">S</div><div class="word">Subjekt</div></div>
+          <div class="stompvi-cell"><div class="pos">v1</div><div class="word">Verb</div></div>
+          <div class="stompvi-cell"><div class="pos">T</div><div class="word">Zeit</div></div>
+          <div class="stompvi-cell"><div class="pos">O</div><div class="word">Objekt</div></div>
+          <div class="stompvi-cell"><div class="pos">M</div><div class="word">Weise</div></div>
+          <div class="stompvi-cell"><div class="pos">P</div><div class="word">Ort</div></div>
+          <div class="stompvi-cell"><div class="pos">v2</div><div class="word">Infinitiv</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:13px;background:var(--surface2);padding:8px 10px;border-radius:var(--radius-sm);font-family:'DM Mono',monospace;">Ich | esse | heute | die Pizza | — | zu Hause | —</div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">Verbposition — Die Regeln</div>
+        <table class="g-table">
+          <tr><th>Satzart</th><th>Verbposition</th><th>Beispiel</th></tr>
+          <tr><td>Hauptsatz</td><td class="hl">Position 2</td><td>Ich <strong>lerne</strong> Deutsch.</td></tr>
+          <tr><td>Inversion</td><td class="hl">Position 2</td><td>Heute <strong>lerne</strong> ich.</td></tr>
+          <tr><td>Nebensatz</td><td class="hl">Verb → Ende</td><td>…weil ich Deutsch <strong>lerne</strong>.</td></tr>
+          <tr><td>Modalverb</td><td class="hl">Modal=2, Inf.=Ende</td><td>Ich <strong>muss</strong> Deutsch <strong>lernen</strong>.</td></tr>
+        </table>
+        <div style="margin-top:8px;font-size:12px;background:var(--red-light);color:var(--red);padding:8px 10px;border-radius:var(--radius-sm);">⚠️ Nach: weil, dass, obwohl, damit, während, sodass → Verb ans ENDE!</div>
+      </div>
+
+      <div class="card">
+        <div style="font-weight:600;margin-bottom:8px;font-size:15px;">Konnektoren-Leiter</div>
+        <table class="g-table">
+          <tr><th>Level</th><th>Konnektor</th><th>Verb</th></tr>
+          <tr><td><span class="badge badge-noun">B1</span></td><td>trotzdem, deshalb</td><td>Position 2</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>obwohl</td><td>→ Ende</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>damit</td><td>→ Ende</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>während</td><td>→ Ende</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>sodass</td><td>→ Ende</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>indem</td><td>→ Ende</td></tr>
+          <tr><td><span class="badge badge-b2">B2</span></td><td>einerseits…andererseits</td><td>Position 2</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SPELLING TRAINER
+════════════════════════════════════════ -->
+<div id="panel-spelling" class="panel">
+  <div class="section-head"><h2>🔤 Rechtschreib-Trainer</h2><p>Englisch → Deutsch. Artikel, Verben, Endungen, Rechtschreibung.</p></div>
+
+  <div style="display:flex;gap:8px;margin-bottom:1rem;align-items:center;flex-wrap:wrap;">
+    <div class="cat-filters" id="spell-cats" style="margin-bottom:0;flex:1;"></div>
+    <button class="btn btn-sm" onclick="shuffleDeck()">Mischen 🔀</button>
+    <button class="btn btn-sm" onclick="goTo('spelling-mistakes',null)" style="background:var(--red-light);color:var(--red);border-color:transparent;" id="mistakes-nav-btn">Fehler (0) ❌</button>
+  </div>
+
+  <div id="spell-main">
+    <div class="stats-row">
+      <div class="stat"><div class="stat-val" id="sp-correct">0</div><div class="stat-lbl">Richtig ✓</div></div>
+      <div class="stat"><div class="stat-val" id="sp-wrong">0</div><div class="stat-lbl">Falsch ✗</div></div>
+      <div class="stat"><div class="stat-val" id="sp-pct">—</div><div class="stat-lbl">Genauigkeit</div></div>
+      <div class="stat"><div class="stat-val" id="sp-streak">0</div><div class="stat-lbl">Serie 🔥</div></div>
+      <div class="stat"><div style="font-size:12px;color:var(--text3);margin-bottom:2px;">Karte</div><div class="stat-val" id="sp-counter" style="font-size:16px;">1/1</div></div>
+    </div>
+    <div class="prog-wrap"><div class="prog-fill" id="sp-prog" style="width:0%"></div></div>
+
+    <div class="spell-card">
+      <div class="badge" id="sp-badge" style="margin-bottom:10px;">Nomen</div>
+      <div class="spell-english" id="sp-english">Loading…</div>
+      <div class="spell-hint" id="sp-hint"></div>
+    </div>
+
+    <div class="kb-row">
+      <button class="kb-btn" onclick="ins('ä')">ä</button>
+      <button class="kb-btn" onclick="ins('ö')">ö</button>
+      <button class="kb-btn" onclick="ins('ü')">ü</button>
+      <button class="kb-btn" onclick="ins('Ä')">Ä</button>
+      <button class="kb-btn" onclick="ins('Ö')">Ö</button>
+      <button class="kb-btn" onclick="ins('Ü')">Ü</button>
+      <button class="kb-btn" onclick="ins('ß')">ß</button>
+    </div>
+
+    <div class="spell-input-wrap" style="margin-bottom:10px;">
+      <input type="text" id="sp-input" placeholder="Tippe das deutsche Wort …" onkeydown="spKey(event)" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    </div>
+
+    <div class="answer-reveal" id="sp-reveal">
+      <div class="answer-word" id="sp-answer-word"></div>
+      <div class="answer-diff" id="sp-diff"></div>
+      <div class="answer-rule" id="sp-rule"></div>
+    </div>
+
+    <div class="btn-row" style="justify-content:center;">
+      <button class="btn btn-primary" id="sp-check" onclick="spCheck()">Prüfen ✓</button>
+      <button class="btn" id="sp-next" onclick="spNext()" style="display:none">Weiter →</button>
+      <button class="btn" onclick="spSkip()">Überspringen ↷</button>
+    </div>
+  </div>
+
+  <div id="spell-mistakes-panel" style="display:none;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <div style="font-size:15px;font-weight:500;">Meine Fehler</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm" onclick="practiseMistakes()">Nur Fehler üben 🎯</button>
+        <button class="btn btn-sm btn-danger" onclick="clearMistakes()">Löschen</button>
+        <button class="btn btn-sm" onclick="document.getElementById('spell-mistakes-panel').style.display='none';document.getElementById('spell-main').style.display='block'">← Zurück</button>
+      </div>
+    </div>
+    <div id="mistakes-list"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     WRITING — ESSAY
+════════════════════════════════════════ -->
+<div id="panel-writing" class="panel">
+  <div class="section-head"><h2>📝 Aufsatz-Training</h2><p>~150 Wörter · Timer 30 Min · Muster verfügbar · Wie die echte B2-Prüfung</p></div>
+  <div class="topic-row" id="essay-topics"></div>
+  <div class="prompt-box" id="essay-prompt"></div>
+  <button class="model-toggle" id="essay-model-toggle" onclick="toggleModel('essay-model-box','essay-model-toggle')">📖 Musteraufsatz anzeigen ▾</button>
+  <div class="model-box" id="essay-model-box"></div>
+  <div class="stats-row">
+    <div class="stat"><div class="timer ok" id="e-timer">30:00</div><div class="stat-lbl">Zeit</div></div>
+    <div class="stat"><div class="stat-val" id="e-wc">0</div><div class="stat-lbl">Wörter</div></div>
+    <div class="stat"><div class="stat-val" id="e-target" style="font-size:14px;">~150</div><div class="stat-lbl">Ziel</div></div>
+    <div class="stat"><div class="stat-val" id="e-conn">0</div><div class="stat-lbl">Konnektoren</div></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="e-prog" style="width:0%"></div></div>
+  <div class="checker-legend">
+    <div class="legend-item"><div class="legend-dot legend-red"></div> Rechtschreibfehler</div>
+    <div class="legend-item"><div class="legend-dot legend-orange"></div> Falscher Artikel</div>
+    <div class="legend-item"><div class="legend-dot legend-yellow"></div> Großschreibung fehlt</div>
+  </div>
+  <div class="checker-toggles">
+    <label class="toggle-label"><input type="checkbox" id="chk-spell" checked onchange="onWriteType('e')"> 🔴 Rechtschreibung</label>
+    <label class="toggle-label"><input type="checkbox" id="chk-article" checked onchange="onWriteType('e')"> 🟠 Artikel</label>
+    <label class="toggle-label"><input type="checkbox" id="chk-cap" checked onchange="onWriteType('e')"> 🟡 Großschreibung</label>
+  </div>
+  <div class="write-wrap">
+    <div class="overlay" id="e-overlay"></div>
+    <textarea id="e-text" placeholder="Beginne hier zu schreiben … Der Timer startet automatisch wenn du anfängst." oninput="onWriteType('e')" onscroll="syncOv('e')"></textarea>
+  </div>
+  <div class="wc-row"><span>Ziel: 130–170 Wörter</span><span class="wc-val" id="e-wc-display">0 Wörter</span></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="submitWrite('e')">Abgeben &amp; prüfen ✓</button>
+    <button class="btn" onclick="resetWrite('e')">Neu ↺</button>
+  </div>
+  <div class="feedback" id="e-feedback"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     EMAIL
+════════════════════════════════════════ -->
+<div id="panel-email" class="panel">
+  <div class="section-head"><h2>📧 E-Mail Training</h2><p>Förmliche E-Mail · Sie-Form · Timer 20 Min · Wie die echte B2-Prüfung</p></div>
+  <div class="topic-row" id="email-topics"></div>
+  <div class="prompt-box" id="email-prompt"></div>
+  <button class="model-toggle" id="email-model-toggle" onclick="toggleModel('email-model-box','email-model-toggle')">📖 Muster-E-Mail anzeigen ▾</button>
+  <div class="model-box" id="email-model-box"></div>
+  <div class="stats-row">
+    <div class="stat"><div class="timer ok" id="m-timer">20:00</div><div class="stat-lbl">Zeit</div></div>
+    <div class="stat"><div class="stat-val" id="m-wc">0</div><div class="stat-lbl">Wörter</div></div>
+    <div class="stat"><div class="stat-val" id="m-target" style="font-size:14px;">50–80</div><div class="stat-lbl">Ziel</div></div>
+    <div class="stat"><div class="stat-val" id="m-conn">0</div><div class="stat-lbl">Konnektoren</div></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="m-prog" style="width:0%"></div></div>
+  <div class="write-wrap">
+    <div class="overlay" id="m-overlay"></div>
+    <textarea id="m-text" style="min-height:220px;" placeholder="Sehr geehrte/r Herr/Frau … (Timer startet automatisch)" oninput="onWriteType('m')" onscroll="syncOv('m')"></textarea>
+  </div>
+  <div class="wc-row"><span>Ziel: 50–80 Wörter · Förmliche Anrede + Abschluss nicht vergessen!</span><span class="wc-val" id="m-wc-display">0 Wörter</span></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="submitWrite('m')">Abgeben &amp; prüfen ✓</button>
+    <button class="btn" onclick="resetWrite('m')">Neu ↺</button>
+  </div>
+  <div class="feedback" id="m-feedback"></div>
+</div>
+
+<!-- ════════════════════════════════════════
+     TYPING TRAINER
+════════════════════════════════════════ -->
+<div id="panel-typing" class="panel">
+  <div class="section-head"><h2>⌨️ Tipp-Trainer</h2><p>Tippe B2-Sätze ab. WPM-Messung. Konnektoren-Training.</p></div>
+  <div class="cat-filters" id="type-cats"></div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="t-correct">0</div><div class="stat-lbl">Richtig</div></div>
+    <div class="stat"><div class="stat-val" id="t-wrong">0</div><div class="stat-lbl">Falsch</div></div>
+    <div class="stat"><div class="stat-val" id="t-pct">—</div><div class="stat-lbl">Genauigkeit</div></div>
+    <div class="stat"><div class="stat-val" id="t-wpm">—</div><div class="stat-lbl">WPM</div></div>
+    <div class="stat"><div style="font-size:11px;color:var(--text3);">Satz</div><div class="stat-val" id="t-counter" style="font-size:14px;">1/1</div></div>
+  </div>
+  <div class="prog-wrap"><div class="prog-fill" id="t-prog" style="width:0%"></div></div>
+  <div style="margin-bottom:6px;display:flex;gap:8px;align-items:center;">
+    <span class="badge" id="t-badge" style="background:var(--blue-light);color:var(--blue);">weil</span>
+    <span style="font-size:12px;color:var(--text3);" id="t-hint"></span>
+  </div>
+  <div class="type-display" id="t-display"></div>
+  <div style="font-size:12px;color:var(--text3);margin-bottom:6px;" id="t-translation"></div>
+  <div class="kb-row" style="justify-content:flex-start;">
+    <button class="kb-btn" onclick="tIns('ä')">ä</button>
+    <button class="kb-btn" onclick="tIns('ö')">ö</button>
+    <button class="kb-btn" onclick="tIns('ü')">ü</button>
+    <button class="kb-btn" onclick="tIns('ß')">ß</button>
+  </div>
+  <input type="text" class="type-input" id="t-input" placeholder="Tippe den Satz ab …" oninput="tType()" onkeydown="tKey(event)" autocomplete="off" autocorrect="off" spellcheck="false" style="margin-bottom:10px;"/>
+  <div class="feedback" id="t-feedback"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" id="t-check" onclick="tCheck()">Prüfen ✓</button>
+    <button class="btn" id="t-next" onclick="tNext()" style="display:none">Weiter →</button>
+    <button class="btn" onclick="tSkip()">Überspringen ↷</button>
+    <button class="btn" onclick="tReset()">Neustart ↺</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     PHRASES
+════════════════════════════════════════ -->
+<div id="panel-phrases" class="panel">
+  <div class="section-head"><h2>💡 B2 Phrasen</h2><p>Klicke auf eine Phrase um sie zu kopieren 📋</p></div>
+  <div class="cat-filters" id="phrase-cats"></div>
+  <div class="phrase-grid" id="phrase-grid"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// NAV
+// ══════════════════════════════════════
+function goTo(id, btn) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  if(id==='spelling'){document.getElementById('spell-main').style.display='block';document.getElementById('spell-mistakes-panel').style.display='none';}
+}
+
+// ══════════════════════════════════════
+// DATA
+// ══════════════════════════════════════
+const spellWords = [
+  {en:"the decision",de:"die Entscheidung",cat:"Nomen",rule:"die → feminine; -ung endings always feminine"},
+  {en:"the company",de:"die Firma",cat:"Nomen",rule:"die Firma → plural: die Firmen"},
+  {en:"the colleague (m)",de:"der Kollege",cat:"Nomen",rule:"der → masculine; Akkusativ: den Kollegen"},
+  {en:"the communication",de:"die Kommunikation",cat:"Nomen",rule:"die → feminine; double-m!"},
+  {en:"the traffic",de:"der Verkehr",cat:"Nomen",rule:"der → masculine; im Stau stehen = stuck in traffic"},
+  {en:"the risk",de:"das Risiko",cat:"Nomen",rule:"das → neuter; plural: die Risiken"},
+  {en:"the advantage",de:"der Vorteil",cat:"Nomen",rule:"der → masculine"},
+  {en:"the disadvantage",de:"der Nachteil",cat:"Nomen",rule:"der → masculine"},
+  {en:"the possibility",de:"die Möglichkeit",cat:"Nomen",rule:"die → -keit endings always feminine"},
+  {en:"the opinion",de:"die Meinung",cat:"Nomen",rule:"die → Meiner Meinung nach (Genitiv!)"},
+  {en:"the solution",de:"die Lösung",cat:"Nomen",rule:"die → -ung endings always feminine"},
+  {en:"the mistake",de:"der Fehler",cat:"Nomen",rule:"der → masculine; plural: die Fehler (no change)"},
+  {en:"the rule",de:"die Regel",cat:"Nomen",rule:"die → feminine; plural: die Regeln"},
+  {en:"the workplace",de:"der Arbeitsplatz",cat:"Nomen",rule:"der → masculine; am Arbeitsplatz"},
+  {en:"the home office",de:"das Homeoffice",cat:"Nomen",rule:"das → neuter; im Homeoffice arbeiten"},
+  {en:"the standstill",de:"der Stillstand",cat:"Nomen",rule:"der → masculine; zum Stillstand kommen"},
+  {en:"the productivity",de:"die Produktivität",cat:"Nomen",rule:"die → -ität endings always feminine"},
+  {en:"the responsibility",de:"die Verantwortung",cat:"Nomen",rule:"die → -ung always feminine"},
+  {en:"the development",de:"die Entwicklung",cat:"Nomen",rule:"die → -ung always feminine"},
+  {en:"the qualification",de:"die Qualifikation",cat:"Nomen",rule:"die → feminine"},
+  {en:"to improve",de:"verbessern",cat:"Verb",rule:"verbessern — double-s; er verbessert"},
+  {en:"to correct",de:"korrigieren",cat:"Verb",rule:"korrigieren — not korriegieren; Perfekt: hat korrigiert (no ge-)"},
+  {en:"to recommend",de:"empfehlen",cat:"Verb",rule:"empfehlen — not emphelen; er empfiehlt (stem change)"},
+  {en:"to commute",de:"pendeln",cat:"Verb",rule:"pendeln — not penden; er pendelt"},
+  {en:"to spend time",de:"Zeit verbringen",cat:"Verb",rule:"verbringen — not spandieren; Perfekt: hat verbracht"},
+  {en:"to complete / manage",de:"erledigen",cat:"Verb",rule:"erledigen — not vertig machen; er erledigt"},
+  {en:"to report someone",de:"jemanden melden",cat:"Verb",rule:"melden — not anklagen (anklagen = court only)"},
+  {en:"to take a risk",de:"ein Risiko eingehen",cat:"Verb",rule:"eingehen = separable; er geht ein Risiko ein"},
+  {en:"to be stuck in traffic",de:"im Stau stehen",cat:"Verb",rule:"fixed phrase — never im Verkehr sitzen"},
+  {en:"to make a decision",de:"eine Entscheidung treffen",cat:"Verb",rule:"treffen — not machen; er trifft eine Entscheidung"},
+  {en:"he/she drives",de:"er fährt",alt:["sie fährt","es fährt"],cat:"Verb",rule:"fahren → er/sie/es fährt (a→ä stem change)"},
+  {en:"he/she reads",de:"er liest",alt:["sie liest","es liest"],cat:"Verb",rule:"lesen → er/sie/es liest (e→ie stem change)"},
+  {en:"he/she helps",de:"er hilft",alt:["sie hilft","es hilft"],cat:"Verb",rule:"helfen → er/sie/es hilft (e→i stem change)"},
+  {en:"he/she recommends",de:"er empfiehlt",alt:["sie empfiehlt","es empfiehlt"],cat:"Verb",rule:"empfehlen → er/sie/es empfiehlt (e→ie stem change)"},
+  {en:"nowadays",de:"heutzutage",cat:"Rechtschreibung",rule:"heutzutage — one word"},
+  {en:"normal",de:"normal",cat:"Rechtschreibung",rule:"normal — not noral"},
+  {en:"people / humans",de:"Menschen",cat:"Rechtschreibung",rule:"Menschen — capital M; not menchsen"},
+  {en:"only / sole",de:"einzige",cat:"Rechtschreibung",rule:"einzige — not einsige"},
+  {en:"temporary",de:"vorübergehend",cat:"Rechtschreibung",rule:"vorübergehend — not tempral"},
+  {en:"productive",de:"produktiv",cat:"Rechtschreibung",rule:"produktiv — not produktief"},
+  {en:"definitely",de:"definitiv",cat:"Rechtschreibung",rule:"definitiv — not definief"},
+  {en:"while / during",de:"während",cat:"Rechtschreibung",rule:"während — umlaut ä, not wahrent"},
+  {en:"outside",de:"draußen",cat:"Rechtschreibung",rule:"draußen — ß+en, not drausen"},
+  {en:"it snows",de:"es schneit",cat:"Rechtschreibung",rule:"schneien → es schneit, not schneen"},
+  {en:"in conclusion (essay)",de:"Zusammenfassend",cat:"Rechtschreibung",rule:"Zusammenfassend — not Zusammenfassent (-end)"},
+  {en:"on the other hand",de:"Andererseits",cat:"Rechtschreibung",rule:"Andererseits — double-r, not Anderseits"},
+  {en:"furthermore",de:"Darüber hinaus",cat:"Rechtschreibung",rule:"Darüber hinaus — two words, umlaut ü"},
+  {en:"qualified",de:"qualifiziert",cat:"Rechtschreibung",rule:"qualifiziert — qu- not kw-"},
+  {en:"colleagues (plural)",de:"Kollegen",cat:"Rechtschreibung",rule:"Kollegen — double-l"},
+  {en:"a good routine (fem, Akk)",de:"eine gute Routine",cat:"Endungen",rule:"die Routine = feminine; eine gute (-e ending)"},
+  {en:"a good colleague (masc, Nom)",de:"ein guter Kollege",cat:"Endungen",rule:"der Kollege = masculine Nominativ: -er ending"},
+  {en:"a good colleague (masc, Akk)",de:"einen guten Kollegen",cat:"Endungen",rule:"Akkusativ masculine: einen guten Kollegen (-en)"},
+  {en:"in my opinion (fixed)",de:"Meiner Meinung nach",cat:"Endungen",rule:"Genitiv: meiner — not meine or mein"},
+  {en:"the whole day (Akk)",de:"den ganzen Tag",cat:"Endungen",rule:"der Tag = masculine Akkusativ: den ganzen Tag"},
+  {en:"this week (Akk)",de:"diese Woche",cat:"Endungen",rule:"die Woche = feminine; Akkusativ unchanged"},
+  {en:"with the family (Dat)",de:"mit der Familie",cat:"Endungen",rule:"mit = always Dativ; die Familie → mit der Familie"},
+  {en:"at the workplace (Dat)",de:"am Arbeitsplatz",cat:"Endungen",rule:"an+dem=am; der Arbeitsplatz → am Arbeitsplatz"},
+  {en:"in the home office (Dat)",de:"im Homeoffice",cat:"Endungen",rule:"in+dem=im; das Homeoffice → im Homeoffice"},
+  {en:"important decisions (plural)",de:"wichtige Entscheidungen",cat:"Endungen",rule:"plural no article: adjective gets -e ending"},
+
+  // ── DEINE PERSÖNLICHEN FEHLER (Session 1) ──
+  // These words came directly from your writing practice on 21 March 2026
+  {en:"work world / working world",de:"die Arbeitswelt",cat:"Meine Fehler",rule:"Arbeitswelt — not Arbeitswerl; one compound word"},
+  {en:"form of work",de:"die Arbeitsform",cat:"Meine Fehler",rule:"Arbeitsform — not Arbeitsfrom; Form comes second"},
+  {en:"in my opinion (phrase)",de:"Meiner Meinung nach",cat:"Meine Fehler",rule:"Meiner — Genitiv form; never 'Meine Meinung nach'"},
+  {en:"he/she offers (Präsens)",de:"er bietet",alt:["sie bietet","es bietet"],cat:"Meine Fehler",rule:"bieten → er/sie/es bietet (-t ending); not biete"},
+  {en:"on the other hand",de:"Andererseits",cat:"Meine Fehler",rule:"Andererseits — double-r; not Anderseits"},
+  {en:"in summary / in conclusion",de:"Zusammenfassend",cat:"Meine Fehler",rule:"Zusammenfassend — ends in -end not -ent"},
+  {en:"colleagues (plural)",de:"Kollegen",cat:"Meine Fehler",rule:"Kollegen — double-l; not Kolegen"},
+  {en:"qualified",de:"qualifiziert",cat:"Meine Fehler",rule:"qualifiziert — qu- not kw-; -ziert not -sisert"},
+  {en:"we need (Präsens)",de:"wir brauchen",cat:"Meine Fehler",rule:"brauchen — not breuchen; au not eu"},
+  {en:"him / he (Akkusativ)",de:"ihn",cat:"Meine Fehler",rule:"ihn (Akkusativ) — not ihm (Dativ); brauchen takes Akkusativ"},
+  {en:"mistakes / errors (plural)",de:"Fehler",cat:"Meine Fehler",rule:"Fehler — not Fähler; no umlaut on F"},
+  {en:"still / yet",de:"noch",cat:"Meine Fehler",rule:"noch — not nocht; no -t at end"},
+  {en:"to improve (infinitive)",de:"verbessern",cat:"Meine Fehler",rule:"verbessern — not verbersern; -ss- then -ern"},
+  {en:"to correct (infinitive)",de:"korrigieren",cat:"Meine Fehler",rule:"korrigieren — not korriegieren; i before e here"},
+  {en:"to recommend (infinitive)",de:"empfehlen",cat:"Meine Fehler",rule:"empfehlen — not emphelen; pf- not ph-"},
+  {en:"I believe / I think",de:"ich glaube",cat:"Meine Fehler",rule:"glaube — not gluabe; au not ua"},
+  {en:"actually / in fact",de:"eigentlich",cat:"Meine Fehler",rule:"eigentlich — not eingentlich; ei- not ein-"},
+  {en:"sentences (plural)",de:"Sätze",cat:"Meine Fehler",rule:"Sätze — not Sätzr; plural of der Satz"},
+  {en:"so that / with that",de:"damit",cat:"Meine Fehler",rule:"damit — not dammit; single -m-"},
+  {en:"complete / whole",de:"komplett",cat:"Meine Fehler",rule:"komplett — not komplete; double-t"},
+  {en:"to use (Perfekt: he used)",de:"er hat benutzt",cat:"Meine Fehler",rule:"benutzt — not benutz; Partizip II needs -t ending"},
+  {en:"there is / gives (es gibt)",de:"es gibt",cat:"Meine Fehler",rule:"es gibt — not gibt ese; subject is 'es'"},
+  {en:"not (adverb)",de:"nicht",cat:"Meine Fehler",rule:"nicht — not nich; ends in -cht"},
+  {en:"sometimes",de:"manchmal",cat:"Meine Fehler",rule:"manchmal — not machmal; -nch- in the middle"},
+  {en:"difficult",de:"schwierig",cat:"Meine Fehler",rule:"schwierig — not swerig; sch- + wie- + rig"},
+  {en:"to type / a typing program",de:"das Tipprogramm",cat:"Meine Fehler",rule:"Tipp-Programm — double-p; Programm double-m"},
+  {en:"I use (Präsens)",de:"ich benutze",cat:"Meine Fehler",rule:"benutze — not benutye; -tze ending"},
+  {en:"my typing (noun)",de:"mein Tippen",cat:"Meine Fehler",rule:"mein Tippen (Akkusativ neuter) — not mienen"},
+  {en:"through it / thereby",de:"dadurch",cat:"Meine Fehler",rule:"dadurch — not darduch; da- not dar-"},
+  {en:"and (conjunction)",de:"und",cat:"Meine Fehler",rule:"und — not unc; ends in -d"},
+  {en:"nowadays",de:"heutzutage",cat:"Meine Fehler",rule:"heutzutage — not Heuzutage; -tz- in middle"},
+  {en:"normal (adjective)",de:"normal",cat:"Meine Fehler",rule:"normal — not noral; -rm- not -r-"},
+  {en:"people (plural noun)",de:"Menschen",cat:"Meine Fehler",rule:"Menschen — not menchsen; -sch- then -en"},
+  {en:"only one / the only",de:"die einzige",cat:"Meine Fehler",rule:"einzige — not einsige; -nz- not -ns-"},
+  {en:"temporary / provisional",de:"vorübergehend",cat:"Meine Fehler",rule:"vorübergehend — not tempral; German compound word"},
+  {en:"productive (adjective)",de:"produktiv",cat:"Meine Fehler",rule:"produktiv — not produktief; -iv not -ief"},
+  {en:"definitive / definitely",de:"definitiv",cat:"Meine Fehler",rule:"definitiv — not definief; -iv not -ief"},
+  {en:"improved (Partizip II)",de:"verbessert",cat:"Meine Fehler",rule:"verbessert — not verbesser; er/sie/es needs -t"},
+  {en:"means / signifies",de:"bedeutet",cat:"Meine Fehler",rule:"bedeutet — not bedeuted; German ends in -t not -d"},
+  {en:"while / during (conjunction)",de:"während",cat:"Meine Fehler",rule:"während — not wahrent; umlaut ä + -end"},
+  {en:"outside (adverb)",de:"draußen",cat:"Meine Fehler",rule:"draußen — not drausen; ß not ss here"},
+  {en:"it snows (Präsens)",de:"es schneit",cat:"Meine Fehler",rule:"schneien → es schneit — not schneen"},
+  {en:"in conclusion (closing word)",de:"Zum Schluss",cat:"Meine Fehler",rule:"Zum Schluss — not Zum schloss; capital S, -uss"},
+  {en:"traffic / transport",de:"der Verkehr",cat:"Meine Fehler",rule:"der Verkehr — not Verker; -ehr ending"},
+  {en:"productivity (noun)",de:"die Produktivität",cat:"Meine Fehler",rule:"Produktivität — not productivietiet; -ität ending"},
+  {en:"to spend time (with family)",de:"Zeit verbringen",cat:"Meine Fehler",rule:"verbringen — not spandieren; Perfekt: hat verbracht"},
+  {en:"to complete / finish (tasks)",de:"erledigen",cat:"Meine Fehler",rule:"erledigen — not vertig machen; er erledigt"},
+  {en:"to report (someone at work)",de:"jemanden melden",cat:"Meine Fehler",rule:"melden — not anklagen; anklagen = court only"},
+  {en:"to take a risk",de:"ein Risiko eingehen",cat:"Meine Fehler",rule:"eingehen — separable verb; not resiko inhalten"},
+  {en:"it can happen",de:"es kann passieren",cat:"Meine Fehler",rule:"passieren — not passsieren; single -ss-"},
+  {en:"higher safety/traffic risk",de:"ein höheres Verkehrsrisiko",cat:"Meine Fehler",rule:"Verkehrsrisiko — not veilichheitsresiko; compound noun"},
+
+  // ── SESSION 2 — Homeoffice & Digitalisierung (22 März 2026) ──
+  {en:"the so-called",de:"der sogenannte",cat:"Meine Fehler",rule:"sogenannte — one word; not 'so genannten'"},
+  {en:"during the Corona period",de:"während der Coronazeit",cat:"Meine Fehler",rule:"Coronazeit — one compound noun; not 'Coronavirus zeit'"},
+  {en:"it continues / still goes on",de:"es dauert noch an",cat:"Meine Fehler",rule:"andauern = separable verb; dauert an — not 'dauern vor'"},
+  {en:"the companies had to (Prät.)",de:"die Firmen mussten",cat:"Meine Fehler",rule:"plural Präteritum: mussten — not 'muss'"},
+  {en:"to close (infinitive)",de:"schließen",cat:"Meine Fehler",rule:"schließen — not schliesen; ß not s"},
+  {en:"under these new circumstances",de:"unter diesen neuen Umständen",cat:"Meine Fehler",rule:"Umstände = circumstances; Dativ: diesen neuen"},
+  {en:"it is all the same to me",de:"es ist mir egal",cat:"Meine Fehler",rule:"es ist mir egal — not 'gebe ich nicht um'"},
+  {en:"whether (subordinating conj.)",de:"ob",cat:"Meine Fehler",rule:"ob = whether → verb to END of clause"},
+  {en:"I sit at my computer",de:"ich sitze an meinem Computer",cat:"Meine Fehler",rule:"sitzen an + Dativ: an meinem — not 'hinter mein Computer setzen'"},
+  {en:"instead of (+ infinitive)",de:"anstatt … zu",cat:"Meine Fehler",rule:"anstatt … zu + Infinitiv — not 'statt von'"},
+  {en:"at any time",de:"jederzeit",cat:"Meine Fehler",rule:"jederzeit — one word; not 'ergenwelche zeit'"},
+  {en:"who / which (relative pronoun)",de:"die",cat:"Meine Fehler",rule:"Menschen, die … — always 'die' not 'was', 'wer' or 'wie'"},
+  {en:"to get stuck in traffic",de:"im Stau steckenbleiben",cat:"Meine Fehler",rule:"steckenbleiben — one word; not 'in den Stau festecken'"},
+  {en:"to concentrate on",de:"sich auf etwas konzentrieren",cat:"Meine Fehler",rule:"konzentrieren — not konsentrieren; -z- not -s-"},
+  {en:"to adapt / adjust",de:"sich anpassen",cat:"Meine Fehler",rule:"sich anpassen — not 'vorbleiben'; er passt sich an"},
+  {en:"to fall behind",de:"zurückbleiben",cat:"Meine Fehler",rule:"zurückbleiben — one word; not 'hinter bleiben'"},
+  {en:"technology is driven forward",de:"Technologie wird vorangetrieben",cat:"Meine Fehler",rule:"vorantreiben Passiv: wird vorangetrieben — not 'beforted'"},
+  {en:"personal things / matters",de:"persönliche Dinge",cat:"Meine Fehler",rule:"persönliche Dinge — not 'personlichen sagen'"},
+  {en:"to ensure / make sure",de:"sicherstellen",cat:"Meine Fehler",rule:"sicherstellen — one separable word; not 'sicher machen'"},
+  {en:"to restrict / limit",de:"einschränken",cat:"Meine Fehler",rule:"einschränken — not 'beperkt' (that is Afrikaans/Dutch!) 😄"},
+  {en:"to restore a balance",de:"eine Balance wiederherstellen",cat:"Meine Fehler",rule:"wiederherstellen — separable; not 'wieder in balance bringen'"},
+  {en:"digitalisation (noun)",de:"die Digitalisierung",cat:"Meine Fehler",rule:"Digitalisierung — not Digitalieserung; -isierung ending"},
+  {en:"cultures (plural)",de:"die Kulturen",cat:"Meine Fehler",rule:"Kulturen — not Kulture; plural adds -en"},
+  {en:"they understand (plural)",de:"sie verstehen",cat:"Meine Fehler",rule:"plural subject → -en ending: verstehen — not verstehe"},
+  {en:"artificial intelligence",de:"die Künstliche Intelligenz",cat:"Meine Fehler",rule:"Künstliche Intelligenz — not Kunstamtigeintellegens"},
+  {en:"it has become more complicated",de:"es ist komplizierter geworden",cat:"Meine Fehler",rule:"werden Perfekt: ist geworden — not gewerden"},
+  {en:"older people (plural)",de:"ältere Menschen",cat:"Meine Fehler",rule:"ältere — umlaut ä; not alteren"},
+  {en:"to get to know / learn about",de:"kennenlernen",cat:"Meine Fehler",rule:"kennenlernen — one word; not 'kennen zu lernen'"},
+  {en:"to grow up with something",de:"damit aufwachsen",cat:"Meine Fehler",rule:"aufwachsen = to grow up; damit — not 'mit es großwerden'"},
+  {en:"the productivity (noun)",de:"die Produktivität",cat:"Meine Fehler",rule:"Produktivität — not Producktevitäte; -ivität ending"},
+  {en:"faster (comparative)",de:"schneller",cat:"Meine Fehler",rule:"schneller — not schnleller; no extra -l-"},
+  {en:"it makes (er/sie/es)",de:"er macht",cat:"Meine Fehler",rule:"er/sie/es macht — not mach; always needs -t ending"},
+  {en:"simpler (comparative)",de:"einfacher",cat:"Meine Fehler",rule:"einfacher — not einfacgher; no -g- in the middle"},
+  {en:"therefore people can (plural)",de:"deshalb können Menschen",cat:"Meine Fehler",rule:"deshalb → inversion: können Menschen — not 'kann menschen'"},
+  {en:"more important things",de:"wichtigere Dinge",cat:"Meine Fehler",rule:"wichtigere Dinge — not 'merh wigtige sache'"},
+  {en:"twofold / in two ways",de:"zweifältig",cat:"Meine Fehler",rule:"zweifältig — one word; not 'zwei fällig'"},
+  {en:"in reality (Dativ)",de:"in der Realität",cat:"Meine Fehler",rule:"die Realität = feminine; Dativ: in der — not 'in die'"},
+  {en:"with all new technology (Dat.)",de:"mit aller neuen Technologie",cat:"Meine Fehler",rule:"Dativ: aller neuen Technologie — not 'allem neue Tegnelogie'"},
+  {en:"any kind of (Dativ plural)",de:"irgendwelchen",cat:"Meine Fehler",rule:"irgendwelchen — not ergenwelchen; irg- not erg-"},
+  {en:"as a second point",de:"Als zweiten Punkt",cat:"Meine Fehler",rule:"Als zweiten Punkt — not 'Am zweiten punkt'"},
+  {en:"a big disadvantage (masc.)",de:"ein großer Nachteil",cat:"Meine Fehler",rule:"der Nachteil = masculine; ein großer — not 'ein großes'"},
+  {en:"reality (noun)",de:"die Realität",cat:"Meine Fehler",rule:"Realität — not reallität; single -l-"},
+  {en:"as well as possible",de:"so gut wie möglich",cat:"Meine Fehler",rule:"möglich — not möntlich; -lich not -tlich"},
+  {en:"responsibility (noun)",de:"die Verantwortung",cat:"Meine Fehler",rule:"Verantwortung — not verandwordelichkeit"},
+  {en:"to misuse / abuse",de:"missbrauchen",cat:"Meine Fehler",rule:"missbrauchen — double-ss; not misbraucht"},
+  {en:"one / a person (pronoun)",de:"man",cat:"Meine Fehler",rule:"man — single n; Mann = husband (capital M, double n)"},
+  {en:"to gain the upper hand",de:"die Oberhand gewinnen",cat:"Meine Fehler",rule:"die Oberhand gewinnen — not 'es übernehmen'"},
+  {en:"seriously damaged",de:"ernsthaft beschädigt",cat:"Meine Fehler",rule:"ernsthaft beschädigt — not 'sichelich beschädigt'"},
+];
+
+const typeSentences = [
+  {de:"Ich lerne jeden Tag Deutsch, weil ich nach Deutschland ziehen möchte.",en:"I learn German every day because I want to move to Germany.",cat:"weil",hint:"weil → Verb ans Ende"},
+  {de:"Obwohl ich manchmal müde bin, versuche ich es trotzdem.",en:"Although I am sometimes tired, I try anyway.",cat:"obwohl",hint:"obwohl → Inversion im Hauptsatz"},
+  {de:"Ich möchte mein Deutsch verbessern, damit ich in Deutschland arbeiten kann.",en:"I want to improve my German so that I can work in Germany.",cat:"damit",hint:"damit → Verb ans Ende"},
+  {de:"Einerseits ist Deutsch schwierig, andererseits ist es sehr interessant.",en:"On one hand German is difficult, on the other hand it is very interesting.",cat:"einerseits",hint:"beide Klauseln: Verb Position 2"},
+  {de:"Meiner Meinung nach ist es wichtig, dass man jeden Tag übt.",en:"In my opinion it is important that one practises every day.",cat:"Meinung",hint:"dass → Verb ans Ende"},
+  {de:"Ein Vorteil ist, dass man durch das Lernen andere Kulturen besser versteht.",en:"One advantage is that through learning one understands other cultures better.",cat:"Vorteil",hint:"dass → Verb ans Ende: versteht"},
+  {de:"Während ich Deutsch lerne, höre ich oft deutsche Musik.",en:"While I learn German, I often listen to German music.",cat:"während",hint:"während → Inversion im Hauptsatz"},
+  {de:"Er hat die Regeln nicht eingehalten, sodass ich ihn melden musste.",en:"He did not follow the rules, so I had to report him.",cat:"sodass",hint:"sodass → Verb ans Ende: musste"},
+  {de:"Zusammenfassend lässt sich sagen, dass Deutsch eine wichtige Sprache ist.",en:"In summary one can say that German is an important language.",cat:"Schluss",hint:"Zusammenfassend → Inversion; dass → Verb ans Ende"},
+  {de:"Trotzdem denke ich, dass wir gemeinsam eine Lösung finden können.",en:"Despite this I think that we can find a solution together.",cat:"trotzdem",hint:"trotzdem → Inversion: denke ich"},
+  {de:"Ich bin der Meinung, dass lebenslanges Lernen unerlässlich ist.",en:"I am of the opinion that lifelong learning is essential.",cat:"Meinung",hint:"dass → Verb ans Ende: ist"},
+  {de:"Obwohl er gut qualifiziert ist, macht er immer wieder dieselben Fehler.",en:"Although he is well qualified, he keeps making the same mistakes.",cat:"obwohl",hint:"obwohl → Verb ans Ende; dann Inversion"},
+  {de:"Darüber hinaus sollte man bedenken, dass Kommunikation sehr wichtig ist.",en:"Furthermore one should consider that communication is very important.",cat:"darüber hinaus",hint:"darüber hinaus → Inversion"},
+  {de:"Ich werde mein Deutsch weiter verbessern, damit ich mich gut integrieren kann.",en:"I will continue improving my German so I can integrate well.",cat:"Zukunft",hint:"Futur I: werde + Infinitiv; damit → Verb ans Ende"},
+  {de:"Sehr geehrte Damen und Herren, ich schreibe Ihnen, weil ich ein Problem habe.",en:"Dear Sir/Madam, I am writing to you because I have a problem.",cat:"E-Mail",hint:"weil → Verb ans Ende: habe"},
+  {de:"Ich halte es für sinnvoll, eine Kombination aus Büro und Homeoffice einzuführen.",en:"I consider it sensible to introduce a combination of office and home office.",cat:"Empfehlung",hint:"halte … für sinnvoll = fixed B2 phrase"},
+  {de:"Andererseits gibt es Menschen, die auf ihr Auto angewiesen sind.",en:"On the other hand there are people who depend on their car.",cat:"andererseits",hint:"andererseits → normal word order"},
+  {de:"Indem man täglich übt, verbessert man seine Deutschkenntnisse erheblich.",en:"By practising daily one improves one's German considerably.",cat:"indem",hint:"indem → Verb ans Ende; dann Inversion"},
+  {de:"Ich wäre Ihnen sehr dankbar, wenn Sie meinen Antrag genehmigen könnten.",en:"I would be very grateful if you could approve my request.",cat:"E-Mail",hint:"Konjunktiv II: wäre, könnten"},
+  {de:"Mit freundlichen Grüßen und vielen Dank für Ihre Zeit und Ihr Verständnis.",en:"Kind regards and many thanks for your time and understanding.",cat:"E-Mail",hint:"Formeller Abschluss einer E-Mail"},
+];
+
+const essayTopics = [
+  {name:"Homeoffice",prompt:"Ihr Unternehmen plant, Homeoffice dauerhaft einzuführen. Schreiben Sie einen Aufsatz mit Ihrer Meinung, Vorteilen, Nachteilen und einem Fazit.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"In der heutigen Arbeitswelt gewinnt das Homeoffice immer mehr an Bedeutung. Viele Unternehmen überlegen, ob sie diese Arbeitsform dauerhaft einführen sollen.",c:"gewinnt … an Bedeutung"},{l:"Meinung & Vorteile",t:"Meiner Meinung nach bietet das Homeoffice viele Vorteile. Einerseits spart man täglich viel Zeit, da man nicht pendeln muss. Außerdem kann man seine Arbeit flexibler gestalten, sodass die Work-Life-Balance deutlich verbessert wird.",c:"einerseits / sodass / außerdem"},{l:"Nachteile",t:"Andererseits gibt es auch Nachteile. Obwohl man zu Hause arbeitet, fühlen sich viele Mitarbeiter isoliert, weil der persönliche Kontakt zu Kollegen fehlt. Darüber hinaus ist es schwieriger, Beruf und Privatleben zu trennen.",c:"andererseits / obwohl / weil / darüber hinaus"},{l:"Schluss",t:"Zusammenfassend lässt sich sagen, dass Homeoffice sowohl Vor- als auch Nachteile hat. Ich halte es für sinnvoll, eine Kombination einzuführen, damit alle Mitarbeiter davon profitieren können.",c:"zusammenfassend / damit"}]},
+  {name:"Soziale Medien",prompt:"Soziale Medien verändern unsere Gesellschaft grundlegend. Schreiben Sie einen Aufsatz zu Vor- und Nachteilen.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"Soziale Medien sind heutzutage ein fester Bestandteil des täglichen Lebens. Millionen von Menschen nutzen Plattformen wie Instagram oder LinkedIn täglich.",c:"heutzutage"},{l:"Meinung & Vorteile",t:"Ich bin der Meinung, dass soziale Medien viele Möglichkeiten bieten. Ein wesentlicher Vorteil ist, dass man sich schnell mit Menschen weltweit verbinden kann, sodass man immer informiert ist.",c:"sodass / ein wesentlicher Vorteil"},{l:"Nachteile",t:"Trotzdem darf man die Nachteile nicht vergessen. Obwohl soziale Medien verbinden, können sie auch zu Einsamkeit führen, weil echte Beziehungen durch digitale ersetzt werden.",c:"trotzdem / obwohl / weil"},{l:"Schluss",t:"Zusammenfassend sind soziale Medien eine zweischneidige Sache. Deshalb halte ich es für wichtig, dass man einen bewussten Umgang damit pflegt.",c:"zusammenfassend / deshalb"}]},
+  {name:"Umweltschutz",prompt:"Viele meinen, jeder Einzelne sollte mehr für den Umweltschutz tun. Schreiben Sie Ihre Meinung dazu.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"Umweltschutz ist eines der wichtigsten Themen unserer Zeit. Immer häufiger wird diskutiert, ob der Einzelne oder die Regierung mehr Verantwortung tragen sollte.",c:"immer häufiger"},{l:"Meinung & Vorteile",t:"Meiner Meinung nach sollte jeder Mensch seinen Teil beitragen. Einerseits kann man durch Recycling viel bewirken, sodass die Umweltbelastung sinkt. Darüber hinaus steigt das Bewusstsein, wenn jeder mitmacht.",c:"einerseits / sodass / darüber hinaus"},{l:"Nachteile",t:"Andererseits ist es nicht fair, die gesamte Verantwortung auf den Einzelnen abzuwälzen. Obwohl viele umweltbewusst leben, verursachen große Unternehmen den Großteil der Emissionen.",c:"andererseits / obwohl"},{l:"Schluss",t:"Zusammenfassend ist Umweltschutz eine gemeinsame Aufgabe. Damit Veränderungen eintreten, müssen sowohl Einzelpersonen als auch Regierungen zusammenarbeiten.",c:"zusammenfassend / damit / sowohl … als auch"}]},
+  {name:"Digitalisierung",prompt:"Die Digitalisierung verändert unsere Arbeitswelt. Schreiben Sie einen Aufsatz zu Chancen und Risiken.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"Die Digitalisierung verändert nahezu alle Bereiche unseres Lebens. Immer mehr Aufgaben werden durch Technologie und künstliche Intelligenz übernommen.",c:"nahezu / immer mehr"},{l:"Meinung & Vorteile",t:"Ich bin der Überzeugung, dass die Digitalisierung enorme Chancen bietet. Einerseits werden Arbeitsprozesse effizienter, sodass Unternehmen wettbewerbsfähiger werden.",c:"einerseits / sodass"},{l:"Nachteile",t:"Andererseits birgt die Digitalisierung Risiken. Obwohl sie Effizienz steigert, werden viele Arbeitsplätze überflüssig, weil Maschinen menschliche Arbeit ersetzen.",c:"andererseits / obwohl / weil"},{l:"Schluss",t:"Zusammenfassend bringt die Digitalisierung sowohl Chancen als auch Herausforderungen. Deshalb muss die Gesellschaft in die Weiterbildung der Arbeitnehmer investieren.",c:"zusammenfassend / deshalb"}]},
+  {name:"Öffentlicher Verkehr",prompt:"Die Stadt plant, Autos aus der Innenstadt zu verbannen und den ÖPNV auszubauen. Schreiben Sie Ihre Meinung.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"In vielen Städten wird diskutiert, ob Autos aus der Innenstadt verbannt werden sollten. Diese Frage betrifft sowohl die Umwelt als auch die Lebensqualität.",c:"sowohl … als auch"},{l:"Meinung & Vorteile",t:"Meiner Meinung nach wäre es sinnvoll, den öffentlichen Verkehr auszubauen. Einerseits würde die Luftqualität verbessert, sodass die Gesundheit der Menschen geschützt wird.",c:"einerseits / sodass"},{l:"Nachteile",t:"Andererseits sind viele Menschen auf ihr Auto angewiesen, weil sie ohne gute Anbindung wohnen. Obwohl der ÖPNV praktisch ist, reicht er oft nicht aus.",c:"andererseits / weil / obwohl"},{l:"Schluss",t:"Zusammenfassend ist ein gut ausgebauter Nahverkehr die bessere Lösung. Damit dies gelingt, muss die Stadt jedoch erheblich investieren.",c:"zusammenfassend / damit"}]},
+  {name:"Lebenslanges Lernen",prompt:"Lebenslanges Lernen wird in der modernen Arbeitswelt immer wichtiger. Schreiben Sie Ihre Meinung.",reqs:["Einleitung","Meinung","Vorteile","Nachteile","Schluss","~150 Wörter"],
+  model:[{l:"Einleitung",t:"In einer sich schnell verändernden Welt ist lebenslanges Lernen wichtig. Immer mehr Unternehmen erwarten, dass Mitarbeiter kontinuierlich neue Fähigkeiten erwerben.",c:"immer mehr"},{l:"Meinung & Vorteile",t:"Ich bin überzeugt, dass lebenslanges Lernen unerlässlich ist. Ein großer Vorteil ist, dass man durch Weiterbildung wettbewerbsfähig bleibt. Darüber hinaus fördert Lernen die persönliche Entwicklung.",c:"darüber hinaus"},{l:"Nachteile",t:"Trotzdem gibt es Herausforderungen. Obwohl Weiterbildung wichtig ist, haben viele keine Zeit oder finanziellen Mittel. Außerdem kann der Druck zu Stress führen.",c:"trotzdem / obwohl / außerdem"},{l:"Schluss",t:"Zusammenfassend ist lebenslanges Lernen sowohl Chance als auch Herausforderung. Deshalb sollten Unternehmen ihre Mitarbeiter aktiv unterstützen, damit alle profitieren.",c:"zusammenfassend / deshalb / damit"}]}
+];
+
+const emailTopics = [
+  {name:"Urlaubsantrag",prompt:"Sie möchten zwei Wochen Urlaub im August nehmen. Schreiben Sie eine förmliche E-Mail an Ihren Chef/Ihre Chefin.",reqs:["Sehr geehrte/r …","Grund nennen","Zeitraum angeben","Vertretung anbieten","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nich hoffe, diese E-Mail findet Sie wohlauf. Ich schreibe Ihnen, weil ich gerne einen Urlaub für den Zeitraum vom 4. bis 18. August beantragen möchte.\n\nIn dieser Zeit werde ich alle laufenden Aufgaben im Voraus erledigen, damit meine Abwesenheit keine Unterbrechung verursacht. Außerdem bin ich bereit, meine Aufgaben zu übergeben, sodass alles reibungslos läuft.\n\nIch wäre Ihnen sehr dankbar, wenn Sie meinen Antrag genehmigen könnten.\n\nMit freundlichen Grüßen\n[Ihr Name]"},
+  {name:"Problem melden",prompt:"Ein Kollege verstößt gegen Firmenregeln. Schreiben Sie eine förmliche E-Mail an Ihren Chef/Ihre Chefin.",reqs:["Sehr geehrte/r …","Problem klar beschreiben","Auswirkungen nennen","Lösung vorschlagen","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nich wende mich an Sie, weil ich ein Problem ansprechen möchte. Obwohl wir bereits intern darüber gesprochen haben, hat sich die Situation nicht verbessert.\n\nEin Kollege verstößt wiederholt gegen die Firmenregeln, indem er während der Arbeitszeit sein Mobiltelefon benutzt. Darüber hinaus hat er Besprechungen ohne Entschuldigung verpasst.\n\nIch bitte Sie, Maßnahmen zu ergreifen, damit die Arbeitsatmosphäre angenehm bleibt.\n\nMit freundlichen Grüßen\n[Ihr Name]"},
+  {name:"Entschuldigung",prompt:"Sie haben einen wichtigen Termin verpasst. Schreiben Sie eine Entschuldigungs-E-Mail.",reqs:["Sehr geehrte/r …","Entschuldigung aussprechen","Grund erklären","Wiedergutmachung anbieten","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nich möchte mich aufrichtig entschuldigen, dass ich heute nicht an der Besprechung teilnehmen konnte. Es tut mir sehr leid, da ich weiß, wie wichtig dieses Meeting war.\n\nDer Grund war ein unvorhergesehener familiärer Notfall, sodass es mir nicht möglich war, rechtzeitig Bescheid zu geben. Obwohl ich verstehe, dass dies unprofessionell wirkt, versichere ich Ihnen, dass es nicht wieder vorkommt.\n\nMit freundlichen Grüßen\n[Ihr Name]"},
+  {name:"Vorschlag machen",prompt:"Sie haben eine Idee zur Verbesserung der Arbeitsprozesse. Schreiben Sie eine E-Mail an Ihren Chef.",reqs:["Sehr geehrte/r …","Vorschlag nennen","Begründung geben","Nutzen erklären","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nich schreibe Ihnen, weil ich einen Vorschlag habe, der unsere Abläufe verbessern könnte. Ich habe beobachtet, dass viele Aufgaben doppelt erledigt werden, sodass Zeit verloren geht.\n\nMeiner Meinung nach wäre eine digitale Projektmanagement-Software sinnvoll, damit alle Teammitglieder einen Überblick haben. Einerseits verbessert dies die Kommunikation, andererseits arbeiten wir effizienter.\n\nMit freundlichen Grüßen\n[Ihr Name]"},
+  {name:"Krankmeldung",prompt:"Sie sind krank. Schreiben Sie eine E-Mail an Ihren Chef/Ihre Chefin.",reqs:["Sehr geehrte/r …","Krankmeldung","Dauer","Vertretung","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nleider muss ich Ihnen mitteilen, dass ich mich heute nicht wohlfühle und deshalb nicht zur Arbeit erscheinen kann. Ich habe einen Arzt aufgesucht, der mir für drei Tage krankgeschrieben hat.\n\nDamit meine Abwesenheit keine Probleme verursacht, habe ich meinen Kollegen gebeten, meine dringenden Aufgaben zu übernehmen.\n\nMit freundlichen Grüßen\n[Ihr Name]"},
+  {name:"Beschwerde",prompt:"Sie sind mit einem Ablauf unzufrieden. Schreiben Sie eine Beschwerde-E-Mail.",reqs:["Sehr geehrte/r …","Problem beschreiben","Datum/Kontext","Lösung fordern","Mit freundlichen Grüßen","50–80 Wörter"],model:"Sehr geehrte/r Herr/Frau [Name],\n\nich schreibe Ihnen, weil ich mit dem Ablauf unseres letzten Projekts nicht zufrieden bin. Obwohl wir den Abgabetermin vereinbart hatten, wurde das Ergebnis eine Woche später geliefert, sodass wir unsere Kunden enttäuscht haben.\n\nIch halte es für wichtig, dass dies nicht wieder vorkommt, damit das Vertrauen unserer Kunden erhalten bleibt.\n\nMit freundlichen Grüßen\n[Ihr Name]"}
+];
+
+const allPhrases = [
+  {cat:"Einleitung",de:"In der heutigen Zeit ist … ein wichtiges Thema.",en:"Nowadays … is an important topic."},
+  {cat:"Einleitung",de:"Diese Frage betrifft viele Menschen weltweit.",en:"This question affects many people worldwide."},
+  {cat:"Einleitung",de:"Immer mehr Menschen beschäftigen sich mit der Frage, ob …",en:"More and more people are considering whether …"},
+  {cat:"Meinung",de:"Meiner Meinung nach …",en:"In my opinion …"},
+  {cat:"Meinung",de:"Ich bin der Meinung, dass …",en:"I am of the opinion that …"},
+  {cat:"Meinung",de:"Ich bin der Überzeugung, dass …",en:"I am convinced that …"},
+  {cat:"Meinung",de:"Ich halte es für sinnvoll, dass …",en:"I consider it sensible that …"},
+  {cat:"Vorteil",de:"Ein wesentlicher Vorteil ist, dass …",en:"A key advantage is that …"},
+  {cat:"Vorteil",de:"Einerseits … sodass …",en:"On one hand … so that …"},
+  {cat:"Vorteil",de:"Darüber hinaus …",en:"Furthermore …"},
+  {cat:"Vorteil",de:"Ein weiterer Vorteil besteht darin, dass …",en:"A further advantage lies in the fact that …"},
+  {cat:"Nachteil",de:"Ein Nachteil ist jedoch, dass …",en:"A disadvantage, however, is that …"},
+  {cat:"Nachteil",de:"Andererseits …",en:"On the other hand …"},
+  {cat:"Nachteil",de:"Trotzdem darf man nicht vergessen, dass …",en:"Despite this, one must not forget that …"},
+  {cat:"Kontrast",de:"Einerseits … , andererseits …",en:"On one hand … , on the other hand …"},
+  {cat:"Kontrast",de:"Obwohl … , …",en:"Although … , …"},
+  {cat:"Kontrast",de:"Trotzdem denke ich, dass …",en:"Despite this, I think that …"},
+  {cat:"Kontrast",de:"Während … , …",en:"While … , …"},
+  {cat:"Schluss",de:"Zusammenfassend lässt sich sagen, dass …",en:"In summary, one can say that …"},
+  {cat:"Schluss",de:"Deshalb halte ich es für wichtig, dass …",en:"Therefore I consider it important that …"},
+  {cat:"Schluss",de:"Abschließend bin ich der Meinung, dass …",en:"In conclusion, I am of the opinion that …"},
+  {cat:"Schluss",de:"Aus diesem Grund plädiere ich dafür, dass …",en:"For this reason I advocate that …"},
+  {cat:"E-Mail",de:"Sehr geehrte/r Herr/Frau [Name],",en:"Dear Mr./Ms. [Name],"},
+  {cat:"E-Mail",de:"Ich schreibe Ihnen, weil …",en:"I am writing to you because …"},
+  {cat:"E-Mail",de:"Ich wende mich an Sie, weil …",en:"I am contacting you because …"},
+  {cat:"E-Mail",de:"Ich hoffe, diese E-Mail findet Sie wohlauf.",en:"I hope this email finds you well."},
+  {cat:"E-Mail",de:"Ich wäre Ihnen sehr dankbar, wenn …",en:"I would be very grateful if …"},
+  {cat:"E-Mail",de:"Ich stehe Ihnen gerne zur Verfügung.",en:"I am happy to be available for further questions."},
+  {cat:"E-Mail",de:"Mit freundlichen Grüßen",en:"Kind regards"},
+  {cat:"E-Mail",de:"Ich freue mich auf Ihre Rückmeldung.",en:"I look forward to your response."},
+];
+
+// ══════════════════════════════════════
+// SPELLING TRAINER
+// ══════════════════════════════════════
+let spDeck=[], spIdx=0, spCorrect=0, spWrong=0, spStreak=0, spRevealed=false;
+let spMistakes={}, spFilter='Alle';
+
+function spBuildCats(){
+  const cats=['Alle','Meine Fehler','Nomen','Verb','Rechtschreibung','Endungen'];
+  document.getElementById('spell-cats').innerHTML=cats.map(c=>
+    `<button class="cf-btn${c==='Alle'?' active':''}" onclick="spSetFilter('${c}',this)">${c}</button>`).join('');
+}
+function spSetFilter(cat,btn){
+  spFilter=cat;
+  document.querySelectorAll('#spell-cats .cf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  spBuildDeck();spIdx=0;spCorrect=0;spWrong=0;spStreak=0;spUpdateStats();spShowCard();
+}
+function spShuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function spBuildDeck(){
+  let f=spFilter==='Alle'?[...spellWords]:spellWords.filter(w=>w.cat===spFilter);
+  spDeck=spShuffle(f);
+}
+function spShowCard(){
+  if(!spDeck.length)return;
+  const w=spDeck[spIdx];
+  document.getElementById('sp-counter').textContent=`${spIdx+1}/${spDeck.length}`;
+  document.getElementById('sp-prog').style.width=`${((spIdx+1)/spDeck.length)*100}%`;
+  document.getElementById('sp-english').textContent=w.en;
+  document.getElementById('sp-hint').textContent='';
+  const b=document.getElementById('sp-badge');
+  b.textContent=w.cat;
+  b.className='badge '+(w.cat==='Meine Fehler'?'badge-b2':w.cat==='Nomen'?'badge-noun':w.cat==='Verb'?'badge-verb':w.cat==='Endungen'?'badge-end':'badge-spell');
+  const inp=document.getElementById('sp-input');
+  inp.value='';inp.className='';inp.disabled=false;inp.focus();
+  document.getElementById('sp-reveal').className='answer-reveal';
+  document.getElementById('sp-check').style.display='';
+  document.getElementById('sp-next').style.display='none';
+  spRevealed=false;
+}
+function spKey(e){if(e.key==='Enter'){e.preventDefault();spRevealed?spNext():spCheck();}}
+function ins(c){
+  const i=document.getElementById('sp-input');
+  const s=i.selectionStart,en=i.selectionEnd;
+  i.value=i.value.slice(0,s)+c+i.value.slice(en);
+  i.selectionStart=i.selectionEnd=s+1;i.focus();
+}
+function spCheck(){
+  if(spRevealed)return;
+  spRevealed=true;
+  const w=spDeck[spIdx];
+  const typed=document.getElementById('sp-input').value.trim();
+  const isOk = typed.toLowerCase() === w.de.toLowerCase() ||
+    (w.alt && w.alt.some(a => typed.toLowerCase() === a.toLowerCase()));
+  const inp=document.getElementById('sp-input');
+  inp.disabled=true;
+  if(isOk){
+    spCorrect++;spStreak++;
+    inp.className='inp-correct';
+    const r=document.getElementById('sp-reveal');
+    r.className='answer-reveal show answer-correct';
+    document.getElementById('sp-answer-word').textContent='✓ '+w.de+(w.alt?' / '+w.alt.join(' / '):'');
+    document.getElementById('sp-diff').textContent='';
+    document.getElementById('sp-rule').textContent='📝 '+w.rule;
+  } else {
+    spWrong++;spStreak=0;
+    inp.className='inp-wrong';
+    const r=document.getElementById('sp-reveal');
+    r.className='answer-reveal show answer-wrong';
+    document.getElementById('sp-answer-word').textContent='Richtig: '+w.de+(w.alt?' / '+w.alt.join(' / '):'');
+    document.getElementById('sp-diff').innerHTML=spBuildDiff(typed,w.de);
+    document.getElementById('sp-rule').textContent='📝 '+w.rule;
+    if(!spMistakes[w.en])spMistakes[w.en]={de:w.de,count:0,cat:w.cat};
+    spMistakes[w.en].count++;
+    spUpdateMistakes();
+  }
+  spUpdateStats();
+  document.getElementById('sp-check').style.display='none';
+  document.getElementById('sp-next').style.display='';
+}
+function spBuildDiff(typed,correct){
+  let h='<span style="font-size:11px;color:#999">Du schriebst: </span>';
+  for(let i=0;i<Math.max(typed.length,correct.length);i++){
+    if(i>=typed.length)h+=`<span class="diff-err">${correct[i]}</span>`;
+    else if(i>=correct.length)h+=`<span class="diff-err" style="text-decoration:line-through">${typed[i]}</span>`;
+    else if(typed[i].toLowerCase()===correct[i].toLowerCase())h+=`<span class="diff-ok">${typed[i]}</span>`;
+    else h+=`<span class="diff-err">${correct[i]}</span>`;
+  }
+  return h;
+}
+function spNext(){spIdx=(spIdx+1)%spDeck.length;spShowCard();}
+function spSkip(){spIdx=(spIdx+1)%spDeck.length;spShowCard();}
+function shuffleDeck(){spBuildDeck();spIdx=0;spCorrect=0;spWrong=0;spStreak=0;spUpdateStats();spShowCard();}
+function spUpdateStats(){
+  document.getElementById('sp-correct').textContent=spCorrect;
+  document.getElementById('sp-wrong').textContent=spWrong;
+  document.getElementById('sp-pct').textContent=spCorrect+spWrong>0?Math.round(spCorrect/(spCorrect+spWrong)*100)+'%':'—';
+  document.getElementById('sp-streak').textContent=spStreak;
+  document.getElementById('mistakes-nav-btn').textContent=`Fehler (${Object.keys(spMistakes).length}) ❌`;
+}
+function spUpdateMistakes(){
+  const keys=Object.keys(spMistakes).sort((a,b)=>spMistakes[b].count-spMistakes[a].count);
+  document.getElementById('mistakes-list').innerHTML=keys.length?keys.map(k=>`
+    <div class="mistake-row">
+      <div><div style="font-size:12px;color:var(--text3)">${k}</div><div style="font-family:'DM Mono',monospace;font-weight:500">${spMistakes[k].de}</div></div>
+      <span class="mistake-count">${spMistakes[k].count}×</span>
+    </div>`).join(''):'<div class="empty-state">Noch keine Fehler! 🎉</div>';
+}
+function goTo_mistakes(){
+  document.getElementById('spell-main').style.display='none';
+  document.getElementById('spell-mistakes-panel').style.display='block';
+  spUpdateMistakes();
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('mistakes-nav-btn').addEventListener('click',goTo_mistakes);
+});
+function practiseMistakes(){
+  const mw=spellWords.filter(w=>spMistakes[w.en]);
+  if(!mw.length){alert('Noch keine Fehler!');return;}
+  spDeck=spShuffle(mw);spIdx=0;
+  document.getElementById('spell-mistakes-panel').style.display='none';
+  document.getElementById('spell-main').style.display='block';
+  spShowCard();
+}
+function clearMistakes(){spMistakes={};spUpdateMistakes();spUpdateStats();}
+
+// ══════════════════════════════════════
+// WRITING (ESSAY + EMAIL)
+// ══════════════════════════════════════
+let eTimer=null,mTimer=null,eSec=1800,mSec=1200,eStarted=false,mStarted=false;
+const errWords={'arbeitswerl':'Arbeitswelt','arbeitsfrom':'Arbeitsform','penden':'pendeln','kwalifisiert':'qualifiziert','breuchen':'brauchen','fähler':'Fehler','verbersern':'verbessern','korriegieren':'korrigieren','emphelen':'empfehlen','gluabe':'glaube','dammit':'damit','zusammenfassent':'Zusammenfassend','anderseits':'Andererseits','kolegen':'Kollegen','produktief':'produktiv','definief':'definitiv','noral':'normal','menchsen':'Menschen','wahrent':'während','drausen':'draußen','heuzutage':'heutzutage','machmal':'manchmal','swerig':'schwierig','benutye':'benutze','darduch':'dadurch','eingentlich':'eigentlich','sätzr':'Sätze','passsieren':'passieren','verker':'Verkehr','spandieren':'verbringen','bedeuted':'bedeutet','gibt ese':'gibt es','nocht':'noch','digitalieserung':'Digitalisierung','schliesen':'schließen','reallität':'Realität','montlich':'möglich','verandwordelichkeit':'Verantwortung','misbraucht':'missbraucht','beperkt':'eingeschränkt','ergenwelchen':'irgendwelchen','konsentrieren':'konzentrieren','festecken':'steckenbleiben','beforted':'vorangetrieben','producktevitäte':'Produktivität','einfacgher':'einfacher','schnleller':'schneller','frimen':'Firmen','firemen':'Firmen','vorbleiben':'sich anpassen','hinter bleiben':'zurückbleiben','kulture':'Kulturen','sichelich':'ernsthaft'};
+const b2conn=['obwohl','damit','während','sodass','einerseits','andererseits','darüber hinaus','indem','trotzdem','deshalb','zusammenfassend','weil','dass'];
+
+function pad(n){return n<10?'0'+n:String(n);}
+function fmt(s){return pad(Math.floor(s/60))+':'+pad(s%60);}
+function wc(t){return t.trim().split(/\s+/).filter(w=>w.length>0).length;}
+
+function startTimer(mode){
+  if(mode==='e'&&!eStarted){eStarted=true;eTimer=setInterval(()=>{eSec--;updTimer('e');if(eSec<=0){clearInterval(eTimer);submitWrite('e');}},1000);}
+  if(mode==='m'&&!mStarted){mStarted=true;mTimer=setInterval(()=>{mSec--;updTimer('m');if(mSec<=0){clearInterval(mTimer);submitWrite('m');}},1000);}
+}
+function updTimer(mode){
+  const s=mode==='e'?eSec:mSec;
+  const el=document.getElementById(mode+'-timer');
+  el.textContent=fmt(s);
+  el.className='timer '+(s>300?'ok':s>60?'warn':'danger');
+}
+function onWriteType(mode){
+  const val=document.getElementById(mode+'-text').value;
+  startTimer(mode);
+  const count=wc(val);
+  const target=mode==='e'?150:65;
+  document.getElementById(mode+'-wc').textContent=count;
+  const pct=Math.min((count/target)*100,100);
+  const pb=document.getElementById(mode+'-prog');
+  pb.style.width=pct+'%';
+  pb.style.background=count>=target*.85&&count<=target*1.2?'var(--accent)':count>target*1.2?'var(--red)':'var(--blue)';
+  const wcel=document.getElementById(mode+'-wc-display');
+  wcel.textContent=count+' Wörter';
+  wcel.className='wc-val '+(count>=130&&count<=170?'wc-green':count>170?'wc-red':'');
+  const found=[...new Set(b2conn.filter(c=>val.toLowerCase().includes(c)))];
+  document.getElementById(mode+'-conn').textContent=found.length;
+
+  // ── THREE-COLOUR CHECKER (essay only) ──
+  const doSpell   = mode==='e' ? (document.getElementById('chk-spell')  ?.checked ?? true) : true;
+  const doArticle = mode==='e' ? (document.getElementById('chk-article')?.checked ?? true) : false;
+  const doCap     = mode==='e' ? (document.getElementById('chk-cap')    ?.checked ?? true) : false;
+
+  // Escape HTML first
+  let ov = val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // 🔴 SPELL CHECK — personal mistakes + real dictionary
+  if(doSpell){
+    // First pass: real dictionary check word by word
+    ov = ov.replace(/\b([a-zA-ZäöüÄÖÜß]{2,})\b/g, (match) => {
+      const low = match.toLowerCase();
+      if(SPELL_IGNORE.has(low)) return match;
+      if(spellOk(low)) return match;
+      return `<span class="err-spell">${match}</span>`;
+    });
+    // Second pass: personal mistakes (override with same colour)
+    Object.keys(errWords).forEach(wrong=>{
+      const rx=new RegExp('\\b'+wrong.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b','gi');
+      ov=ov.replace(rx,m=>`<span class="err-spell">${m}</span>`);
+    });
+  }
+
+  // 🟠 ARTICLE CHECKER — wrong gender article before known noun
+  if(doArticle){
+    const articleErrors = [
+      // Wrong masculine used for feminine
+      {wrong:/\b(der|den|dem)\s+(Meinung|Entscheidung|Lösung|Regel|Firma|Kommunikation|Balance|Realität|Verantwortung|Digitalisierung|Produktivität|Möglichkeit|Entwicklung|Arbeit|Zeit|Freiheit|Sicherheit|Wahl|Frage|Seite|Welt|Natur)\b/gi, note:'die'},
+      // Wrong feminine used for masculine
+      {wrong:/\b(die|der|den)\s+(Vorteil|Nachteil|Verkehr|Stillstand|Arbeitsplatz|Vorschlag|Fehler|Satz|Computer|Beruf|Tag|Mann|Mensch|Brief|Punkt|Schritt|Grund|Teil)\b/gi, note:'der'},
+      // Wrong article used for neuter
+      {wrong:/\b(der|die)\s+(Homeoffice|Risiko|Kind|Problem|Ergebnis|Thema|System|Leben|Bild|Haus|Jahr|Land|Auto|Ziel)\b/gi, note:'das'},
+      // Common specific mistakes from your essays
+      {wrong:/\b(der)\s+(Arbeit)\b/gi, note:'die Arbeit'},
+      {wrong:/\b(die|der)\s+(Stau)\b/gi, note:'der Stau'},
+      {wrong:/\b(in die)\s+(Realität)\b/gi, note:'in der Realität'},
+      {wrong:/\b(bei die)\b/gi, note:'bei der'},
+      {wrong:/\b(nach die)\b/gi, note:'nach der'},
+      {wrong:/\b(mit die)\b/gi, note:'mit der'},
+      {wrong:/\b(für die)\s+(Arbeit)\b/gi, note:'für die Arbeit ✓'},
+    ];
+    articleErrors.forEach(({wrong})=>{
+      ov=ov.replace(wrong,m=>`<span class="err-article">${m}</span>`);
+    });
+  }
+
+  // 🟡 CAPITALISATION CHECKER — nouns after space/start that are lowercase
+  if(doCap){
+    const commonNouns=['menschen','firmen','arbeit','kollegen','meinung','vorteil','nachteil','verkehr','realität','digitalisierung','kommunikation','produktivität','verantwortung','freiheit','sicherheit','balance','entscheidung','lösung','entwicklung','technologie','welt','zeit','land','jahr','tag','haus','kind','mensch','mann','frau','problem','thema','ergebnis','punkt','schritt','grund','teil','seite','frage','regel','firma','vorschlag','fehler','satz','leben','bild','auto','ziel','stau','beruf','computer','brief','natur','stil','stil'];
+    commonNouns.forEach(noun=>{
+      // Match noun when it follows a space and is lowercase (not already inside a span)
+      const rx=new RegExp('(?<=\\s|^|,\\s*)\\b('+noun+')\\b','g');
+      ov=ov.replace(rx,m=>`<span class="err-cap">${m}</span>`);
+    });
+  }
+
+  const ovEl=document.getElementById(mode+'-overlay');
+  ovEl.innerHTML=ov;
+  ovEl.scrollTop=document.getElementById(mode+'-text').scrollTop;
+}
+function syncOv(mode){document.getElementById(mode+'-overlay').scrollTop=document.getElementById(mode+'-text').scrollTop;}
+function submitWrite(mode){
+  const val=document.getElementById(mode+'-text').value.trim();
+  const count=wc(val);
+  const fb=document.getElementById(mode+'-feedback');
+  const found=[...new Set(b2conn.filter(c=>val.toLowerCase().includes(c)))];
+  let tips=[];
+  if(mode==='e'){
+    if(count<100)tips.push(`⚠️ Nur ${count} Wörter — Ziel ist ~150 Wörter.`);
+    if(count>180)tips.push(`⚠️ ${count} Wörter — etwas zu lang. Versuche ~150.`);
+    if(!val.toLowerCase().includes('meinung')&&!val.toLowerCase().includes('überzeugung'))tips.push('⚠️ Meinung fehlt! Verwende: Meiner Meinung nach …');
+    if(!val.toLowerCase().includes('vorteil')&&!val.toLowerCase().includes('einerseits'))tips.push('⚠️ Vorteile nicht klar genannt.');
+    if(!val.toLowerCase().includes('nachteil')&&!val.toLowerCase().includes('andererseits'))tips.push('⚠️ Nachteile nicht klar genannt.');
+    if(!val.toLowerCase().includes('zusammenfassend')&&!val.toLowerCase().includes('abschließend'))tips.push('⚠️ Schluss fehlt! Verwende: Zusammenfassend lässt sich sagen …');
+  } else {
+    if(!val.toLowerCase().includes('sehr geehrte'))tips.push('⚠️ Anrede fehlt: Sehr geehrte/r Herr/Frau …');
+    if(!val.toLowerCase().includes('mit freundlichen grüßen'))tips.push('⚠️ Abschluss fehlt: Mit freundlichen Grüßen');
+    if(count<30)tips.push('⚠️ Zu kurz — schreib mindestens 50 Wörter.');
+  }
+  if(found.length<2)tips.push('💡 Mehr B2-Konnektoren verwenden: obwohl, damit, sodass, einerseits …');
+  if(tips.length===0){
+    fb.className='feedback show good';
+    fb.innerHTML=`✓ Ausgezeichnet! ${count} Wörter. Konnektoren: <strong>${found.join(', ')}</strong>.<br>📋 Kopiere deinen Text und paste ihn in den Chat — Claude korrigiert alles im Detail!`;
+  } else {
+    fb.className='feedback show warn';
+    fb.innerHTML=tips.join('<br>')+(found.length>0?`<br>✓ Konnektoren: <strong>${found.join(', ')}</strong>`:'')+`<br><br>📋 Paste deinen Text im Chat für vollständige Korrektur!`;
+  }
+}
+function resetWrite(mode){
+  if(mode==='e'){clearInterval(eTimer);eSec=1800;eStarted=false;document.getElementById('e-timer').textContent='30:00';document.getElementById('e-timer').className='timer ok';document.getElementById('e-text').value='';document.getElementById('e-overlay').innerHTML='';document.getElementById('e-wc').textContent='0';document.getElementById('e-conn').textContent='0';document.getElementById('e-prog').style.width='0%';document.getElementById('e-wc-display').textContent='0 Wörter';document.getElementById('e-feedback').className='feedback';}
+  else{clearInterval(mTimer);mSec=1200;mStarted=false;document.getElementById('m-timer').textContent='20:00';document.getElementById('m-timer').className='timer ok';document.getElementById('m-text').value='';document.getElementById('m-overlay').innerHTML='';document.getElementById('m-wc').textContent='0';document.getElementById('m-conn').textContent='0';document.getElementById('m-prog').style.width='0%';document.getElementById('m-wc-display').textContent='0 Wörter';document.getElementById('m-feedback').className='feedback';}
+}
+function toggleModel(boxId,btnId){
+  const b=document.getElementById(boxId);b.classList.toggle('open');
+  const btn=document.getElementById(btnId);btn.textContent=b.classList.contains('open')?btn.textContent.replace('anzeigen ▾','verbergen ▴'):btn.textContent.replace('verbergen ▴','anzeigen ▾');
+}
+function buildEssayTopics(){
+  document.getElementById('essay-topics').innerHTML=essayTopics.map((t,i)=>`<button class="topic-pill${i===0?' active':''}" onclick="selEssay(${i},this)">${t.name}</button>`).join('');
+  showEssayTopic(0);
+}
+function selEssay(i,btn){document.querySelectorAll('#essay-topics .topic-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');showEssayTopic(i);resetWrite('e');document.getElementById('essay-model-box').classList.remove('open');document.getElementById('essay-model-toggle').textContent='📖 Musteraufsatz anzeigen ▾';}
+function showEssayTopic(i){
+  const t=essayTopics[i];
+  document.getElementById('essay-prompt').innerHTML=`<div class="prompt-title">📋 Aufgabe: ${t.name}</div><div class="prompt-text">${t.prompt}</div><div class="req-row">${t.reqs.map(r=>`<span class="req-pill">${r}</span>`).join('')}</div>`;
+  document.getElementById('essay-model-box').innerHTML=t.model.map(s=>`<div class="model-sec"><div class="model-label">${s.l}</div><div class="model-text">${s.t}</div><div style="margin-top:4px"><span class="conn-tag">${s.c}</span></div></div>`).join('');
+}
+function buildEmailTopics(){
+  document.getElementById('email-topics').innerHTML=emailTopics.map((t,i)=>`<button class="topic-pill${i===0?' active':''}" onclick="selEmail(${i},this)">${t.name}</button>`).join('');
+  showEmailTopic(0);
+}
+function selEmail(i,btn){document.querySelectorAll('#email-topics .topic-pill').forEach(b=>b.classList.remove('active'));btn.classList.add('active');showEmailTopic(i);resetWrite('m');document.getElementById('email-model-box').classList.remove('open');document.getElementById('email-model-toggle').textContent='📖 Muster-E-Mail anzeigen ▾';}
+function showEmailTopic(i){
+  const t=emailTopics[i];
+  document.getElementById('email-prompt').innerHTML=`<div class="prompt-title">📋 Situation: ${t.name}</div><div class="prompt-text">${t.prompt}</div><div class="req-row">${t.reqs.map(r=>`<span class="req-pill">${r}</span>`).join('')}</div>`;
+  document.getElementById('email-model-box').innerHTML=`<div class="model-label">Muster-E-Mail</div><div class="model-text" style="white-space:pre-line;font-size:13px">${t.model}</div>`;
+}
+
+// ══════════════════════════════════════
+// TYPING TRAINER
+// ══════════════════════════════════════
+let tDeck=[],tIdx=0,tCorrect=0,tWrong=0,tStartTime=null,tRevealed=false,tFilter='Alle';
+const typeCats=['Alle','weil','obwohl','damit','während','sodass','einerseits','andererseits','E-Mail','Meinung','Schluss','Zukunft','Empfehlung','darüber hinaus','indem','trotzdem'];
+function tBuildCats(){document.getElementById('type-cats').innerHTML=['Alle',...new Set(typeSentences.map(s=>s.cat))].map(c=>`<button class="cf-btn${c==='Alle'?' active':''}" onclick="tSetFilter('${c}',this)">${c}</button>`).join('');}
+function tSetFilter(cat,btn){tFilter=cat;document.querySelectorAll('#type-cats .cf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');tBuildDeck();tIdx=0;tCorrect=0;tWrong=0;tUpdateStats();tShowCard();}
+function tShuffle(a){const r=[...a];for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function tBuildDeck(){tDeck=tShuffle(tFilter==='Alle'?[...typeSentences]:typeSentences.filter(s=>s.cat===tFilter));}
+function tShowCard(){
+  if(!tDeck.length)return;
+  const s=tDeck[tIdx];
+  document.getElementById('t-counter').textContent=`${tIdx+1}/${tDeck.length}`;
+  document.getElementById('t-prog').style.width=`${((tIdx+1)/tDeck.length)*100}%`;
+  document.getElementById('t-badge').textContent=s.cat;
+  document.getElementById('t-hint').textContent='💡 '+s.hint;
+  document.getElementById('t-translation').textContent='🇬🇧 '+s.en;
+  const d=document.getElementById('t-display');
+  d.innerHTML=s.de.split('').map((c,i)=>`<span class="ch-pending" id="tc${i}">${c===' '?'\u00a0':c}</span>`).join('');
+  const inp=document.getElementById('t-input');inp.value='';inp.focus();
+  document.getElementById('t-feedback').className='feedback';
+  document.getElementById('t-check').style.display='';document.getElementById('t-next').style.display='none';
+  tStartTime=null;tRevealed=false;
+}
+function tType(){
+  const s=tDeck[tIdx];const typed=document.getElementById('t-input').value;
+  if(!tStartTime&&typed.length>0)tStartTime=Date.now();
+  for(let i=0;i<s.de.length;i++){const el=document.getElementById('tc'+i);if(!el)continue;if(i<typed.length)el.className='ch-'+(typed[i]===s.de[i]?'correct':'wrong');else if(i===typed.length)el.className='ch-current';else el.className='ch-pending';}
+}
+function tKey(e){if(e.key==='Enter'){e.preventDefault();tRevealed?tNext():tCheck();}}
+function tIns(c){const i=document.getElementById('t-input');const s=i.selectionStart,en=i.selectionEnd;i.value=i.value.slice(0,s)+c+i.value.slice(en);i.selectionStart=i.selectionEnd=s+1;i.focus();tType();}
+function tCheck(){
+  if(tRevealed)return;tRevealed=true;
+  const s=tDeck[tIdx];const typed=document.getElementById('t-input').value.trim();
+  const ok=typed===s.de;const fb=document.getElementById('t-feedback');
+  if(ok){
+    tCorrect++;if(tStartTime){const mins=(Date.now()-tStartTime)/60000;const w=Math.round((typed.length/5)/mins);document.getElementById('t-wpm').textContent=w;}
+    fb.className='feedback show good';fb.innerHTML='✓ Perfekt!';
+  } else {
+    tWrong++;fb.className='feedback show warn';
+    fb.innerHTML=`Richtig: <span style="font-family:'DM Mono',monospace;font-size:13px">${s.de}</span>`;
+  }
+  tUpdateStats();document.getElementById('t-check').style.display='none';document.getElementById('t-next').style.display='';
+}
+function tNext(){tIdx=(tIdx+1)%tDeck.length;tShowCard();}
+function tSkip(){tIdx=(tIdx+1)%tDeck.length;tShowCard();}
+function tReset(){tDeck=tShuffle([...typeSentences]);tIdx=0;tCorrect=0;tWrong=0;tUpdateStats();tShowCard();}
+function tUpdateStats(){document.getElementById('t-correct').textContent=tCorrect;document.getElementById('t-wrong').textContent=tWrong;document.getElementById('t-pct').textContent=tCorrect+tWrong>0?Math.round(tCorrect/(tCorrect+tWrong)*100)+'%':'—';}
+
+// ══════════════════════════════════════
+// PHRASES
+// ══════════════════════════════════════
+function buildPhrases(){
+  const cats=['Alle',...new Set(allPhrases.map(p=>p.cat))];
+  document.getElementById('phrase-cats').innerHTML=cats.map(c=>`<button class="cf-btn${c==='Alle'?' active':''}" onclick="filterPhrases('${c}',this)">${c}</button>`).join('');
+  renderPhrases('Alle');
+}
+function filterPhrases(cat,btn){document.querySelectorAll('#phrase-cats .cf-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderPhrases(cat);}
+function renderPhrases(cat){
+  const list=cat==='Alle'?allPhrases:allPhrases.filter(p=>p.cat===cat);
+  document.getElementById('phrase-grid').innerHTML=list.map(p=>`<div class="ph-card" onclick="copyPh(this,'${p.de.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')" ><div class="ph-cat">${p.cat}</div><div class="ph-de">${p.de}</div><div class="ph-en">${p.en}</div></div>`).join('');
+}
+function copyPh(el,text){navigator.clipboard.writeText(text).catch(()=>{});el.classList.add('copied');setTimeout(()=>el.classList.remove('copied'),700);}
+
+// ══════════════════════════════════════
+// DARK MODE
+// ══════════════════════════════════════
+let isDark = false;
+function toggleDark(){
+  isDark=!isDark;
+  document.body.classList.toggle('dark', isDark);
+  document.getElementById('dark-btn').textContent = isDark ? '☀️' : '🌙';
+  localStorage.setItem('b2-dark', isDark);
+}
+// Restore preference on load
+if(localStorage.getItem('b2-dark')==='true'){
+  isDark=true;
+  document.body.classList.add('dark');
+  document.getElementById('dark-btn').textContent='☀️';
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+spBuildCats();spBuildDeck();spShowCard();
+buildEssayTopics();buildEmailTopics();
+tBuildCats();tBuildDeck();tShowCard();
+buildPhrases();
+
+// ══════════════════════════════════════
+// REAL DICTIONARY — 13,115 German words
+// ══════════════════════════════════════
+const DICT=new Set(["abend","abendessen","aber","abfahren","abgefahren","abitur","ablehnen","abschließend","abschluss","abteilung","acht","achte","achtzehn","achtzig","adresse","aktuell","akzent","alle","allein","allem","allerdings","allergie","alles","allmählich","als","also","alt","alter","altmodisch","am","am ende","ampel","an","anbei","andere","andererseits","anders","anfangen","angebot","angefangen","angekommen","angenehm","angepasst","angst","anhängen","ankommen","ankündigen","anpasse","anpassen","anpasst","anrufen","ans","anschließend","ansicht","anstatt","anstatt zu","antworten","anziehen","apfel","apotheke","app","april","arbeit","arbeite","arbeiten","arbeitest","arbeitet","arbeitete","arbeiteten","arbeitnehmer","argument","argumentieren","arm","arme","artikel","arzt","auch","auf","auf der anderen seite","auf der einen seite","auf jeden fall","auf wiedersehen","aufgabe","aufgeben","aufgehört","aufgemacht","aufgepasst","aufgeregt","aufgeräumt","aufgestanden","aufgewachsen","aufgrund","aufhören","aufmachen","aufmerksamkeit","aufpassen","aufregend","aufräumen","aufstehen","aufwachsen","aufzug","auge","augen","august","aus","ausbildung","ausflug","ausgabe","ausgaben","ausgeben","ausgegangen","ausgehen","ausgestiegen","ausreichend","ausruhen","ausschalten","aussprache","aussteigen","ausstellung","ausweis","auto","autobahn","automatisierung","autos","außer","außerdem","außerhalb","babies","baby","backen","badezimmer","bahn","bahnhof","bald","balkon","banane","bananen","bank","bargeld","basketball","bauch","bauen","baum","beantragen","bedauerlicherweise","bedeuten","bedeutet","bedeutete","befördern","befürchten","begann","begeistert","beginne","beginnen","beginnst","beginnt","begonnen","behandeln","behandlung","beheben","bei","beigefügt","beim","bein","beine","beispielsweise","beitragen","bekannte","bekannten","bekannter","bemerken","benutzen","benzin","beobachten","bequem","bereits","berg","berge","bericht","berichten","beruf","berufe","beruflich","berufsschule","beschreiben","beschädigen","besonders","besprechung","besser","best","bestehen","bestellen","bestätigen","besuchen","besuchst","besucht","besuchte","betrieb","bett","betten","bevor","bevölkerung","bewegung","bewerben","bewirken","bewölkt","bezahlen","beziehungsweise","bezüglich","bier","bildschirm","bildung","billig","bin","bis","bis bald","bis morgen","bist","bitte","bitte schön","bitten","blau","bleibe","bleiben","bleibst","bleibt","blieb","blieben","blume","blumen","boden","bon","boutique","brachte","braun","breit","breite","brettspiel","brief","bringen","bringst","bringt","brot","bruder","brötchen","brüder","buch","buchhandlung","buchung","bundesstraße","bunt","bus","bushaltestelle","butter","bäckerei","bäume","bücher","bügeln","bürger","büro","café","camping","cent","chance","chef","chefin","chefs","computer","computerspiel","cousin","cousine","da","dach","dachte","dachte nach","dachten","dachtest","daher","damit","danach","dankbar","danke","danke schön","dann","darf","darfst","darum","darüber","darüber hinaus","das","dass","daten","datum","dauere","dauerhaft","dauern","dauerst","dauert","dauerte","debattieren","decke","definitiv","dein","deine","deinem","deinen","deiner","deines","dem","demokratie","den","denke","denken","denkst","denkt","denkt nach","denn","dennoch","der","des","deshalb","dessert","deswegen","deutlich","deutsch","dezember","dich","die","dienstag","diese","diesel","diesem","diesen","dieser","dieses","digital","digitalisierung","diplomarbeit","dir","direkt","diskutieren","doch","dollar","donnerstag","doppelzimmer","dort","draußen","drei","dreimal","dreizehn","dreißig","dritte","drucker","du","dunkel","durch","durchfallen","durchführen","durfte","durften","durftest","durstig","dürfen","dürft","eben","ebenfalls","ebenso","effizient","effizienz","ehrlich","eigentlich","ein","eine","einem","einen","einer","einerseits","eines","einfach","eingang","eingekauft","eingeladen","eingeschränkt","eingestiegen","einige","einkaufen","einladen","einmal","einnahme","einnahmen","einrichten","eins","einsam","einschalten","einschränken","einschränkt","einsteigen","einstellen","eintrittskarte","einzelzimmer","eis","elektroauto","elf","eltern","email","empfangen","empfehlen","empfohlen","ende","enden","endest","endet","endete","energie","engagieren","englisch","entlang","entlassen","entscheiden","entscheidend","entscheidung","entscheidungen","entschuldigen","entschuldigung","entspannen","entspannt","enttäuscht","entwickeln","entwickelst","entwickelt","entwickelte","entwickelten","entwickle","entwicklung","er","erdbeere","erfahrung","erfolg","ergebnis","ergebnisse","erheblich","erholen","erholung","erinnern","erinnert","erinnerte","erkannt","erkannte","erkenne","erkennen","erkennst","erkennt","erkläre","erklären","erklärst","erklärt","erklärte","erkältung","erlauben","erleben","erlebt","erlebte","erledige","erledigen","erledigst","erledigt","erledigung","ermöglichen","ermöglicht","erneuerbar","ernst","ernährung","erreichen","erschwinglich","erschöpft","erste","erwachsene","erwarten","erwartet","erziehen","erzählen","es","essen","essig","esszimmer","etwas","euch","euer","eure","eurem","euren","eurer","eures","euro","europäisch","existieren","existiert","existierte","facebook","fach","fahre","fahren","fahrkarte","fahrkarten","fahrrad","fahrschein","fahrtkosten","fair","falle","fallen","falls","falsch","familie","familien","fand","fanden","fandst","farbe","farben","fast","faul","februar","fehler","feierabend","feiern","feiertag","fenster","ferien","fernarbeit","ferngesehen","fernsehen","festival","feststellen","fieber","fiel","film","filme","finanzieren","finde","finden","findest","findet","fing an","finger","firma","firmen","fisch","fische","fit","fitness","flach","fleisch","fleißig","fliegen","fliegt","flughafen","flugzeug","fluss","flüchtling","fokussieren","folglich","fordern","form","formen","fortbildung","foto","fotografieren","fotos","fragen","frau","frauen","freiheit","freitag","freizeit","fremdsprache","freund","freunde","freundin","freundinnen","freundlich","freundlichen","freundschaft","freut sich","freute sich","frisch","froh","frost","früh","früher","frühling","frühstück","fuhr","fuhr ab","fuhren","fuhrst","funktionieren","funktioniert","funktionierte","fuß","fußball","fächer","fähigkeit","fähigkeiten","fährst","fährt","fährt ab","fällst","fällt","fängt an","fördern","fühle","fühlen","fühlst","fühlt","fühlt sich","fühlte","fühlte sich","fühlten","fünf","fünfmal","fünfte","fünfzehn","fünfzig","für","fürs","füße","gab","gaben","gabst","ganz","garage","garantie","garten","gearbeitet","gebe","geben","geblieben","gebracht","geburtstag","geburtstagsfeier","gebären","gebühr","gedacht","gedauert","geduld","gedurft","geehrte","geehrten","geehrter","geendet","gefahren","gefallen","gefiel","gefordert","gefreut","gefunden","gefährlich","gefällt","gefördert","gefühlt","gegangen","gegeben","gegen","gegenseitig","gegenüber","geglaubt","gehabt","gehalt","gehangen","gehe","geheiratet","gehen","geholfen","gehst","geht","geht aus","geht schlafen","geht schwimmen","geht spazieren","geht weiter","gehören","gehört","gehörte","gekommen","gekonnt","gekostet","gelassen","gelb","geld","geldbeutel","gelegt","gelernt","gelesen","gelingen","gemacht","gemeinsam","gemeldet","gemocht","gemusst","gemüse","genannt","genau","genauso","genehmigen","generation","generell","genießen","genommen","genug","gepasst","gependelt","gepäck","geradeaus","gerechtigkeit","geregnet","gern","gern geschehen","gerne","geschlossen","geschneit","geschrieben","geschäft","gesehen","gesellschaft","gesellschaftlich","gesessen","gesetz","gesetze","gesetzt","gesicht","gesollt","gesprochen","gestanden","gestellt","gestern","gestiegen","gestresst","gesucht","gesund","gesundheit","gesunken","gewachsen","gewesen","gewicht","gewitter","gewohnt","gewollt","geworden","gewusst","gewährleisten","gewährleistet","gewürz","gezeigt","geändert","geärgert","geöffnet","gibst","gibt","ging","ging aus","ging schlafen","ging spazieren","ging weiter","gingen","gingst","glaube","glauben","glaubst","glaubt","glaubte","glaubten","gleich","gleichheit","gleichzeitig","global","glück","glücklich","grammatik","gras","gratis","grau","grippe","groß","großmutter","großvater","grund","grundsätzlich","gruppe","größe","größer","größt","grün","gründe","grüßen","gurke","gut","guten abend","guten morgen","guten tag","gym","günstig","haar","haare","habe","haben","habt","half","halfen","hallo","hals","halt","haltestelle","hand","handschuhe","handy","hast","hat","hat vor","hatte","hatte vor","hatten","hattest","hattet","haus","hausaufgabe","hausaufgaben","hause","heilen","heirate","heiraten","heiratest","heiratet","heiratete","heizung","heiß","heiße","heißen","heißt","helfen","hell","hemd","her","herbst","herunterladen","herz","heute","heute abend","heute mittag","heute morgen","heutzutage","hier","hiermit","hieß","hilfe","hilfsbereit","hilfst","hilft","himmel","hin","hinaus","hing","hingegen","hinsichtlich","hinten","hinter","hobby","hobbys","hoch","hochladen","hochschule","hochzeit","hoffen","hoffnung","homeoffice","hose","hostel","hotel","hund","hunde","hundert","hungrig","husten","hände","hängen","hängst","hängt","hässlich","häufig","häuser","höflich","höhe","hören","hört auf","hört zu","hörte auf","hörte zu","ich","ich bin der meinung dass","ich denke dass","ich glaube dass","ihm","ihn","ihnen","ihr","ihre","ihrem","ihren","ihrer","ihres","im","im allgemeinen","im großen und ganzen","im grunde","imbiss","immer","impfung","in","indem","indirekt","information","informieren","innerhalb","innovation","ins","insbesondere","insgesamt","insofern","instagram","integration","intelligenz","interessant","interessen","international","internet","interview","inzwischen","irgendwo","ist","ja","jacke","jahr","jahreszeit","januar","jede","jedem","jeden","jeder","jedes","jedoch","jemand","jetzt","job","jubiläum","juli","jung","junge","jungen","juni","jährlich","jünger","jüngst","kaffee","kakao","kalt","kam","kam an","kam zurück","kamen","kamst","kann","kannst","kantine","kaputt","karotte","karriere","karte","kartoffel","kartoffeln","kasse","katze","katzen","kaufen","kaufhaus","kauft ein","kaufte ein","kaum","kein","keine","keinem","keinen","keller","kellner","kellnerin","kennen","kennengelernt","kennenlerne","kennenlernen","kennenlernst","kennenlernt","kenntnisse","ki","kind","kinder","kino","kirche","kirsche","klar","klasse","klassen","klausur","kleid","kleidung","klein","kleiner","kleinst","klima","klimawandel","klug","knoblauch","kochen","koffer","kollege","kollegen","kollegin","komisch","komme","kommen","kommentieren","kommst","kommt","kommt an","kommt zurück","kommunikation","kompetenz","kompliziert","konferenz","konnte","konnten","konntest","konto","konzentrieren","konzert","kopf","kosten","kostenlos","kostet","kostete","krank","krankenhaus","krankheit","kreativ","kreditkarte","kreuzung","kritisch","kritisieren","kräuter","kuchen","kuh","kultur","kulturell","kulturen","kurs","kurz","kurzfristig","käse","können","könnt","küche","kühl","kündigen","kündigung","künstliche","küste","laden","lampe","lampen","land","lang","langfristig","langsam","langweilig","laptop","las","lasen","lasse","laufen","laut","leben","lebensmittel","leer","legen","legst","legt","legte","lehrer","lehrerin","leicht","leider","leise","lerne","lernen","lernst","lernt","lernt kennen","lernte","lernte kennen","lernten","lese","lesen","letzte","letztendlich","letztlich","liebe","lied","lieder","liest","ließ","ließen","lila","limonade","links","lohn","lokal","lud ein","luft","lunge","lustig","lädt ein","länder","länge","lässt","lösen","lösung","lösungen","mache","machen","machst","machst auf","machst zu","macht","macht auf","macht zu","machte","machten","mag","magen","magst","mahlzeit","mai","makler","mal","malen","man","manchmal","mann","mantel","marke","markt","material","maus","maßgeblich","medien","medikament","medium","meer","meeting","mehr","mehrmals","mein","meine","meinem","meinen","meiner","meiner meinung nach","meines","meinung","meinungen","meistens","melde","meldest","meldet","meldete","meldeten","mensch","menschen","metzgerei","mich","miete","mieten","mieter","migration","milch","million","minute","minuten","mir","missbrauchen","missbraucht","misserfolg","mit","mitarbeiter","miteinander","mithilfe","mittag","mittagessen","mitteilen","mittelfristig","mittlerweile","mittwoch","mochte","mochten","mochtest","mode","modern","monat","monatlich","mond","montag","morgen","moschee","motorrad","mund","museum","musik","muss","musst","musste","mussten","musstest","mut","mutter","mädchen","männer","märz","möbel","möchte","möchten","möchtest","möchtet","mögen","möglich","möglichkeit","mögt","müde","müll","müssen","müsst","mütze","nach","nachbar","nachbarin","nachbarn","nachdem","nachdenken","nachgedacht","nachhaltig","nachhaltigkeit","nachname","nachricht","nachrichten","nacht","nachteil","nachteile","nachtisch","nahm","nahmen","nahmst","name","nase","national","nationalität","natur","natürlich","nebel","neben","nebenkosten","neffe","negativ","nehme","nehmen","nein","nennen","nennt","nervös","nett","netzwerk","neu","neuer","neuest","neun","neunte","neunzehn","neunzig","neutral","nichte","nichts","nie","niedrig","niemand","nimmst","nimmt","nirgends","noch","normal","normalerweise","normen","notaufnahme","note","notfall","notwendig","november","nudeln","null","nur","nächste","nämlich","nötig","nützlich","ob","oben","obgleich","objektiv","obst","obwohl","oder","offen","oft","ohne","ohne zu","ohr","ohren","okay","oktober","oma","onkel","onlinemeeting","opa","operation","operieren","optimiert","orange","orangensaft","ordentlich","organisation","organisieren","paket","paprika","parkplatz","party","pass","passen","passieren","passiert","passierte","passt","passt auf","passte","passte auf","pech","pendeln","pendelst","pendelt","pension","persönlich","pfeffer","pferd","pflegen","pflicht","planen","platz","politik","politisch","portemonnaie","positiv","praktikum","praktisch","preis","preise","preiswert","privat","problem","probleme","produktivität","projekt","prüfen","prüfung","putzen","pünktlich","qualifikation","qualifiziert","qualität","quittung","rabatt","radfahren","raten","reagieren","realität","rechnung","recht","rechts","rechtzeitig","recyceln","recycling","regal","regale","regel","regelmäßig","regeln","regen","regierung","regional","regnen","regnet","regnete","reich","reis","reise","reisen","reiten","religion","renovieren","rente","reparieren","reservieren","reservierung","respekt","respektvoll","restaurant","retten","rezept","richtig","risiko","roboter","rock","rosa","rot","rucksack","räume","räumst auf","räumt auf","räumte auf","rücken","rückgabe","saft","sagen","sah","sah fern","sahen","sahst","salat","sale","salz","samstag","sank","satz","sauber","sauce","saß","saßen","schaf","schaffen","scheiden","scheitern","schicken","schiff","schlaf","schlafen","schlafen gehen","schlafzimmer","schlecht","schlechter","schließe","schließen","schließlich","schließt","schlimmst","schloss","schlüssel","schmal","schmerz","schmerzen","schmutzig","schnee","schneien","schneit","schneite","schnell","schokolade","schon","schrank","schreibe","schreiben","schreibst","schreibt","schrieb","schrieben","schränke","schuhe","schule","schulen","schulter","schutz","schutzgebiet","schwach","schwarz","schwein","schwer","schwester","schwestern","schwierig","schwimmen","schwimmen gegangen","schwimmen gehen","schön","schüler","schülerin","schützen","sechs","sechste","sechzehn","sechzig","see","sehe","sehen","sehr","seid","sein","seine","seinem","seinen","seiner","seines","seit","seitdem","sekunde","sekunden","selbst","selbstverständlich","selten","seltsam","seminar","september","serie","serien","setzen","setzt","setzte","show","sich","sich freuen","sich fühlen","sich ärgern","sicher","sichergestellt","sicherheit","sicherstellen","sie","sieben","siebte","siebzehn","siebzig","siehst","sieht","sieht fern","sind","singen","sinke","sinken","sinkst","sinkt","sinnlos","sinnvoll","sitze","sitzt","smartphone","snack","so","sobald","socken","sodass","sofa","sofern","sofort","software","sohn","solange","solar","soll","sollen","sollst","sollt","sollte","sollten","solltest","somit","sommer","sondern","sonig","sonne","sonntag","sorge","sorry","soweit","sowohl","sozial","soziale medien","sozialstaat","soße","spannend","sparen","spazierengegangen","spazierengehen","spiegel","spiel","spiele","spielen","spielzeug","sport","sprach","sprache","sprachen","spreche","sprechen","sprichst","spricht","spät","später","staat","staatlich","stadt","stand","stand auf","standen","standpunkt","stark","statt","stau","staubsaugen","steckenbleiben","stehe","stehst","steht","steht auf","steige","steigen","steigst","steigt","steigt aus","steigt ein","stelle","stellen","stellst","stellt","stellt vor","stellte","stellte vor","sterne","steuer","steuern","stieg","stieg aus","stieg ein","stolz","stornierung","strand","straße","straßenbahn","stress","strom","student","studentin","studieren","studiert","studium","stuhl","stunde","stunden","sturm","städte","stühle","subjektiv","suchen","suchst","sucht","suchte","suite","supermarkt","suppe","symptom","system","sätze","söhne","tablet","tablette","tag","tage","tal","tankstelle","tante","tanzen","tasche","taschen","tastatur","tatsächlich","tausend","taxi","team","technisch","technologie","tee","teilnehmen","telefon","telefonnummer","tempel","tennis","teppich","termin","terrasse","teuer","theater","theoretisch","ticket","tickets","tief","tiefe","tier","tiere","tisch","tische","tochter","tomate","tomaten","torte","total","tradition","tram","traube","traurig","treffen","treiben","treppe","trinken","trinkgeld","trotz","trotzdem","tschüss","typisch","täglich","töchter","tür","türen","ubahn","uhr","uhren","uhrzeit","um","um zu","ums","umtausch","umwelt","umweltfreundlich","umziehen","unangenehm","unbequem","unbezahlbar","und","unfall","unglücklich","universität","unmöglich","unnötig","unordentlich","unpünktlich","uns","unser","unsere","unserem","unseren","unserer","unseres","unsicher","unten","unter","unterkunft","unternehmen","unterricht","unterrichten","unterstützen","unterstützt","unterstützung","untersuchen","unterwäsche","unwahr","unwichtig","unzufrieden","unzuverlässig","urlaub","vater","veranstaltung","verantwortung","verantwortungsbewusst","verbessere","verbessern","verbesserst","verbessert","verbesserte","verbesserten","verbieten","verbracht","verbrachte","verbringen","verbringt","verdienen","vereinbart","verhindern","verkaufen","verkehr","verlangt","verletzung","verliebt","vermeiden","vermieter","verschieden","verschreiben","versicherung","verstand","verstanden","verstehe","verstehen","verstehst","versteht","verständlich","verständnis","versuchen","versuchst","versucht","versuchte","vertrag","vertrauen","verursachen","verwenden","veröffentlichen","video","videokonferenz","videos","videospiel","viel","viele","vielfältig","vielleicht","vielschichtig","vier","viermal","vierte","vierzehn","vierzig","vogel","vokabular","voll","vom","von","vor","vorangetrieben","vorantreiben","vorbereiten","vorgehabt","vorgeschlagen","vorgestellt","vorhaben","vorhang","vorlesung","vorname","vorne","vorschlagen","vorschrift","vorstellen","vorteil","vorteile","vorübergehend","vögel","wachse","wachsen","wahl","wahr","wahrscheinlich","wald","wand","wandern","wann","war","waren","warm","warnen","warst","wart","warten","wartezimmer","warum","was","waschen","wasser","website","weder","weg","wegen","weil","wein","weiterbildung","weiterentwickeln","weitergegangen","weitergehen","weiterhin","weitermachen","weiß","weißt","wenig","wenige","weniger","wenn","wer","werde","werden","werdet","werkstatt","werte","wesentlich","wetter","wg","wichtig","wichtiger","widersprechen","wie","wieder","wiederholen","wiese","will","willst","wind","winter","wir","wird","wirst","wirtschaftlich","wissen","wissenschaftlich","witzig","wo","woche","wochenende","wochenendtrip","wofür","woher","wohin","wohingegen","wohnen","wohngemeinschaft","wohnst","wohnt","wohnte","wohnung","wohnungen","wohnzimmer","wolke","wolken","wollen","wollt","wollte","wollten","wolltest","womit","workshop","wort","worüber","wuchs","wurde","wurden","wurdest","wurdet","wurst","wusste","wussten","wächst","wählen","während","wälder","wöchentlich","wörter","wütend","yoga","youtube","zahnarzt","zehn","zehnte","zeichnen","zeige","zeigen","zeigst","zeigt","zeigte","zeit","zeitgemäß","zeitschrift","zeitschriften","zeitung","zeitungen","zeitzone","zerstören","zeugnis","ziemlich","zimmer","zitrone","zu","zucker","zudem","zuerst","zufrieden","zug","zugehört","zugemacht","zuhören","zum","zum beispiel","zum schluss","zumachen","zumindest","zunächst","zur","zurückbleiben","zurückgeblieben","zurückgekommen","zurückkommen","zusammen","zusammenarbeit","zusammenfassend","zustimmen","zusätzlich","zuverlässig","zwanzig","zwar","zwei","zweifach","zweifeln","zweifältig","zweimal","zweischneidig","zweite","zwiebel","zwischen","zwölf","züge","ähnlich","älter","ältest","ändere","ändern","änderst","ändert","änderte","äpfel","ärgerlich","ärgert sich","ärgerte sich","ärztin","öffentlich","öffne","öffnen","öffnest","öffnet","öffnete","öfter","ökologisch","öl","über","überall","überhaupt","überlegen","übermäßig","überrascht","überwiegend","überzeugen","üblicherweise","übrigens"]);
+
+const SPELL_IGNORE = new Set([
+  'ich','du','er','sie','es','wir','ihr','mich','dich','ihn','uns','euch','mir','dir','ihm','ihnen','sich',
+  'der','die','das','den','dem','des','ein','eine','einen','einem','einer','eines',
+  'und','oder','aber','denn','weil','dass','ob','wenn','als','obwohl','damit',
+  'sodass','indem','trotzdem','deshalb','einerseits','andererseits',
+  'zum','zur','beim','vom','im','am','ins','ans',
+  'nicht','auch','noch','schon','nun','dann','doch','ja','nein','so','sehr','nur',
+  'meiner','meinem','meinen','dieser','diese','dieses','jeder','jede',
+  'heutzutage','andererseits','einerseits','sodass','obwohl','zusammenfassend',
+  'digitalisierung','homeoffice','ki','b2','a1','a2',
+]);
+
+function spellOk(word) {
+  if(!word || word.length <= 1) return true;
+  const low = word.toLowerCase().replace(/[.,!?;:"\n]/g,'');
+  if(!low || low.length <= 1) return true;
+  if(SPELL_IGNORE.has(low)) return true;
+  if(/^[0-9]+$/.test(low)) return true;
+  if(DICT.has(low)) return true;
+  return false;
+}
+</script>
+</body>
+</html>

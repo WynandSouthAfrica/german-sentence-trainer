@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>German Learning System</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>German Learning System – R0.1</h1>
+        <p class="subtitle">Grammar, writing, sentence building, and lifelong German practice.</p>
+
+        <div class="menu">
+            <button onclick="openPage('grammar')">Grammar Analyzer</button>
+            <button onclick="openPage('b2')">B2 Master Tool</button>
+            <button onclick="openPage('practice')">Practice</button>
+            <button onclick="openPage('dictionary')">Dictionary (Coming Soon)</button>
+        </div>
+
+        <iframe id="viewer" src="" title="Learning Tool Viewer"></iframe>
+    </div>
+
+    <script>
+        function openPage(page) {
+            const viewer = document.getElementById("viewer");
+
+            if (page === "grammar") {
+                viewer.src = "02_Grammatik_Analyser_v4b.html";
+            } else if (page === "b2") {
+                viewer.src = "01_B2_Master_Tool_v8.html";
+            } else if (page === "practice") {
+                viewer.src = "practice.html";
+            } else {
+                viewer.src = "";
+                alert("Coming soon 🚧");
+            }
+        }
+    </script>
+    <script type="module" src="./main.js"></script>
+</body>
+</html>

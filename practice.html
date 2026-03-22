@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Übung – Simple Sentence Mode</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f1ea;
+            color: #1f2937;
+        }
+
+        .page {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 14px;
+        }
+
+        .home-button {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: #1e293b;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .home-button:hover {
+            background: #334155;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #14213d);
+            color: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        .hero h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: #dbe4f0;
+            font-size: 16px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.45fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            font-size: 22px;
+            color: #0f172a;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            border: 2px solid #111827;
+            border-radius: 10px;
+            padding: 14px;
+            font-size: 18px;
+            resize: vertical;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        .helper-text {
+            margin-top: 10px;
+            color: #475569;
+            font-size: 14px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #eef2ff;
+            color: #1e3a8a;
+            border: 1px solid #c7d2fe;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .chip:hover {
+            background: #dbeafe;
+        }
+
+        .sentence-preview {
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 14px;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .block-analysis {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .block-chip {
+            border-radius: 12px;
+            padding: 12px 14px;
+            border: 1px solid rgba(0,0,0,0.08);
+            min-width: 150px;
+            max-width: 260px;
+        }
+
+        .block-chip .phrase {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+            font-size: 18px;
+        }
+
+        .block-chip .role {
+            font-size: 13px;
+            color: #374151;
+        }
+
+        .block-chip .case {
+            font-size: 12px;
+            color: #7c2d12;
+            margin-top: 4px;
+        }
+
+        .case-nom { background: #ff4dff; }
+        .case-akk { background: #ffa500; }
+        .case-dat { background: #39ff14; }
+        .case-gen { background: #20d9e8; }
+
+        .role-verb { background: #fff34d; }
+        .role-time { background: #fff3b0; }
+        .role-place { background: #fbcfe8; }
+        .role-unknown { background: #e5e7eb; }
+
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .mini-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .mini-box strong {
+            display: block;
+            margin-bottom: 6px;
+            color: #0f172a;
+        }
+
+        .stompvi-row {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stompvi-row-secondary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .stompvi-box {
+            border-radius: 12px;
+            padding: 10px;
+            min-height: 92px;
+            font-size: 14px;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .stompvi-box .label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .subject { background: #dbeafe; }
+        .verb { background: #fee2e2; }
+        .time { background: #fef3c7; }
+        .object { background: #dcfce7; }
+        .manner { background: #ede9fe; }
+        .place { background: #fce7f3; }
+        .verb2 { background: #e0f2fe; }
+        .dativ-extra { background: #dcfce7; }
+        .prep-extra { background: #fdf4ff; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #d6d3d1;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #111827;
+            color: white;
+        }
+
+        .sugar-note {
+            margin-top: 12px;
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            border-radius: 10px;
+            padding: 12px;
+            color: #5b21b6;
+        }
+
+        .warning {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 12px;
+            color: #991b1b;
+            margin-top: 12px;
+        }
+
+        .good {
+            background: #ecfdf5;
+            border: 1px solid #a7f3d0;
+            border-radius: 10px;
+            padding: 12px;
+            color: #065f46;
+            margin-top: 12px;
+        }
+
+        .bold-prep {
+            font-weight: bold;
+        }
+
+        @media (max-width: 1100px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stompvi-row {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stompvi-row,
+            .analysis-grid,
+            .stompvi-row-secondary {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="topbar">
+            <a class="home-button" href="index.html">← Zur Startseite</a>
+        </div>
+
+        <div class="hero">
+            <h1>Übung – Simple Sentence Mode</h1>
+            <p>Nur Hauptsätze. Fokus auf Nominativ, Dativ, Akkusativ, Zeitblock und Präpositionsblock.</p>
+        </div>
+
+        <div class="layout">
+            <div>
+                <div class="card">
+                    <h2>Schreibe deinen Satz</h2>
+                    <textarea id="sentenceInput" placeholder="Beispiel: Der Mann gibt heute dem Kind in der Küche das Buch."></textarea>
+
+                    <div class="helper-text">
+                        Diese Version ist absichtlich einfach. Keine Konnektoren, keine Nebensätze — nur stabile Hauptsätze.
+                    </div>
+
+                    <div class="chips">
+                        <div class="chip" data-example="Ich esse jeden Tag Pizza.">Einfacher Satz</div>
+                        <div class="chip" data-example="Ich trinke Wasser.">Bare noun Objekt</div>
+                        <div class="chip" data-example="Ich lerne Deutsch.">Bare noun Objekt 2</div>
+                        <div class="chip" data-example="Der Mann gibt dem Kind das Buch.">Dativ + Akkusativ</div>
+                        <div class="chip" data-example="Der Mann gibt heute dem Kind in der Küche das Buch.">Längerer Satz</div>
+                        <div class="chip" data-example="Ich bin in der Küche.">Dativ-Ort</div>
+                        <div class="chip" data-example="Ich gehe in den Supermarkt.">Akkusativ-Bewegung</div>
+                    </div>
+
+                    <div class="sentence-preview" id="sentencePreview">
+                        Dein Satz erscheint hier.
+                    </div>
+
+                    <div class="block-analysis" id="blockAnalysis"></div>
+                </div>
+
+                <div class="card">
+                    <h2>Live-Analyse</h2>
+                    <div class="analysis-grid">
+                        <div class="mini-box">
+                            <strong>Erkanntes Subjekt</strong>
+                            <span id="detectedSubject">—</span>
+                        </div>
+                        <div class="mini-box">
+                            <strong>Erkanntes Verb</strong>
+                            <span id="detectedVerb">—</span>
+                        </div>
+                        <div class="mini-box">
+                            <strong>Erkannte Präposition</strong>
+                            <span id="detectedPreposition">—</span>
+                        </div>
+                        <div class="mini-box">
+                            <strong>Erkannter Dativblock</strong>
+                            <span id="detectedDativ">—</span>
+                        </div>
+                        <div class="mini-box">
+                            <strong>Modus</strong>
+                            <span id="detectedMode">Simple Sentence Mode</span>
+                        </div>
+                        <div class="mini-box">
+                            <strong>Erkanntes Objekt</strong>
+                            <span id="detectedObject">—</span>
+                        </div>
+                    </div>
+
+                    <div id="warningBox"></div>
+                </div>
+
+                <div class="card">
+                    <h2>STOMPVI-Ansicht</h2>
+                    <p style="color:#64748b;">Subjekt | Verb | Zeit | Objekt | Art und Weise | Ort | Verb 2 / Infinitiv</p>
+
+                    <div class="stompvi-row">
+                        <div class="stompvi-box subject">
+                            <span class="label">Subjekt</span>
+                            <div id="stSubject">—</div>
+                        </div>
+                        <div class="stompvi-box verb">
+                            <span class="label">Verb</span>
+                            <div id="stVerb">—</div>
+                        </div>
+                        <div class="stompvi-box time">
+                            <span class="label">Zeit</span>
+                            <div id="stTime">—</div>
+                        </div>
+                        <div class="stompvi-box object">
+                            <span class="label">Objekt</span>
+                            <div id="stObject">—</div>
+                        </div>
+                        <div class="stompvi-box manner">
+                            <span class="label">Art und Weise</span>
+                            <div id="stManner">—</div>
+                        </div>
+                        <div class="stompvi-box place">
+                            <span class="label">Ort</span>
+                            <div id="stPlace">—</div>
+                        </div>
+                        <div class="stompvi-box verb2">
+                            <span class="label">Verb 2 / Infinitiv</span>
+                            <div id="stVerb2">—</div>
+                        </div>
+                    </div>
+
+                    <div class="stompvi-row-secondary">
+                        <div class="stompvi-box dativ-extra">
+                            <span class="label">Dativblock</span>
+                            <div id="stDativ">—</div>
+                        </div>
+                        <div class="stompvi-box prep-extra">
+                            <span class="label">Präpositionsblock</span>
+                            <div id="stPreposition">—</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h2>Sugar Table – Schnellansicht</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fall</th>
+                                <th>der</th>
+                                <th>die</th>
+                                <th>das</th>
+                                <th>Plural</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#ff4dff;">
+                                <td>Nominativ</td>
+                                <td>der</td>
+                                <td>die</td>
+                                <td>das</td>
+                                <td>die</td>
+                            </tr>
+                            <tr style="background:#ffa500;">
+                                <td>Akkusativ</td>
+                                <td>den</td>
+                                <td>die</td>
+                                <td>das</td>
+                                <td>die</td>
+                            </tr>
+                            <tr style="background:#00ff00;">
+                                <td>Dativ</td>
+                                <td>dem</td>
+                                <td>der</td>
+                                <td>dem</td>
+                                <td>den</td>
+                            </tr>
+                            <tr style="background:#20d9e8;">
+                                <td>Genitiv</td>
+                                <td>des</td>
+                                <td>der</td>
+                                <td>des</td>
+                                <td>der</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="sugar-note" id="sugarNote">
+                        Sugar-Table-Hinweis erscheint hier.
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Personalpronomen – Schnellansicht</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>ich</th>
+                                <th>du</th>
+                                <th>er</th>
+                                <th>sie</th>
+                                <th>es</th>
+                                <th>wir</th>
+                                <th>ihr</th>
+                                <th>sie / Sie</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background:#ff4dff;">
+                                <td><strong>Nominativ</strong></td>
+                                <td>ich</td>
+                                <td>du</td>
+                                <td>er</td>
+                                <td>sie</td>
+                                <td>es</td>
+                                <td>wir</td>
+                                <td>ihr</td>
+                                <td>sie / Sie</td>
+                            </tr>
+                            <tr style="background:#ffa500;">
+                                <td><strong>Akkusativ</strong></td>
+                                <td>mich</td>
+                                <td>dich</td>
+                                <td>ihn</td>
+                                <td>sie</td>
+                                <td>es</td>
+                                <td>uns</td>
+                                <td>euch</td>
+                                <td>sie / Sie</td>
+                            </tr>
+                            <tr style="background:#00ff00;">
+                                <td><strong>Dativ</strong></td>
+                                <td>mir</td>
+                                <td>dir</td>
+                                <td>ihm</td>
+                                <td>ihr</td>
+                                <td>ihm</td>
+                                <td>uns</td>
+                                <td>euch</td>
+                                <td>ihnen / Ihnen</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card">
+                    <h2>Schnelle Regeln</h2>
+                    <ul>
+                        <li><strong>Nur Hauptsatz:</strong> keine Konnektoren in dieser Version.</li>
+                        <li><strong>Bare noun support:</strong> Wörter wie <strong>Pizza</strong>, <strong>Wasser</strong>, <strong>Deutsch</strong> können als wahrscheinlicher Akkusativblock erkannt werden.</li>
+                        <li><strong>Nominativblock:</strong> z. B. <strong>Der Mann</strong></li>
+                        <li><strong>Dativblock:</strong> z. B. <strong>der Frau</strong> / <strong>dem Kind</strong></li>
+                        <li><strong>Präpositionsblock:</strong> z. B. <strong>mit dem Chef</strong> / <strong>in der Küche</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { analyzeSentence } from "./main.js";
+
+        const inputField = document.getElementById("sentenceInput");
+        const sentencePreview = document.getElementById("sentencePreview");
+        const blockAnalysis = document.getElementById("blockAnalysis");
+        const sugarNote = document.getElementById("sugarNote");
+        const warningBox = document.getElementById("warningBox");
+
+        const subjectBox = document.getElementById("stSubject");
+        const verbBox = document.getElementById("stVerb");
+        const timeBox = document.getElementById("stTime");
+        const objectBox = document.getElementById("stObject");
+        const mannerBox = document.getElementById("stManner");
+        const placeBox = document.getElementById("stPlace");
+        const verb2Box = document.getElementById("stVerb2");
+        const dativBox = document.getElementById("stDativ");
+        const prepBox = document.getElementById("stPreposition");
+
+        const detectedSubject = document.getElementById("detectedSubject");
+        const detectedVerb = document.getElementById("detectedVerb");
+        const detectedPreposition = document.getElementById("detectedPreposition");
+        const detectedDativ = document.getElementById("detectedDativ");
+        const detectedObject = document.getElementById("detectedObject");
+
+        function renderSentenceWithBoldPrepositions(sentence, result) {
+            const prepText = result.prepositionBlock || result.placeBlock || "";
+            if (!prepText) return sentence;
+
+            const firstWord = prepText.split(" ")[0];
+            const regex = new RegExp(`\\b${firstWord}\\b`, "i");
+            return sentence.replace(regex, `<span class="bold-prep"><strong>${firstWord}</strong></span>`);
+        }
+
+        function getChipMeta(kind) {
+            if (kind === "subject") {
+                return { role: "Nominativblock", className: "case-nom", caseText: "geschrieben: Nominativ" };
+            }
+            if (kind === "verb") {
+                return { role: "Verbblock", className: "role-verb", caseText: "" };
+            }
+            if (kind === "time") {
+                return { role: "Zeitblock", className: "role-time", caseText: "" };
+            }
+            if (kind === "object") {
+                return { role: "Akkusativblock", className: "case-akk", caseText: "geschrieben: Akkusativ" };
+            }
+            if (kind === "dativ") {
+                return { role: "Dativblock", className: "case-dat", caseText: "geschrieben: Dativ" };
+            }
+            if (kind === "preposition") {
+                return { role: "Präpositionsblock", className: "role-place", caseText: "Präposition + Fall" };
+            }
+            if (kind === "place") {
+                return { role: "Ort / Bewegungsblock", className: "role-place", caseText: "Ort / Ziel" };
+            }
+            return { role: "Block", className: "role-unknown", caseText: "" };
+        }
+
+        function addChip(kind, text) {
+            if (!text) return;
+
+            const meta = getChipMeta(kind);
+            const item = document.createElement("div");
+            item.className = `block-chip ${meta.className}`;
+            item.innerHTML = `
+                <span class="phrase">${text}</span>
+                <span class="role">${meta.role}</span>
+                <span class="case">${meta.caseText}</span>
+            `;
+            blockAnalysis.appendChild(item);
+        }
+
+        function buildBlockAnalysis(result) {
+            blockAnalysis.innerHTML = "";
+
+            addChip("subject", result.subject);
+            addChip("verb", result.verb?.found);
+            if (result.time.length) addChip("time", result.time.join(" "));
+            addChip("object", result.object);
+            addChip("dativ", result.dativeBlock);
+            addChip("preposition", result.prepositionBlock);
+            addChip("place", result.placeBlock);
+        }
+
+        function buildSugarNote(result) {
+            if (result.notes.length) {
+                sugarNote.innerHTML = result.notes.map(note => `<div>${note}</div>`).join("");
+                return;
+            }
+
+            if (result.dativeBlock) {
+                sugarNote.innerHTML = `<div><strong>${result.dativeBlock}</strong> → Dativblock erkannt.</div>`;
+                return;
+            }
+
+            if (result.object) {
+                sugarNote.innerHTML = `<div><strong>${result.object}</strong> → Objektblock erkannt.</div>`;
+                return;
+            }
+
+            if (result.prepositionBlock || result.placeBlock) {
+                sugarNote.innerHTML = `<div><strong>${result.prepositionBlock || result.placeBlock}</strong> → Präpositions-/Ortblock erkannt.</div>`;
+                return;
+            }
+
+            sugarNote.textContent = "Sugar-Table-Hinweis erscheint hier.";
+        }
+
+        function buildMessage(result) {
+            if (result.suggestions && result.suggestions.length) {
+                warningBox.innerHTML = `
+                    <div class="warning">
+                        <strong>Hinweise:</strong><br>
+                        ${result.notes.join("<br>")}<br><br>
+                        <strong>Vorschläge:</strong><br>
+                        ${result.suggestions.join("<br>")}
+                    </div>
+                `;
+                return;
+            }
+
+            if (result.notes.length) {
+                warningBox.innerHTML = `<div class="good">${result.notes.join("<br>")}</div>`;
+                return;
+            }
+
+            warningBox.innerHTML = `<div class="good">Gut – stabile Hauptsatz-Blockanalyse erstellt.</div>`;
+        }
+
+        function updateStompvi(result) {
+            subjectBox.textContent = result.subject || "—";
+            verbBox.textContent = result.verb?.found || "—";
+            timeBox.textContent = result.time.length ? result.time.join(" ") : "—";
+            objectBox.textContent = result.object || "—";
+            mannerBox.textContent = "—";
+            placeBox.textContent = result.placeBlock || "—";
+            verb2Box.textContent = result.verb2 || "—";
+            dativBox.textContent = result.dativeBlock || "—";
+            prepBox.textContent = result.prepositionBlock || "—";
+        }
+
+        function updateLiveAnalysis(result) {
+            detectedSubject.textContent = result.subject || "—";
+            detectedVerb.textContent = result.verb?.found || "—";
+            detectedPreposition.textContent = result.prepositionBlock || result.placeBlock || "—";
+            detectedDativ.textContent = result.dativeBlock || "—";
+            detectedObject.textContent = result.object || "—";
+        }
+
+        function resetUI() {
+            sentencePreview.textContent = "Dein Satz erscheint hier.";
+            blockAnalysis.innerHTML = "";
+            sugarNote.textContent = "Sugar-Table-Hinweis erscheint hier.";
+            warningBox.innerHTML = "";
+
+            subjectBox.textContent = "—";
+            verbBox.textContent = "—";
+            timeBox.textContent = "—";
+            objectBox.textContent = "—";
+            mannerBox.textContent = "—";
+            placeBox.textContent = "—";
+            verb2Box.textContent = "—";
+            dativBox.textContent = "—";
+            prepBox.textContent = "—";
+
+            detectedSubject.textContent = "—";
+            detectedVerb.textContent = "—";
+            detectedPreposition.textContent = "—";
+            detectedDativ.textContent = "—";
+            detectedObject.textContent = "—";
+        }
+
+        function runAnalysis() {
+            const sentence = inputField.value.trim();
+
+            if (!sentence) {
+                resetUI();
+                return;
+            }
+
+            const result = analyzeSentence(sentence);
+
+            console.log("UI RESULT", result);
+
+            sentencePreview.innerHTML = renderSentenceWithBoldPrepositions(sentence, result);
+            buildBlockAnalysis(result);
+            updateStompvi(result);
+            updateLiveAnalysis(result);
+            buildSugarNote(result);
+            buildMessage(result);
+        }
+
+        function insertExample(text) {
+            inputField.value = text;
+            runAnalysis();
+            inputField.focus();
+        }
+
+        document.querySelectorAll(".chip").forEach(chip => {
+            chip.addEventListener("click", () => {
+                insertExample(chip.dataset.example);
+            });
+        });
+
+        inputField.addEventListener("input", runAnalysis);
+        resetUI();
+
+        window.insertExample = insertExample;
+    </script>
+</body>
+</html>

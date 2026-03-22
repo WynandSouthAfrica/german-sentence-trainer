@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grammatik-Analyser v4</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,300;8..60,400;8..60,500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f7f5f0;--surface:#fff;--surface2:#f0ede6;--border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+  --text:#1a1814;--text2:#5a5650;--text3:#9a9690;--radius:12px;--radius-sm:8px;--shadow:0 2px 16px rgba(0,0,0,0.08);
+  --nom:#d946ef;--nom-bg:#fae8ff;--verb:#eab308;--verb-bg:#fefce8;
+  --akk:#f97316;--akk-bg:#fff7ed;--dat:#22c55e;--dat-bg:#f0fdf4;
+  --gen:#06b6d4;--gen-bg:#ecfeff;--prep:#1a1814;--prep-bg:#f0ede6;--pron:#8b5cf6;
+  --spell-err:#cc2222;--art-err:#cc7700;
+}
+body.dark{
+  --bg:#161412;--surface:#1f1c19;--surface2:#2a2620;--border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.15);
+  --text:#e8e4dc;--text2:#a09890;--text3:#6a6258;
+  --nom-bg:#3d1a4a;--verb-bg:#3a3000;--akk-bg:#3a1a00;--dat-bg:#0a2e14;--gen-bg:#002a30;--prep-bg:#2a2620;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Serif 4',serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+
+/* NAV */
+.nav{background:var(--text);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--verb);position:sticky;top:0;z-index:100;}
+.brand{font-family:'Playfair Display',serif;font-size:16px;color:#fff;font-weight:700;padding:14px 0;}
+.brand span{color:#fde68a;}
+.nav-right{display:flex;align-items:center;gap:8px;}
+.dark-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:10px;color:#fff;}
+
+/* TWO COLUMN LAYOUT */
+.page{display:grid;grid-template-columns:1fr 320px;gap:16px;padding:1.2rem;max-width:1200px;margin:0 auto;}
+@media(max-width:780px){.page{grid-template-columns:1fr;}}
+.main-col{min-width:0;}
+.side-col{min-width:0;}
+
+/* CARDS */
+.card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);padding:1.1rem 1.3rem;margin-bottom:1rem;box-shadow:var(--shadow);}
+.card-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+
+/* SUGAR TABLE */
+.sugar-wrap{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--radius);overflow:hidden;margin-bottom:1rem;box-shadow:var(--shadow);}
+.sugar-title{background:var(--text);color:#fff;font-family:'Playfair Display',serif;font-size:13px;padding:9px 14px;letter-spacing:.05em;}
+.sugar-title span{color:#fde68a;}
+.g-table{width:100%;border-collapse:collapse;font-size:12px;}
+.g-table th{padding:7px 8px;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.04em;text-align:center;border:0.5px solid var(--border2);background:var(--surface2);}
+.g-table td{padding:8px 8px;text-align:center;border:0.5px solid var(--border2);font-family:'DM Mono',monospace;font-size:11px;line-height:1.6;}
+.g-table .rl{font-family:'Source Serif 4',serif;font-weight:600;font-size:11px;text-align:left;padding-left:10px;white-space:nowrap;}
+.rn{background:var(--nom-bg)!important;}.rn .rl{color:var(--nom);}
+.ra{background:var(--akk-bg)!important;}.ra .rl{color:var(--akk);}
+.rd{background:var(--dat-bg)!important;}.rd .rl{color:var(--dat);}
+.rg{background:var(--gen-bg)!important;}.rg .rl{color:var(--gen);}
+
+/* PRONOUN TABLE */
+.pron-table{width:100%;border-collapse:collapse;font-size:11px;}
+.pron-table th{padding:6px 5px;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:.03em;text-align:center;border:0.5px solid var(--border2);background:var(--surface2);}
+.pron-table td{padding:6px 5px;text-align:center;border:0.5px solid var(--border2);font-family:'DM Mono',monospace;font-size:11px;}
+.pr-nom{background:var(--nom-bg);}.pr-akk{background:var(--akk-bg);}.pr-dat{background:var(--dat-bg);}
+.pr-nom td,.pr-nom th{color:var(--nom);font-weight:500;}
+.pr-akk td,.pr-akk th{color:var(--akk);font-weight:500;}
+.pr-dat td,.pr-dat th{color:var(--dat);font-weight:500;}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:1rem;}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text2);}
+.lchip{padding:2px 8px;border-radius:16px;font-size:11px;font-weight:600;font-family:'DM Mono',monospace;}
+.cn{background:var(--nom-bg);color:var(--nom);border:1.5px solid var(--nom);}
+.cv{background:var(--verb-bg);color:#92400e;border:1.5px solid var(--verb);}
+.ca{background:var(--akk-bg);color:var(--akk);border:1.5px solid var(--akk);}
+.cd{background:var(--dat-bg);color:var(--dat);border:1.5px solid var(--dat);}
+.cg{background:var(--gen-bg);color:var(--gen);border:1.5px solid var(--gen);}
+.cp{background:var(--prep-bg);color:var(--prep);border:1.5px solid var(--border2);font-weight:800;}
+.cpr{background:var(--surface2);color:var(--pron);border:1.5px solid var(--pron);text-decoration:underline;text-underline-offset:2px;}
+.csp{background:#fef2f2;color:var(--spell-err);border:1.5px solid var(--spell-err);}
+.car{background:#fff7ed;color:var(--art-err);border:1.5px solid var(--art-err);}
+
+/* INPUT */
+.sentence-input{width:100%;padding:12px 14px;font-size:17px;font-family:'Source Serif 4',serif;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--surface2);color:var(--text);outline:none;transition:border-color .2s;}
+.sentence-input:focus{border-color:var(--verb);}
+.kb-row{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap;}
+.kb-btn{padding:4px 10px;border-radius:6px;border:0.5px solid var(--border2);font-size:14px;cursor:pointer;background:var(--surface2);color:var(--text);font-family:'DM Mono',monospace;transition:all .15s;}
+.kb-btn:hover{background:var(--nom-bg);}
+.ex-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.ex-btn{padding:4px 11px;border-radius:12px;border:0.5px solid var(--border2);font-size:11px;cursor:pointer;background:transparent;color:var(--text2);font-family:'Source Serif 4',serif;transition:all .15s;}
+.ex-btn:hover{background:var(--surface2);}
+
+/* OUTPUT */
+.highlighted{font-size:19px;line-height:2.4;font-family:'Source Serif 4',serif;word-wrap:break-word;min-height:50px;}
+.empty-msg{font-size:14px;color:var(--text3);font-style:italic;}
+
+/* WORD HIGHLIGHTS */
+.wn{background:var(--nom-bg);color:var(--nom);border-radius:4px;padding:1px 5px;font-weight:600;border-bottom:2.5px solid var(--nom);}
+.wv{background:var(--verb-bg);color:#92400e;border-radius:4px;padding:1px 5px;font-weight:600;border-bottom:2.5px solid var(--verb);}
+.wa{background:var(--akk-bg);color:var(--akk);border-radius:4px;padding:1px 5px;font-weight:600;border-bottom:2.5px solid var(--akk);}
+.wd{background:var(--dat-bg);color:var(--dat);border-radius:4px;padding:1px 5px;font-weight:600;border-bottom:2.5px solid var(--dat);}
+.wg{background:var(--gen-bg);color:var(--gen);border-radius:4px;padding:1px 5px;font-weight:600;border-bottom:2.5px solid var(--gen);}
+.wp{font-weight:800;border-bottom:2px dotted var(--prep);}
+.wpr{color:var(--pron);border-bottom:2px solid var(--pron);font-style:italic;}
+.wsp{border-bottom:2.5px solid var(--spell-err);background:rgba(204,34,34,0.1);border-radius:2px;cursor:help;}
+.war2{border-bottom:2.5px solid var(--art-err);background:rgba(204,119,0,0.1);border-radius:2px;cursor:help;}
+.wlbl{font-size:9px;vertical-align:super;font-family:'DM Mono',monospace;margin-left:1px;opacity:.7;}
+
+/* STOMPVI */
+.stomp-table{width:100%;border-collapse:collapse;}
+.stomp-table th{padding:7px 6px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;text-align:center;border:0.5px solid var(--border);background:var(--surface2);}
+.stomp-table td{padding:9px 8px;border:0.5px solid var(--border);text-align:center;font-size:13px;min-width:55px;vertical-align:top;}
+.stomp-table td.filled{background:var(--surface2);}
+.stomp-table td.empty{color:var(--text3);font-size:11px;}
+.sts{border-top:3px solid var(--nom)!important;}.stv{border-top:3px solid var(--verb)!important;}
+.stt{border-top:3px solid #94a3b8!important;}.sto{border-top:3px solid var(--akk)!important;}
+.stm{border-top:3px solid #a78bfa!important;}.stp{border-top:3px solid #f43f5e!important;}
+.stv2{border-top:3px solid var(--dat)!important;}
+.stomp-note{font-size:12px;color:var(--text2);padding:7px 12px;border-top:0.5px solid var(--border);}
+
+/* SIDE PANEL */
+.side-section{margin-bottom:12px;}
+.side-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:6px;padding-bottom:4px;border-bottom:0.5px solid var(--border);}
+
+/* ERROR LIST */
+.err-list{display:flex;flex-direction:column;gap:6px;}
+.err-item{border-radius:var(--radius-sm);padding:8px 10px;font-size:12px;line-height:1.6;}
+.err-spell-item{background:#fef2f2;border:0.5px solid rgba(204,34,34,0.3);color:#7f1d1d;}
+.err-art-item{background:#fff7ed;border:0.5px solid rgba(204,119,0,0.3);color:#7c2d12;}
+.err-word{font-family:'DM Mono',monospace;font-weight:600;font-size:13px;}
+.err-correct{font-family:'DM Mono',monospace;color:var(--dat);font-weight:600;}
+.err-empty{font-size:13px;color:var(--text3);text-align:center;padding:1rem;font-style:italic;}
+
+/* VERB PANEL */
+.verb-panel{background:var(--verb-bg);border:0.5px solid rgba(234,179,8,0.4);border-radius:var(--radius-sm);padding:10px 12px;}
+.verb-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;color:#92400e;margin-bottom:8px;}
+.verb-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.verb-row{display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:4px;font-size:12px;}
+.verb-row:nth-child(odd){background:rgba(234,179,8,0.1);}
+.verb-pron{color:var(--text2);font-family:'DM Mono',monospace;}
+.verb-form{font-family:'DM Mono',monospace;font-weight:500;color:#92400e;}
+.verb-empty{font-size:12px;color:var(--text3);text-align:center;padding:.8rem;font-style:italic;}
+
+/* BREAKDOWN CHIPS */
+.bd-grid{display:flex;gap:6px;flex-wrap:wrap;}
+.bd-chip{display:flex;align-items:center;gap:4px;background:var(--surface2);border-radius:6px;padding:4px 8px;font-size:12px;}
+.bd-w{font-family:'DM Mono',monospace;font-weight:500;}
+.bd-c{font-size:10px;padding:1px 5px;border-radius:6px;font-weight:600;}
+
+/* INFO BOX */
+.info-box{background:var(--verb-bg);border:0.5px solid rgba(234,179,8,.35);border-radius:var(--radius-sm);padding:8px 12px;font-size:12px;color:#78350f;line-height:1.7;margin-top:8px;}
+
+/* SCROLLABLE SIDE */
+.side-scroll{position:sticky;top:70px;max-height:calc(100vh - 80px);overflow-y:auto;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="brand">Grammatik <span>Analyser</span> <span style="font-size:11px;opacity:.6;font-family:monospace">v4</span></div>
+  <div class="nav-right">
+    <button class="dark-btn" id="dark-btn" onclick="toggleDark()">🌙</button>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- ══════════════ MAIN COLUMN ══════════════ -->
+<div class="main-col">
+
+  <!-- SUGAR TABLE -->
+  <div class="sugar-wrap">
+    <div class="sugar-title">⚡ Zuckertisch — <span>Artikel nach Fall &amp; Geschlecht</span></div>
+    <table class="g-table">
+      <thead><tr>
+        <th style="background:var(--surface2)"></th>
+        <th>DER (Mask.)</th><th>DIE (Fem.)</th><th>DAS (Neutr.)</th><th>PLURAL</th>
+      </tr></thead>
+      <tbody>
+        <tr class="rn"><td class="rl">1 — NOMINATIV<br><span style="font-size:9px;font-weight:400">Wer/Was?</span></td>
+          <td><b>Der</b> …e / <span style="opacity:.7">Ein …er</span></td><td><b>Die</b> …e / <span style="opacity:.7">Eine …e</span></td>
+          <td><b>Das</b> …e / <span style="opacity:.7">Ein …es</span></td><td><b>Die</b> …en / <span style="opacity:.7">Viele …e</span></td></tr>
+        <tr class="ra"><td class="rl">2 — AKKUSATIV<br><span style="font-size:9px;font-weight:400">Wen/Was?</span></td>
+          <td><b>Den</b> …en / <span style="opacity:.7">Einen …en</span></td><td><b>Die</b> …e / <span style="opacity:.7">Eine …e</span></td>
+          <td><b>Das</b> …e / <span style="opacity:.7">Ein …es</span></td><td><b>Die</b> …en / <span style="opacity:.7">Viele …e</span></td></tr>
+        <tr class="rd"><td class="rl">3 — DATIV<br><span style="font-size:9px;font-weight:400">Wem?</span></td>
+          <td><b>Dem</b> …en / <span style="opacity:.7">Einem …en</span></td><td><b>Der</b> …en / <span style="opacity:.7">Einer …en</span></td>
+          <td><b>Dem</b> …en / <span style="opacity:.7">Einem …en</span></td><td><b>Den</b> …en+n / <span style="opacity:.7">Vielen …en</span></td></tr>
+        <tr class="rg"><td class="rl">4 — GENITIV<br><span style="font-size:9px;font-weight:400">Wessen?</span></td>
+          <td><b>Des</b> …en+s / <span style="opacity:.7">Eines …en+s</span></td><td><b>Der</b> …en / <span style="opacity:.7">Einer …en</span></td>
+          <td><b>Des</b> …en+s / <span style="opacity:.7">Eines …en+s</span></td><td><b>Der</b> …en / <span style="opacity:.7">Vieler …en</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- PRONOUN TABLE -->
+  <div class="sugar-wrap">
+    <div class="sugar-title">👤 Personalpronomen — <span>nach Fall</span></div>
+    <table class="pron-table">
+      <thead><tr>
+        <th></th><th>ICH</th><th>DU</th><th>ER</th><th>SIE</th><th>ES</th><th>WIR</th><th>IHR</th><th>SIE/Sie</th>
+      </tr></thead>
+      <tbody>
+        <tr class="pr-nom"><th>NOM</th><td>ich</td><td>du</td><td>er</td><td>sie</td><td>es</td><td>wir</td><td>ihr</td><td>sie/Sie</td></tr>
+        <tr class="pr-akk"><th>AKK</th><td>mich</td><td>dich</td><td>ihn</td><td>sie</td><td>es</td><td>uns</td><td>euch</td><td>sie/Sie</td></tr>
+        <tr class="pr-dat"><th>DAT</th><td>mir</td><td>dir</td><td>ihm</td><td>ihr</td><td>es</td><td>uns</td><td>euch</td><td>ihnen/Ihnen</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg"><span class="lchip cn">Nominativ</span></div>
+    <div class="leg"><span class="lchip cv">Verb</span></div>
+    <div class="leg"><span class="lchip ca">Akkusativ</span></div>
+    <div class="leg"><span class="lchip cd">Dativ</span></div>
+    <div class="leg"><span class="lchip cg">Genitiv</span></div>
+    <div class="leg"><span class="lchip cp">Präposition</span></div>
+    <div class="leg"><span class="lchip cpr">Pronomen</span></div>
+    <div class="leg"><span class="lchip csp">Rechtschreibfehler</span></div>
+    <div class="leg"><span class="lchip car">Falscher Artikel</span></div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="card">
+    <div class="card-title">✍️ Schreib deinen Satz</div>
+    <input class="sentence-input" id="sentence-in" type="text"
+      placeholder="z.B. Der Mann gibt dem Kind das Buch."
+      oninput="analyse()" autocomplete="off" autocorrect="off" spellcheck="false"/>
+    <div class="kb-row">
+      <button class="kb-btn" onclick="ins('ä')">ä</button><button class="kb-btn" onclick="ins('ö')">ö</button>
+      <button class="kb-btn" onclick="ins('ü')">ü</button><button class="kb-btn" onclick="ins('Ä')">Ä</button>
+      <button class="kb-btn" onclick="ins('Ö')">Ö</button><button class="kb-btn" onclick="ins('Ü')">Ü</button>
+      <button class="kb-btn" onclick="ins('ß')">ß</button>
+    </div>
+    <div class="ex-row">
+      <span style="font-size:11px;color:var(--text3);align-self:center">Beispiele:</span>
+      <button class="ex-btn" onclick="setEx('Der Mann fährt das Auto auf der Straße.')">Nom + Akk</button>
+      <button class="ex-btn" onclick="setEx('Der Hund frisst den Apfel in dem Garten der Frau.')">Dativ + Genitiv</button>
+      <button class="ex-btn" onclick="setEx('Ich lerne jeden Tag Deutsch, weil ich nach Deutschland ziehen möchte.')">B2 Satz</button>
+      <button class="ex-btn" onclick="setEx('Der Lehrer gibt dem Kind das Buch des Autors.')">Alle 4 Fälle</button>
+      <button class="ex-btn" onclick="setEx('Obwohl ich manchmal müde bin, lerne ich trotzdem jeden Tag Deutsch.')">obwohl-Satz</button>
+      <button class="ex-btn" onclick="setEx('Ich möchte heute meinem Motorrad waschen, weil es schmutzig ist.')">Aus deinem Satz</button>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="card">
+    <div class="card-title">🎨 Analysierter Satz</div>
+    <div class="highlighted" id="output">
+      <span class="empty-msg">Fang an zu tippen …</span>
+    </div>
+    <div class="info-box" id="info-box" style="display:none"></div>
+  </div>
+
+  <!-- BREAKDOWN -->
+  <div class="card" id="breakdown-card" style="display:none">
+    <div class="card-title">📋 Wort-für-Wort</div>
+    <div class="bd-grid" id="breakdown-grid"></div>
+  </div>
+
+  <!-- STOMPVI -->
+  <div class="card" id="stompvi-card" style="display:none">
+    <div class="card-title">📐 STOMPVI — Satzstruktur</div>
+    <table class="stomp-table">
+      <thead><tr>
+        <th class="sts" style="color:var(--nom)">S<br>Subjekt</th>
+        <th class="stv" style="color:#92400e">v1<br>Verb</th>
+        <th class="stt">T<br>Zeit</th>
+        <th class="sto" style="color:var(--akk)">O<br>Objekt</th>
+        <th class="stm">M<br>Weise</th>
+        <th class="stp">P<br>Ort</th>
+        <th class="stv2" style="color:var(--dat)">v2<br>Verb 2</th>
+      </tr></thead>
+      <tbody><tr>
+        <td class="sts empty" id="st-s">—</td><td class="stv empty" id="st-v">—</td>
+        <td class="stt empty" id="st-t">—</td><td class="sto empty" id="st-o">—</td>
+        <td class="stm empty" id="st-m">—</td><td class="stp empty" id="st-p">—</td>
+        <td class="stv2 empty" id="st-v2">—</td>
+      </tr></tbody>
+    </table>
+    <div class="stomp-note" id="stomp-note"></div>
+  </div>
+
+</div><!-- end main-col -->
+
+<!-- ══════════════ SIDE COLUMN ══════════════ -->
+<div class="side-col">
+<div class="side-scroll">
+
+  <!-- SPELL ERRORS -->
+  <div class="card">
+    <div class="card-title">🔴 Rechtschreibfehler</div>
+    <div id="spell-panel"><div class="err-empty">Keine Fehler gefunden ✓</div></div>
+  </div>
+
+  <!-- ARTICLE ERRORS -->
+  <div class="card">
+    <div class="card-title">🟠 Artikel-Fehler</div>
+    <div id="art-panel"><div class="err-empty">Keine Artikel-Fehler ✓</div></div>
+  </div>
+
+  <!-- VERB CONJUGATION -->
+  <div class="card">
+    <div class="card-title">🟡 Verb-Konjugation</div>
+    <div id="verb-panel"><div class="verb-empty">Tippe einen Satz mit einem Verb …</div></div>
+  </div>
+
+</div>
+</div><!-- end side-col -->
+
+</div><!-- end page -->
+
+<script>
+// ══════ DARK MODE ══════
+let isDark=false;
+function toggleDark(){isDark=!isDark;document.body.classList.toggle('dark',isDark);document.getElementById('dark-btn').textContent=isDark?'☀️':'🌙';localStorage.setItem('ga-dark',isDark);}
+if(localStorage.getItem('ga-dark')==='true'){isDark=true;document.body.classList.add('dark');document.getElementById('dark-btn').textContent='☀️';}
+
+// ══════ KEYBOARD ══════
+function ins(c){const i=document.getElementById('sentence-in');const s=i.selectionStart,e=i.selectionEnd;i.value=i.value.slice(0,s)+c+i.value.slice(e);i.selectionStart=i.selectionEnd=s+1;i.focus();analyse();}
+function setEx(t){document.getElementById('sentence-in').value=t;analyse();}
+
+// ══════ B2 DICTIONARY ══════
+const DICT=new Set(["abend","abendessen","aber","abfahren","abgefahren","abitur","ablehnen","abschließend","abschluss","abteilung","acht","achte","achtzehn","achtzig","adresse","aktuell","akzent","alle","allein","allem","allerdings","allergie","alles","allmählich","als","also","alt","alter","altmodisch","am","am ende","ampel","an","anbei","andere","andererseits","anders","anfangen","angebot","angefangen","angekommen","angenehm","angepasst","angst","anhängen","ankommen","ankündigen","anpasse","anpassen","anpasst","anrufen","ans","anschließend","ansicht","anstatt","anstatt zu","antworten","anziehen","apfel","apotheke","app","april","arbeit","arbeite","arbeiten","arbeitest","arbeitet","arbeitete","arbeiteten","arbeitnehmer","argument","argumentieren","arm","arme","artikel","arzt","auch","auf","auf der anderen seite","auf der einen seite","auf jeden fall","auf wiedersehen","aufgabe","aufgeben","aufgehört","aufgemacht","aufgepasst","aufgeregt","aufgeräumt","aufgestanden","aufgewachsen","aufgrund","aufhören","aufmachen","aufmerksamkeit","aufpassen","aufregend","aufräumen","aufstehen","aufwachsen","aufzug","auge","augen","august","aus","ausbildung","ausflug","ausgabe","ausgaben","ausgeben","ausgegangen","ausgehen","ausgestiegen","ausreichend","ausruhen","ausschalten","aussprache","aussteigen","ausstellung","ausweis","auto","autobahn","automatisierung","autos","außer","außerdem","außerhalb","babies","baby","backen","badezimmer","bahn","bahnhof","bald","balkon","banane","bananen","bank","bargeld","basketball","bauch","bauen","baum","beantragen","bedauerlicherweise","bedeuten","bedeutet","bedeutete","befördern","befürchten","begann","begeistert","beginne","beginnen","beginnst","beginnt","begonnen","behandeln","behandlung","beheben","bei","beigefügt","beim","bein","beine","beispielsweise","beitragen","bekannte","bekannten","bekannter","bemerken","benutzen","benzin","beobachten","bequem","bereits","berg","berge","bericht","berichten","beruf","berufe","beruflich","berufsschule","beschreiben","beschädigen","besonders","besprechung","besser","best","bestehen","bestellen","bestätigen","besuchen","besuchst","besucht","besuchte","betrieb","bett","betten","bevor","bevölkerung","bewegung","bewerben","bewirken","bewölkt","bezahlen","beziehungsweise","bezüglich","bier","bildschirm","bildung","billig","bin","bis","bis bald","bis morgen","bist","bitte","bitte schön","bitten","blau","bleibe","bleiben","bleibst","bleibt","blieb","blieben","blume","blumen","boden","bon","boutique","brachte","braun","breit","breite","brettspiel","brief","bringen","bringst","bringt","brot","bruder","brötchen","brüder","buch","buchhandlung","buchung","bundesstraße","bunt","bus","bushaltestelle","butter","bäckerei","bäume","bücher","bügeln","bürger","büro","café","camping","cent","chance","chef","chefin","chefs","computer","computerspiel","cousin","cousine","da","dach","dachte","dachte nach","dachten","dachtest","daher","damit","danach","dankbar","danke","danke schön","dann","darf","darfst","darum","darüber","darüber hinaus","das","dass","daten","datum","dauere","dauerhaft","dauern","dauerst","dauert","dauerte","debattieren","decke","definitiv","dein","deine","deinem","deinen","deiner","deines","dem","demokratie","den","denke","denken","denkst","denkt","denkt nach","denn","dennoch","der","des","deshalb","dessert","deswegen","deutlich","deutsch","dezember","dich","die","dienstag","diese","diesel","diesem","diesen","dieser","dieses","digital","digitalisierung","diplomarbeit","dir","direkt","diskutieren","doch","dollar","donnerstag","doppelzimmer","dort","draußen","drei","dreimal","dreizehn","dreißig","dritte","drucker","du","dunkel","durch","durchfallen","durchführen","durfte","durften","durftest","durstig","dürfen","dürft","eben","ebenfalls","ebenso","effizient","effizienz","ehrlich","eigentlich","ein","eine","einem","einen","einer","einerseits","eines","einfach","eingang","eingekauft","eingeladen","eingeschränkt","eingestiegen","einige","einkaufen","einladen","einmal","einnahme","einnahmen","einrichten","eins","einsam","einschalten","einschränken","einschränkt","einsteigen","einstellen","eintrittskarte","einzelzimmer","eis","elektroauto","elf","eltern","email","empfangen","empfehlen","empfohlen","ende","enden","endest","endet","endete","energie","engagieren","englisch","entlang","entlassen","entscheiden","entscheidend","entscheidung","entscheidungen","entschuldigen","entschuldigung","entspannen","entspannt","enttäuscht","entwickeln","entwickelst","entwickelt","entwickelte","entwickelten","entwickle","entwicklung","er","erdbeere","erfahrung","erfolg","ergebnis","ergebnisse","erheblich","erholen","erholung","erinnern","erinnert","erinnerte","erkannt","erkannte","erkenne","erkennen","erkennst","erkennt","erkläre","erklären","erklärst","erklärt","erklärte","erkältung","erlauben","erleben","erlebt","erlebte","erledige","erledigen","erledigst","erledigt","erledigung","ermöglichen","ermöglicht","erneuerbar","ernst","ernährung","erreichen","erschwinglich","erschöpft","erste","erwachsene","erwarten","erwartet","erziehen","erzählen","es","essen","essig","esszimmer","etwas","euch","euer","eure","eurem","euren","eurer","eures","euro","europäisch","existieren","existiert","existierte","facebook","fach","fahre","fahren","fahrkarte","fahrkarten","fahrrad","fahrschein","fahrtkosten","fair","falle","fallen","falls","falsch","familie","familien","fand","fanden","fandst","farbe","farben","fast","faul","februar","fehler","feierabend","feiern","feiertag","fenster","ferien","fernarbeit","ferngesehen","fernsehen","festival","feststellen","fieber","fiel","film","filme","finanzieren","finde","finden","findest","findet","fing an","finger","firma","firmen","fisch","fische","fit","fitness","flach","fleisch","fleißig","fliegen","fliegt","flughafen","flugzeug","fluss","flüchtling","fokussieren","folglich","fordern","form","formen","fortbildung","foto","fotografieren","fotos","fragen","frau","frauen","freiheit","freitag","freizeit","fremdsprache","freund","freunde","freundin","freundinnen","freundlich","freundlichen","freundschaft","freut sich","freute sich","frisch","froh","frost","früh","früher","frühling","frühstück","fuhr","fuhr ab","fuhren","fuhrst","funktionieren","funktioniert","funktionierte","fuß","fußball","fächer","fähigkeit","fähigkeiten","fährst","fährt","fährt ab","fällst","fällt","fängt an","fördern","fühle","fühlen","fühlst","fühlt","fühlt sich","fühlte","fühlte sich","fühlten","fünf","fünfmal","fünfte","fünfzehn","fünfzig","für","fürs","füße","gab","gaben","gabst","ganz","garage","garantie","garten","gearbeitet","gebe","geben","geblieben","gebracht","geburtstag","geburtstagsfeier","gebären","gebühr","gedacht","gedauert","geduld","gedurft","geehrte","geehrten","geehrter","geendet","gefahren","gefallen","gefiel","gefordert","gefreut","gefunden","gefährlich","gefällt","gefördert","gefühlt","gegangen","gegeben","gegen","gegenseitig","gegenüber","geglaubt","gehabt","gehalt","gehangen","gehe","geheiratet","gehen","geholfen","gehst","geht","geht aus","geht schlafen","geht schwimmen","geht spazieren","geht weiter","gehören","gehört","gehörte","gekommen","gekonnt","gekostet","gelassen","gelb","geld","geldbeutel","gelegt","gelernt","gelesen","gelingen","gemacht","gemeinsam","gemeldet","gemocht","gemusst","gemüse","genannt","genau","genauso","genehmigen","generation","generell","genießen","genommen","genug","gepasst","gependelt","gepäck","geradeaus","gerechtigkeit","geregnet","gern","gern geschehen","gerne","geschlossen","geschneit","geschrieben","geschäft","gesehen","gesellschaft","gesellschaftlich","gesessen","gesetz","gesetze","gesetzt","gesicht","gesollt","gesprochen","gestanden","gestellt","gestern","gestiegen","gestresst","gesucht","gesund","gesundheit","gesunken","gewachsen","gewesen","gewicht","gewitter","gewohnt","gewollt","geworden","gewusst","gewährleisten","gewährleistet","gewürz","gezeigt","geändert","geärgert","geöffnet","gibst","gibt","ging","ging aus","ging schlafen","ging spazieren","ging weiter","gingen","gingst","glaube","glauben","glaubst","glaubt","glaubte","glaubten","gleich","gleichheit","gleichzeitig","global","glück","glücklich","grammatik","gras","gratis","grau","grippe","groß","großmutter","großvater","grund","grundsätzlich","gruppe","größe","größer","größt","grün","gründe","grüßen","gurke","gut","guten abend","guten morgen","guten tag","gym","günstig","haar","haare","habe","haben","habt","half","halfen","hallo","hals","halt","haltestelle","hand","handschuhe","handy","hast","hat","hat vor","hatte","hatte vor","hatten","hattest","hattet","haus","hausaufgabe","hausaufgaben","hause","heilen","heirate","heiraten","heiratest","heiratet","heiratete","heizung","heiß","heiße","heißen","heißt","helfen","hell","hemd","her","herbst","herunterladen","herz","heute","heute abend","heute mittag","heute morgen","heutzutage","hier","hiermit","hieß","hilfe","hilfsbereit","hilfst","hilft","himmel","hin","hinaus","hing","hingegen","hinsichtlich","hinten","hinter","hobby","hobbys","hoch","hochladen","hochschule","hochzeit","hoffen","hoffnung","homeoffice","hose","hostel","hotel","hund","hunde","hundert","hungrig","husten","hände","hängen","hängst","hängt","hässlich","häufig","häuser","höflich","höhe","hören","hört auf","hört zu","hörte auf","hörte zu","ich","ich bin der meinung dass","ich denke dass","ich glaube dass","ihm","ihn","ihnen","ihr","ihre","ihrem","ihren","ihrer","ihres","im","im allgemeinen","im großen und ganzen","im grunde","imbiss","immer","impfung","in","indem","indirekt","information","informieren","innerhalb","innovation","ins","insbesondere","insgesamt","insofern","instagram","integration","intelligenz","interessant","interessen","international","internet","interview","inzwischen","irgendwo","ist","ja","jacke","jahr","jahreszeit","januar","jede","jedem","jeden","jeder","jedes","jedoch","jemand","jetzt","job","jubiläum","juli","jung","junge","jungen","juni","jährlich","jünger","jüngst","kaffee","kakao","kalt","kam","kam an","kam zurück","kamen","kamst","kann","kannst","kantine","kaputt","karotte","karriere","karte","kartoffel","kartoffeln","kasse","katze","katzen","kaufen","kaufhaus","kauft ein","kaufte ein","kaum","kein","keine","keinem","keinen","keller","kellner","kellnerin","kennen","kennengelernt","kennenlerne","kennenlernen","kennenlernst","kennenlernt","kenntnisse","ki","kind","kinder","kino","kirche","kirsche","klar","klasse","klassen","klausur","kleid","kleidung","klein","kleiner","kleinst","klima","klimawandel","klug","knoblauch","kochen","koffer","kollege","kollegen","kollegin","komisch","komme","kommen","kommentieren","kommst","kommt","kommt an","kommt zurück","kommunikation","kompetenz","kompliziert","konferenz","konnte","konnten","konntest","konto","konzentrieren","konzert","kopf","kosten","kostenlos","kostet","kostete","krank","krankenhaus","krankheit","kreativ","kreditkarte","kreuzung","kritisch","kritisieren","kräuter","kuchen","kuh","kultur","kulturell","kulturen","kurs","kurz","kurzfristig","käse","können","könnt","küche","kühl","kündigen","kündigung","künstliche","küste","laden","lampe","lampen","land","lang","langfristig","langsam","langweilig","laptop","las","lasen","lasse","laufen","laut","leben","lebensmittel","leer","legen","legst","legt","legte","lehrer","lehrerin","leicht","leider","leise","lerne","lernen","lernst","lernt","lernt kennen","lernte","lernte kennen","lernten","lese","lesen","letzte","letztendlich","letztlich","liebe","lied","lieder","liest","ließ","ließen","lila","limonade","links","lohn","lokal","lud ein","luft","lunge","lustig","lädt ein","länder","länge","lässt","lösen","lösung","lösungen","mache","machen","machst","machst auf","machst zu","macht","macht auf","macht zu","machte","machten","mag","magen","magst","mahlzeit","mai","makler","mal","malen","man","manchmal","mann","mantel","marke","markt","material","maus","maßgeblich","medien","medikament","medium","meer","meeting","mehr","mehrmals","mein","meine","meinem","meinen","meiner","meiner meinung nach","meines","meinung","meinungen","meistens","melde","meldest","meldet","meldete","meldeten","mensch","menschen","metzgerei","mich","miete","mieten","mieter","migration","milch","million","minute","minuten","mir","missbrauchen","missbraucht","misserfolg","mit","mitarbeiter","miteinander","mithilfe","mittag","mittagessen","mitteilen","mittelfristig","mittlerweile","mittwoch","mochte","mochten","mochtest","mode","modern","monat","monatlich","mond","montag","morgen","moschee","motorrad","mund","museum","musik","muss","musst","musste","mussten","musstest","mut","mutter","mädchen","männer","märz","möbel","möchte","möchten","möchtest","möchtet","mögen","möglich","möglichkeit","mögt","müde","müll","müssen","müsst","mütze","nach","nachbar","nachbarin","nachbarn","nachdem","nachdenken","nachgedacht","nachhaltig","nachhaltigkeit","nachname","nachricht","nachrichten","nacht","nachteil","nachteile","nachtisch","nahm","nahmen","nahmst","name","nase","national","nationalität","natur","natürlich","nebel","neben","nebenkosten","neffe","negativ","nehme","nehmen","nein","nennen","nennt","nervös","nett","netzwerk","neu","neuer","neuest","neun","neunte","neunzehn","neunzig","neutral","nichte","nichts","nie","niedrig","niemand","nimmst","nimmt","nirgends","noch","normal","normalerweise","normen","notaufnahme","note","notfall","notwendig","november","nudeln","null","nur","nächste","nämlich","nötig","nützlich","ob","oben","obgleich","objektiv","obst","obwohl","oder","offen","oft","ohne","ohne zu","ohr","ohren","okay","oktober","oma","onkel","onlinemeeting","opa","operation","operieren","optimiert","orange","orangensaft","ordentlich","organisation","organisieren","paket","paprika","parkplatz","party","pass","passen","passieren","passiert","passierte","passt","passt auf","passte","passte auf","pech","pendeln","pendelst","pendelt","pension","persönlich","pfeffer","pferd","pflegen","pflicht","planen","platz","politik","politisch","portemonnaie","positiv","praktikum","praktisch","preis","preise","preiswert","privat","problem","probleme","produktivität","projekt","prüfen","prüfung","putzen","pünktlich","qualifikation","qualifiziert","qualität","quittung","rabatt","radfahren","raten","reagieren","realität","rechnung","recht","rechts","rechtzeitig","recyceln","recycling","regal","regale","regel","regelmäßig","regeln","regen","regierung","regional","regnen","regnet","regnete","reich","reis","reise","reisen","reiten","religion","renovieren","rente","reparieren","reservieren","reservierung","respekt","respektvoll","restaurant","retten","rezept","richtig","risiko","roboter","rock","rosa","rot","rucksack","räume","räumst auf","räumt auf","räumte auf","rücken","rückgabe","saft","sagen","sah","sah fern","sahen","sahst","salat","sale","salz","samstag","sank","satz","sauber","sauce","saß","saßen","schaf","schaffen","scheiden","scheitern","schicken","schiff","schlaf","schlafen","schlafen gehen","schlafzimmer","schlecht","schlechter","schließe","schließen","schließlich","schließt","schlimmst","schloss","schlüssel","schmal","schmerz","schmerzen","schmutzig","schnee","schneien","schneit","schneite","schnell","schokolade","schon","schrank","schreibe","schreiben","schreibst","schreibt","schrieb","schrieben","schränke","schuhe","schule","schulen","schulter","schutz","schutzgebiet","schwach","schwarz","schwein","schwer","schwester","schwestern","schwierig","schwimmen","schwimmen gegangen","schwimmen gehen","schön","schüler","schülerin","schützen","sechs","sechste","sechzehn","sechzig","see","sehe","sehen","sehr","seid","sein","seine","seinem","seinen","seiner","seines","seit","seitdem","sekunde","sekunden","selbst","selbstverständlich","selten","seltsam","seminar","september","serie","serien","setzen","setzt","setzte","show","sich","sich freuen","sich fühlen","sich ärgern","sicher","sichergestellt","sicherheit","sicherstellen","sie","sieben","siebte","siebzehn","siebzig","siehst","sieht","sieht fern","sind","singen","sinke","sinken","sinkst","sinkt","sinnlos","sinnvoll","sitze","sitzt","smartphone","snack","so","sobald","socken","sodass","sofa","sofern","sofort","software","sohn","solange","solar","soll","sollen","sollst","sollt","sollte","sollten","solltest","somit","sommer","sondern","sonig","sonne","sonntag","sorge","sorry","soweit","sowohl","sozial","soziale medien","sozialstaat","soße","spannend","sparen","spazierengegangen","spazierengehen","spiegel","spiel","spiele","spielen","spielzeug","sport","sprach","sprache","sprachen","spreche","sprechen","sprichst","spricht","spät","später","staat","staatlich","stadt","stand","stand auf","standen","standpunkt","stark","statt","stau","staubsaugen","steckenbleiben","stehe","stehst","steht","steht auf","steige","steigen","steigst","steigt","steigt aus","steigt ein","stelle","stellen","stellst","stellt","stellt vor","stellte","stellte vor","sterne","steuer","steuern","stieg","stieg aus","stieg ein","stolz","stornierung","strand","straße","straßenbahn","stress","strom","student","studentin","studieren","studiert","studium","stuhl","stunde","stunden","sturm","städte","stühle","subjektiv","suchen","suchst","sucht","suchte","suite","supermarkt","suppe","symptom","system","sätze","söhne","tablet","tablette","tag","tage","tal","tankstelle","tante","tanzen","tasche","taschen","tastatur","tatsächlich","tausend","taxi","team","technisch","technologie","tee","teilnehmen","telefon","telefonnummer","tempel","tennis","teppich","termin","terrasse","teuer","theater","theoretisch","ticket","tickets","tief","tiefe","tier","tiere","tisch","tische","tochter","tomate","tomaten","torte","total","tradition","tram","traube","traurig","treffen","treiben","treppe","trinken","trinkgeld","trotz","trotzdem","tschüss","typisch","täglich","töchter","tür","türen","ubahn","uhr","uhren","uhrzeit","um","um zu","ums","umtausch","umwelt","umweltfreundlich","umziehen","unangenehm","unbequem","unbezahlbar","und","unfall","unglücklich","universität","unmöglich","unnötig","unordentlich","unpünktlich","uns","unser","unsere","unserem","unseren","unserer","unseres","unsicher","unten","unter","unterkunft","unternehmen","unterricht","unterrichten","unterstützen","unterstützt","unterstützung","untersuchen","unterwäsche","unwahr","unwichtig","unzufrieden","unzuverlässig","urlaub","vater","veranstaltung","verantwortung","verantwortungsbewusst","verbessere","verbessern","verbesserst","verbessert","verbesserte","verbesserten","verbieten","verbracht","verbrachte","verbringen","verbringt","verdienen","vereinbart","verhindern","verkaufen","verkehr","verlangt","verletzung","verliebt","vermeiden","vermieter","verschieden","verschreiben","versicherung","verstand","verstanden","verstehe","verstehen","verstehst","versteht","verständlich","verständnis","versuchen","versuchst","versucht","versuchte","vertrag","vertrauen","verursachen","verwenden","veröffentlichen","video","videokonferenz","videos","videospiel","viel","viele","vielfältig","vielleicht","vielschichtig","vier","viermal","vierte","vierzehn","vierzig","vogel","vokabular","voll","vom","von","vor","vorangetrieben","vorantreiben","vorbereiten","vorgehabt","vorgeschlagen","vorgestellt","vorhaben","vorhang","vorlesung","vorname","vorne","vorschlagen","vorschrift","vorstellen","vorteil","vorteile","vorübergehend","vögel","wachse","wachsen","wahl","wahr","wahrscheinlich","wald","wand","wandern","wann","war","waren","warm","warnen","warst","wart","warten","wartezimmer","warum","was","waschen","wasser","website","weder","weg","wegen","weil","wein","weiterbildung","weiterentwickeln","weitergegangen","weitergehen","weiterhin","weitermachen","weiß","weißt","wenig","wenige","weniger","wenn","wer","werde","werden","werdet","werkstatt","werte","wesentlich","wetter","wg","wichtig","wichtiger","widersprechen","wie","wieder","wiederholen","wiese","will","willst","wind","winter","wir","wird","wirst","wirtschaftlich","wissen","wissenschaftlich","witzig","wo","woche","wochenende","wochenendtrip","wofür","woher","wohin","wohingegen","wohnen","wohngemeinschaft","wohnst","wohnt","wohnte","wohnung","wohnungen","wohnzimmer","wolke","wolken","wollen","wollt","wollte","wollten","wolltest","womit","workshop","wort","worüber","wuchs","wurde","wurden","wurdest","wurdet","wurst","wusste","wussten","wächst","wählen","während","wälder","wöchentlich","wörter","wütend","yoga","youtube","zahnarzt","zehn","zehnte","zeichnen","zeige","zeigen","zeigst","zeigt","zeigte","zeit","zeitgemäß","zeitschrift","zeitschriften","zeitung","zeitungen","zeitzone","zerstören","zeugnis","ziemlich","zimmer","zitrone","zu","zucker","zudem","zuerst","zufrieden","zug","zugehört","zugemacht","zuhören","zum","zum beispiel","zum schluss","zumachen","zumindest","zunächst","zur","zurückbleiben","zurückgeblieben","zurückgekommen","zurückkommen","zusammen","zusammenarbeit","zusammenfassend","zustimmen","zusätzlich","zuverlässig","zwanzig","zwar","zwei","zweifach","zweifeln","zweifältig","zweimal","zweischneidig","zweite","zwiebel","zwischen","zwölf","züge","ähnlich","älter","ältest","ändere","ändern","änderst","ändert","änderte","äpfel","ärgerlich","ärgert sich","ärgerte sich","ärztin","öffentlich","öffne","öffnen","öffnest","öffnet","öffnete","öfter","ökologisch","öl","über","überall","überhaupt","überlegen","übermäßig","überrascht","überwiegend","überzeugen","üblicherweise","übrigens"]);
+
+// Personal errors from sessions
+const MY_ERRORS={
+  'arbeitswerl':'Arbeitswelt','arbeitsfrom':'Arbeitsform','penden':'pendeln',
+  'kwalifisiert':'qualifiziert','breuchen':'brauchen','fähler':'Fehler',
+  'verbersern':'verbessern','korriegieren':'korrigieren','emphelen':'empfehlen',
+  'gluabe':'glaube','dammit':'damit','zusammenfassent':'Zusammenfassend',
+  'anderseits':'Andererseits','kolegen':'Kollegen','produktief':'produktiv',
+  'definief':'definitiv','noral':'normal','menchsen':'Menschen',
+  'wahrent':'während','drausen':'draußen','heuzutage':'heutzutage',
+  'machmal':'manchmal','swerig':'schwierig','darduch':'dadurch',
+  'eingentlich':'eigentlich','passsieren':'passieren','verker':'Verkehr',
+  'spandieren':'verbringen','bedeuted':'bedeutet','nocht':'noch',
+  'digitalieserung':'Digitalisierung','schliesen':'schließen',
+  'reallität':'Realität','montlich':'möglich','misbraucht':'missbraucht',
+  'beperkt':'eingeschränkt','ergenwelchen':'irgendwelchen',
+  'konsentrieren':'konzentrieren','beforted':'vorangetrieben',
+  'producktevitäte':'Produktivität','einfacgher':'einfacher',
+  'schnleller':'schneller','vorbleiben':'sich anpassen',
+  'kulture':'Kulturen','sichelich':'ernsthaft',
+  'scmutsich':'schmutzig','schmutzig':'schmutzig',
+};
+
+const SPELL_IGNORE=new Set(['ich','du','er','sie','es','wir','ihr','mich','dich','ihn','uns','euch','mir','dir','ihm','ihnen','sich','der','die','das','den','dem','des','ein','eine','einen','einem','einer','eines','kein','keine','und','oder','aber','denn','weil','dass','ob','wenn','als','obwohl','damit','während','sodass','indem','trotzdem','deshalb','einerseits','andererseits','zum','zur','beim','vom','im','am','ins','ans','nicht','auch','noch','schon','nun','dann','doch','ja','nein','so','sehr','nur','mal','eben','halt','etwas','alles','alle','viele','wenige','einige','hier','dort','da','jetzt','heute','morgen','gestern','immer','nie','oft','manchmal','bald','früher','später','bitte','danke','gern','meiner','meinem','meinen','dieser','diese','dieses','jeder','jede','jedes','heutzutage','andererseits','einerseits','sodass','obwohl','zusammenfassend','digitalisierung','homeoffice','ki','b2','a1','a2','c1','c2','wg','ok','okay','usw','bzw','etc','z','b','d','h']);
+
+function spellOk(w){
+  if(!w||w.length<=1)return true;
+  const l=w.toLowerCase().replace(/[.,!?;:"]/g,'');
+  if(!l||l.length<=1)return true;
+  if(SPELL_IGNORE.has(l))return true;
+  if(/^[0-9]+$/.test(l))return true;
+  if(MY_ERRORS[l])return false;
+  return DICT.has(l);
+}
+
+// ══════ GRAMMAR DATA ══════
+const VERBS=new Set(['bin','bist','ist','sind','seid','war','warst','waren','wart','habe','hast','hat','haben','habt','hatte','hattest','hatten','werde','wirst','wird','werden','werdet','wurde','wurdest','wurden','kann','kannst','können','könnt','konnte','konnten','muss','musst','müssen','müsst','musste','mussten','will','willst','wollen','wollt','wollte','wollten','soll','sollst','sollen','sollt','sollte','sollten','darf','darfst','dürfen','dürft','durfte','durften','mag','magst','mögen','mögt','mochte','mochten','möchte','möchtest','möchten','möchtet','lerne','lernst','lernt','lernte','lernten','arbeite','arbeitest','arbeitet','arbeitete','arbeiteten','gehe','gehst','geht','ging','gingst','gingen','komme','kommst','kommt','kam','kamst','kamen','mache','machst','macht','machte','machten','nehme','nimmst','nimmt','nahm','nahmen','gebe','gibst','gibt','gab','gaben','sehe','siehst','sieht','sah','sahen','fahre','fährst','fährt','fuhr','fuhren','finde','findest','findet','fand','fanden','denke','denkst','denkt','dachte','dachten','glaube','glaubst','glaubt','glaubte','glaubten','fühle','fühlst','fühlt','fühlte','fühlten','weiß','weißt','wusste','wussten','spreche','sprichst','spricht','sprach','sprachen','schreibe','schreibst','schreibt','schrieb','schrieben','lese','liest','las','lasen','bleibe','bleibst','bleibt','blieb','blieben','stehe','stehst','steht','stand','standen','sitze','sitzt','saß','saßen','hilfe','hilfst','hilft','half','halfen','lasse','lässt','ließ','ließen','verstehe','verstehst','versteht','verstand','verstanden','melde','meldest','meldet','meldete','meldeten','verbessere','verbesserst','verbessert','verbesserte','verbesserten','entwickle','entwickelst','entwickelt','entwickelte','entwickelten','schließe','schließt','schloss','beginne','beginnst','beginnt','begann','ändere','änderst','ändert','änderte','fange','fängst','fängt','fing','trage','trägst','trägt','trug','waschen','wäschst','wäscht','wusch','wuschen','gemeldet','gelernt','gearbeitet','gegangen','gekommen','gemacht','genommen','gegeben','gesehen','gefahren','gefunden','gedacht','geglaubt','gefühlt','gewusst','gesprochen','geschrieben','gelesen','geblieben','gestanden','geholfen','gelassen','verstanden','verbessert','entwickelt','eingeschränkt','singen','singt','singst','sang','sangen','parken','parkt','parkst','parkte','zeichnen','zeichnet','zeichnest','zeichnete','frisst','fressen','fraß','frassen','trinkt','trinken','trank','tranken','waschen','wascht','wäschst','wusch','wuschen']);
+
+const NOM_A=new Set(['der','die','das','ein','eine','mein','meine','dein','deine','sein','seine','ihr','ihre','unser','unsere','euer','eure','kein','keine','dieser','diese','dieses','jeder','jede','jedes']);
+const AKK_A=new Set(['den','einen','meinen','deinen','seinen','ihren','unseren','euren','keinen','diesen','jeden']);
+const DAT_A=new Set(['dem','einer','einem','meinem','meiner','deinem','deiner','seinem','seiner','ihrem','ihrer','unserem','unserer','eurem','eurer','keinem','keiner','diesem','dieser']);
+const GEN_A=new Set(['des','des','eines','einer','meines','meiner','deines','deiner','seines','seiner','ihres','ihrer','unseres','unserer','eures','eurer','keines','keiner']);
+const PRONOUNS=new Set(['ich','du','er','sie','es','wir','ihr','mich','dich','ihn','uns','euch','mir','dir','ihm','ihnen','sich']);
+const ALL_PREPS=new Set(['an','auf','bei','bis','durch','für','gegen','hinter','in','mit','nach','neben','ohne','seit','über','um','unter','von','vor','während','wegen','zwischen','zu','aus','außer','außerhalb','innerhalb','trotz','statt','anstatt','aufgrund','mithilfe','gegenüber','entlang','zufolge','nächst']);
+const SUB_CONJ=new Set(['weil','dass','obwohl','damit','während','sodass','indem','wenn','ob','als','bevor','nachdem','bis','seit','seitdem','falls','sofern']);
+const TIME_W=new Set(['heute','morgen','gestern','jetzt','dann','immer','nie','oft','manchmal','selten','bald','früher','später','zuerst','danach','schließlich','jeden','täglich','heutzutage','abends','morgens','nachts','mittags','neulich','sofort','gleich','schon','noch','bereits']);
+
+// Article errors — wrong article before noun
+const ART_ERRORS=[
+  {rx:/\b(der|den|dem)\s+(Meinung|Entscheidung|Lösung|Regel|Firma|Kommunikation|Balance|Realität|Verantwortung|Digitalisierung|Produktivität|Möglichkeit|Entwicklung|Arbeit|Zeit|Freiheit|Sicherheit|Wahl|Frage|Seite|Welt)\b/gi, correct:'die'},
+  {rx:/\b(die|der)\s+(Vorteil|Nachteil|Verkehr|Stillstand|Arbeitsplatz|Vorschlag|Fehler|Satz|Computer|Beruf|Tag|Punkt|Schritt|Grund)\b/gi, correct:'der'},
+  {rx:/\b(der|die)\s+(Homeoffice|Risiko|Kind|Problem|Ergebnis|Thema|System|Leben|Bild|Haus|Jahr|Land|Auto|Ziel)\b/gi, correct:'das'},
+  {rx:/\b(bei die)\b/gi, correct:'bei der (Dativ)'},
+  {rx:/\b(bei der Hause|bei der hause)\b/gi, correct:'zu Hause (fixed phrase!)'},
+  {rx:/\b(bei dem Hause|bei dem hause)\b/gi, correct:'zu Hause (fixed phrase!)'},
+  {rx:/\b(mit die)\b/gi, correct:'mit der/dem (Dativ)'},
+  {rx:/\b(nach die)\b/gi, correct:'nach der/dem (Dativ)'},
+  {rx:/\b(in die Realität)\b/gi, correct:'in der Realität (Dativ)'},
+  {rx:/\b(für der)\b/gi, correct:'für die/den'},
+  {rx:/\b(bei die Arbeit|bei der Arbeit)\b/gi, correct:'bei der Arbeit ✓ (bei + Dativ)'},
+  {rx:/\b(auf die Straße)\b/gi, correct:'auf der Straße (Dativ — location)'},
+  {rx:/\b(in die Schule)\b/gi, correct:'in der Schule (Dativ — location) or in die Schule (Akkusativ — going there)'},
+];
+
+// Verb conjugation table
+const VERB_CONJ={
+  'sein':     {ich:'bin',du:'bist','er/sie/es':'ist',wir:'sind',ihr:'seid','sie/Sie':'sind'},
+  'haben':    {ich:'habe',du:'hast','er/sie/es':'hat',wir:'haben',ihr:'habt','sie/Sie':'haben'},
+  'werden':   {ich:'werde',du:'wirst','er/sie/es':'wird',wir:'werden',ihr:'werdet','sie/Sie':'werden'},
+  'können':   {ich:'kann',du:'kannst','er/sie/es':'kann',wir:'können',ihr:'könnt','sie/Sie':'können'},
+  'müssen':   {ich:'muss',du:'musst','er/sie/es':'muss',wir:'müssen',ihr:'müsst','sie/Sie':'müssen'},
+  'wollen':   {ich:'will',du:'willst','er/sie/es':'will',wir:'wollen',ihr:'wollt','sie/Sie':'wollen'},
+  'sollen':   {ich:'soll',du:'sollst','er/sie/es':'soll',wir:'sollen',ihr:'sollt','sie/Sie':'sollen'},
+  'dürfen':   {ich:'darf',du:'darfst','er/sie/es':'darf',wir:'dürfen',ihr:'dürft','sie/Sie':'dürfen'},
+  'mögen':    {ich:'mag',du:'magst','er/sie/es':'mag',wir:'mögen',ihr:'mögt','sie/Sie':'mögen'},
+  'möchten':  {ich:'möchte',du:'möchtest','er/sie/es':'möchte',wir:'möchten',ihr:'möchtet','sie/Sie':'möchten'},
+  'gehen':    {ich:'gehe',du:'gehst','er/sie/es':'geht',wir:'gehen',ihr:'geht','sie/Sie':'gehen'},
+  'kommen':   {ich:'komme',du:'kommst','er/sie/es':'kommt',wir:'kommen',ihr:'kommt','sie/Sie':'kommen'},
+  'machen':   {ich:'mache',du:'machst','er/sie/es':'macht',wir:'machen',ihr:'macht','sie/Sie':'machen'},
+  'lernen':   {ich:'lerne',du:'lernst','er/sie/es':'lernt',wir:'lernen',ihr:'lernt','sie/Sie':'lernen'},
+  'arbeiten': {ich:'arbeite',du:'arbeitest','er/sie/es':'arbeitet',wir:'arbeiten',ihr:'arbeitet','sie/Sie':'arbeiten'},
+  'fahren':   {ich:'fahre',du:'fährst','er/sie/es':'fährt',wir:'fahren',ihr:'fahrt','sie/Sie':'fahren'},
+  'sehen':    {ich:'sehe',du:'siehst','er/sie/es':'sieht',wir:'sehen',ihr:'seht','sie/Sie':'sehen'},
+  'lesen':    {ich:'lese',du:'liest','er/sie/es':'liest',wir:'lesen',ihr:'lest','sie/Sie':'lesen'},
+  'geben':    {ich:'gebe',du:'gibst','er/sie/es':'gibt',wir:'geben',ihr:'gebt','sie/Sie':'geben'},
+  'nehmen':   {ich:'nehme',du:'nimmst','er/sie/es':'nimmt',wir:'nehmen',ihr:'nehmt','sie/Sie':'nehmen'},
+  'sprechen': {ich:'spreche',du:'sprichst','er/sie/es':'spricht',wir:'sprechen',ihr:'sprecht','sie/Sie':'sprechen'},
+  'schreiben':{ich:'schreibe',du:'schreibst','er/sie/es':'schreibt',wir:'schreiben',ihr:'schreibt','sie/Sie':'schreiben'},
+  'denken':   {ich:'denke',du:'denkst','er/sie/es':'denkt',wir:'denken',ihr:'denkt','sie/Sie':'denken'},
+  'wissen':   {ich:'weiß',du:'weißt','er/sie/es':'weiß',wir:'wissen',ihr:'wisst','sie/Sie':'wissen'},
+  'finden':   {ich:'finde',du:'findest','er/sie/es':'findet',wir:'finden',ihr:'findet','sie/Sie':'finden'},
+  'helfen':   {ich:'helfe',du:'hilfst','er/sie/es':'hilft',wir:'helfen',ihr:'helft','sie/Sie':'helfen'},
+  'waschen':  {ich:'wasche',du:'wäschst','er/sie/es':'wäscht',wir:'waschen',ihr:'wascht','sie/Sie':'waschen'},
+  'verbessern':{ich:'verbessere',du:'verbesserst','er/sie/es':'verbessert',wir:'verbessern',ihr:'verbessert','sie/Sie':'verbessern'},
+  'fühlen':   {ich:'fühle',du:'fühlst','er/sie/es':'fühlt',wir:'fühlen',ihr:'fühlt','sie/Sie':'fühlen'},
+  'bleiben':  {ich:'bleibe',du:'bleibst','er/sie/es':'bleibt',wir:'bleiben',ihr:'bleibt','sie/Sie':'bleiben'},
+};
+
+// Map conjugated form → infinitive
+const FORM_TO_INF={};
+Object.entries(VERB_CONJ).forEach(([inf,forms])=>{
+  Object.values(forms).forEach(f=>{ if(!FORM_TO_INF[f]) FORM_TO_INF[f]=inf; });
+  FORM_TO_INF[inf]=inf;
+});
+
+// ══════ CLASSIFY TOKEN ══════
+function classify(token,prev){
+  const low=token.toLowerCase().replace(/[.,!?;:"]/g,'');
+  if(!low)return 'punct';
+  if(VERBS.has(low))return 'verb';
+  if(PRONOUNS.has(low))return 'pron';
+  if(ALL_PREPS.has(low))return 'prep';
+  if(SUB_CONJ.has(low))return 'prep';
+  if(GEN_A.has(low))return 'gen';
+  if(DAT_A.has(low))return 'dat';
+  if(AKK_A.has(low))return 'akk';
+  if(NOM_A.has(low))return 'nom';
+  const p1=prev[prev.length-1]?.toLowerCase().replace(/[.,!?;:]/g,'');
+  const p2=prev[prev.length-2]?.toLowerCase().replace(/[.,!?;:]/g,'');
+  if(p1){if(GEN_A.has(p1))return 'gen';if(DAT_A.has(p1))return 'dat';if(AKK_A.has(p1))return 'akk';if(NOM_A.has(p1))return 'nom';}
+  if(p2){if(GEN_A.has(p2))return 'gen';if(DAT_A.has(p2))return 'dat';if(AKK_A.has(p2))return 'akk';if(NOM_A.has(p2))return 'nom';}
+  if(token[0]===token[0].toUpperCase()&&/[A-ZÄÖÜ]/.test(token[0]))return 'noun';
+  return 'other';
+}
+
+// ══════ MAIN ANALYSER ══════
+function analyse(){
+  const raw=document.getElementById('sentence-in').value;
+  if(!raw.trim()){
+    document.getElementById('output').innerHTML='<span class="empty-msg">Fang an zu tippen …</span>';
+    ['stompvi-card','breakdown-card'].forEach(id=>document.getElementById(id).style.display='none');
+    document.getElementById('info-box').style.display='none';
+    clearSidePanels();return;
+  }
+  const tokens=raw.match(/[^\s]+/g)||[];
+  const classified=[];
+  for(let i=0;i<tokens.length;i++){
+    classified.push({word:tokens[i],type:classify(tokens[i],tokens.slice(0,i))});
+  }
+
+  // Article error detection on raw string
+  const artErrors=[];
+  ART_ERRORS.forEach(({rx,correct})=>{
+    let m;rx.lastIndex=0;
+    while((m=rx.exec(raw))!==null){
+      artErrors.push({wrong:m[0],correct,index:m.index});
+    }
+  });
+
+  // Build highlighted HTML
+  let html='';
+  const spellErrors=[];
+  classified.forEach(({word,type})=>{
+    const clean=word.replace(/[.,!?;:"]/g,'');
+    const punct=word.slice(clean.length);
+    const low=clean.toLowerCase();
+    // Check if this word is in an article error
+    const isArtErr=artErrors.some(e=>raw.indexOf(e.wrong)>=0&&e.wrong.toLowerCase().includes(low));
+    switch(type){
+      case 'verb':   html+=`<span class="wv">${clean}<sup class="wlbl">V</sup></span>${punct} `;break;
+      case 'pron':   html+=`<span class="wpr">${clean}<sup class="wlbl">PRO</sup></span>${punct} `;break;
+      case 'prep':   html+=`<span class="wp">${clean}</span>${punct} `;break;
+      case 'nom':    html+=`<span class="wn">${clean}<sup class="wlbl">NOM</sup></span>${punct} `;break;
+      case 'akk':    html+=`<span class="wa">${clean}<sup class="wlbl">AKK</sup></span>${punct} `;break;
+      case 'dat':    html+=`<span class="wd">${clean}<sup class="wlbl">DAT</sup></span>${punct} `;break;
+      case 'gen':    html+=`<span class="wg">${clean}<sup class="wlbl">GEN</sup></span>${punct} `;break;
+      case 'noun':
+        if(isArtErr) html+=`<span class="war2" title="Falscher Artikel">${clean}</span>${punct} `;
+        else {
+          // If previous word was a verb or modal — this noun is likely Akkusativ (direct object)
+          const prevType = classified[classified.indexOf(classified.find((t,i)=>i===classified.findIndex(x=>x===classified[classified.length-1&&i])))];
+          // Simple heuristic: check if there's a verb before this noun without an article
+          const prevWords = classified.slice(0, classified.findIndex(t=>t.word===word));
+          const lastMeaningful = [...prevWords].reverse().find(t=>t.type!=='punct'&&t.type!=='other');
+          if(lastMeaningful && lastMeaningful.type==='verb') {
+            html+=`<span class="wa" title="Wahrscheinlich Akkusativ (direktes Objekt)">${clean}<sup class="wlbl">AKK?</sup></span>${punct} `;
+          } else {
+            html+=`${word} `;
+          }
+        }
+        break;
+      default:
+        if(clean.length>1&&!spellOk(clean)){
+          const correction=MY_ERRORS[low]||'?';
+          spellErrors.push({wrong:clean,correct:correction});
+          html+=`<span class="wsp" title="Möglicher Rechtschreibfehler → ${correction}">${clean}</span>${punct} `;
+        } else {
+          html+=`${word} `;
+        }
+    }
+  });
+
+  document.getElementById('output').innerHTML=html.trim();
+  buildSidePanels(spellErrors,artErrors,classified,raw);
+  buildBreakdown(classified);
+  buildSTOMPVI(classified,raw);
+  buildInfo(classified,raw);
+}
+
+// ══════ SIDE PANELS ══════
+function clearSidePanels(){
+  document.getElementById('spell-panel').innerHTML='<div class="err-empty">Keine Fehler gefunden ✓</div>';
+  document.getElementById('art-panel').innerHTML='<div class="err-empty">Keine Artikel-Fehler ✓</div>';
+  document.getElementById('verb-panel').innerHTML='<div class="verb-empty">Tippe einen Satz mit einem Verb …</div>';
+}
+
+function buildSidePanels(spellErrors,artErrors,classified,raw){
+  // SPELL PANEL
+  const sp=document.getElementById('spell-panel');
+  if(!spellErrors.length){
+    sp.innerHTML='<div class="err-empty">Keine Fehler gefunden ✓</div>';
+  } else {
+    const seen=new Set();
+    sp.innerHTML='<div class="err-list">'+spellErrors.filter(e=>{if(seen.has(e.wrong))return false;seen.add(e.wrong);return true;}).map(e=>`
+      <div class="err-item err-spell-item">
+        <span class="err-word" style="color:var(--spell-err)">${e.wrong}</span>
+        <span style="color:var(--text2)"> → </span>
+        <span class="err-correct">${e.correct!=='?'?e.correct:'nicht im B2-Wörterbuch'}</span>
+      </div>`).join('')+'</div>';
+  }
+
+  // ARTICLE PANEL
+  const ap=document.getElementById('art-panel');
+  if(!artErrors.length){
+    ap.innerHTML='<div class="err-empty">Keine Artikel-Fehler ✓</div>';
+  } else {
+    const seen=new Set();
+    ap.innerHTML='<div class="err-list">'+artErrors.filter(e=>{if(seen.has(e.wrong))return false;seen.add(e.wrong);return true;}).map(e=>`
+      <div class="err-item err-art-item">
+        <span class="err-word" style="color:var(--art-err)">${e.wrong}</span>
+        <span style="color:var(--text2)"> → sollte </span>
+        <span class="err-correct">${e.correct}</span>
+        <span style="color:var(--text2)"> sein</span>
+      </div>`).join('')+'</div>';
+  }
+
+  // VERB PANEL — show conjugation for found verbs
+  const vp=document.getElementById('verb-panel');
+  const foundVerbs=[...new Set(classified.filter(t=>t.type==='verb').map(t=>{
+    const low=t.word.toLowerCase().replace(/[.,!?;:]/g,'');
+    return FORM_TO_INF[low]||null;
+  }).filter(Boolean))];
+
+  if(!foundVerbs.length){
+    vp.innerHTML='<div class="verb-empty">Kein Verb erkannt …</div>';
+  } else {
+    vp.innerHTML=foundVerbs.map(inf=>{
+      const conj=VERB_CONJ[inf];
+      if(!conj) return `<div class="verb-panel"><div class="verb-name">${inf}</div><div class="verb-empty">Konjugation nicht verfügbar</div></div>`;
+      const rows=Object.entries(conj).map(([pron,form])=>`
+        <div class="verb-row">
+          <span class="verb-pron">${pron}</span>
+          <span class="verb-form">${form}</span>
+        </div>`).join('');
+      return `<div class="verb-panel" style="margin-bottom:10px">
+        <div class="verb-name">${inf}</div>
+        <div class="verb-grid">${rows}</div>
+      </div>`;
+    }).join('<hr style="border:none;border-top:0.5px solid var(--border);margin:8px 0">');
+  }
+}
+
+// ══════ BREAKDOWN ══════
+function buildBreakdown(classified){
+  const card=document.getElementById('breakdown-card');
+  const interesting=classified.filter(t=>!['other','punct'].includes(t.type));
+  if(!interesting.length){card.style.display='none';return;}
+  card.style.display='block';
+  const colors={verb:{bg:'var(--verb-bg)',color:'#92400e',l:'Verb'},pron:{bg:'var(--surface2)',color:'var(--pron)',l:'Pronomen'},prep:{bg:'var(--prep-bg)',color:'var(--prep)',l:'Präp.'},nom:{bg:'var(--nom-bg)',color:'var(--nom)',l:'Nom'},akk:{bg:'var(--akk-bg)',color:'var(--akk)',l:'Akk'},dat:{bg:'var(--dat-bg)',color:'var(--dat)',l:'Dat'},gen:{bg:'var(--gen-bg)',color:'var(--gen)',l:'Gen'},noun:{bg:'var(--surface2)',color:'var(--text2)',l:'Nomen'}};
+  document.getElementById('breakdown-grid').innerHTML=interesting.map(({word,type})=>{
+    const c=colors[type]||{bg:'var(--surface2)',color:'var(--text2)',l:type};
+    const clean=word.replace(/[.,!?;:]/g,'');
+    return `<div class="bd-chip"><span class="bd-w">${clean}</span><span class="bd-c" style="background:${c.bg};color:${c.color}">${c.l}</span></div>`;
+  }).join('');
+}
+
+// ══════ STOMPVI ══════
+function buildSTOMPVI(classified,raw){
+  document.getElementById('stompvi-card').style.display='block';
+  const lraw=raw.toLowerCase();
+  const slots={s:'—',v:'—',t:'—',o:'—',m:'—',p:'—',v2:'—'};
+  // Subject
+  for(let i=0;i<classified.length;i++){
+    const t=classified[i];
+    if(t.type==='nom'||t.type==='pron'){
+      let sg=[t.word];
+      if(i+1<classified.length&&classified[i+1].type==='noun')sg.push(classified[i+1].word);
+      slots.s=sg.join(' ');break;
+    }
+  }
+  // Verbs
+  const verbs=classified.filter(t=>t.type==='verb');
+  if(verbs.length>0)slots.v=verbs[0].word;
+  if(verbs.length>1)slots.v2=verbs[verbs.length-1].word;
+  // Time
+  classified.forEach(t=>{const l=t.word.toLowerCase().replace(/[.,!?;:]/g,'');if(TIME_W.has(l))slots.t=t.word;});
+  if(lraw.includes('jeden tag'))slots.t='jeden Tag';
+  if(lraw.includes('heute abend'))slots.t='heute Abend';
+  if(lraw.includes('heute morgen'))slots.t='heute Morgen';
+  // Object
+  for(let i=0;i<classified.length;i++){
+    const t=classified[i];
+    if(t.type==='akk'){
+      let og=[t.word];
+      if(i+1<classified.length&&classified[i+1].type==='noun')og.push(classified[i+1].word);
+      slots.o=og.join(' ');break;
+    }
+  }
+  // Manner (connectors)
+  if(lraw.includes('weil '))slots.m='weil …';
+  else if(lraw.includes('obwohl '))slots.m='obwohl …';
+  else if(lraw.includes('damit '))slots.m='damit …';
+  else if(lraw.includes('indem '))slots.m='indem …';
+  // Place
+  const placePreps=['zu hause','in deutschland','im','am','beim','auf der','an der','bei der','nach hause','vor dem','hinter dem'];
+  placePreps.forEach(p=>{
+    if(lraw.includes(p)&&slots.p==='—'){
+      const idx=lraw.indexOf(p);
+      slots.p=raw.slice(idx).split(' ').slice(0,3).join(' ').replace(/[,]/g,'');
+    }
+  });
+  // Update DOM
+  Object.entries({s:'st-s',v:'st-v',t:'st-t',o:'st-o',m:'st-m',p:'st-p',v2:'st-v2'}).forEach(([k,id])=>{
+    const el=document.getElementById(id);
+    el.textContent=slots[k];
+    el.className=el.className.replace(/\s*(filled|empty)/g,'')+(slots[k]==='—'?' empty':' filled');
+  });
+  // Note
+  let note='';
+  const subFound=[...SUB_CONJ].filter(c=>lraw.includes(c+' '));
+  if(subFound.length>0)note=`⚠️ Nach "<b>${subFound[0]}</b>" → Verb geht ans <b>Ende</b> des Nebensatzes!`;
+  else if(verbs.length>=2)note=`💡 <b>${verbs[0].word}</b> (Pos. 2) + <b>${verbs[verbs.length-1].word}</b> (Ende)`;
+  else if(classified[0]&&!['nom','pron','verb'].includes(classified[0].type))
+    note=`💡 Satz beginnt mit "<b>${classified[0].word}</b>" → Inversion: Verb kommt direkt danach!`;
+  document.getElementById('stomp-note').innerHTML=note;
+}
+
+// ══════ INFO TIPS ══════
+function buildInfo(classified,raw){
+  const box=document.getElementById('info-box');
+  const lraw=raw.toLowerCase();
+  const tips=[];
+  if(lraw.includes('bei die '))tips.push('🟠 "bei die" → <b>bei der</b> (Dativ)');
+  if(lraw.includes('mit die '))tips.push('🟠 "mit die" → <b>mit der/dem</b> (Dativ)');
+  if(lraw.includes('bei der hause')||lraw.includes('bei dem hause'))tips.push('🟠 "bei der/dem Hause" → auf Deutsch sagt man <b>zu Hause</b>!');
+  if(lraw.includes('in die realität'))tips.push('🟠 "in die Realität" → <b>in der Realität</b> (Dativ)');
+  if(lraw.includes('meine meinung nach'))tips.push('🔴 "Meine Meinung nach" → <b>Meiner Meinung nach</b> (Genitiv)');
+  if(lraw.includes('statt von'))tips.push('💡 "statt von" → <b>anstatt … zu</b> + Infinitiv');
+  // Capitalisation of time nouns
+  if(raw.includes('heute abend')&&!raw.includes('heute Abend'))tips.push('🟡 "heute abend" → <b>heute Abend</b> — Abend ist ein Nomen, immer groß!');
+  if(raw.includes('heute morgen')&&!raw.includes('heute Morgen'))tips.push('🟡 "heute morgen" → <b>heute Morgen</b> — Morgen ist ein Nomen!');
+  if(raw.includes('heute mittag')&&!raw.includes('heute Mittag'))tips.push('🟡 "heute mittag" → <b>heute Mittag</b> — Mittag ist ein Nomen!');
+  if(raw.includes('heute nacht')&&!raw.includes('heute Nacht'))tips.push('🟡 "heute nacht" → <b>heute Nacht</b> — Nacht ist ein Nomen!');
+  if(raw.includes('guten morgen')&&!raw.includes('Guten Morgen'))tips.push('🟡 "guten morgen" → <b>Guten Morgen</b> — beide Wörter werden großgeschrieben!');
+  if(tips.length>0){box.style.display='block';box.innerHTML='<b>💡 Hinweise:</b><br>'+tips.join('<br>');}
+  else box.style.display='none';
+}
+</script>
+</body>
+</html>
