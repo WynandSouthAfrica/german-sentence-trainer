@@ -142,19 +142,25 @@ function isArticle(word) {
   return Boolean(word) && ALL_SUPPORTED_ARTICLES.includes(lower(word));
 }
 
-function classifyArticleCase(articleWord, noun) {
+function looksLikePluralDativeNoun(word, noun) {
+  const clean = lower(word);
+  if (!clean) return false;
+  if (noun?.gender === "plural") return true;
+
+  return clean.endsWith("ern") || clean.endsWith("en") || clean.endsWith("n");
+}
+
+function classifyArticleCase(articleWord, noun, nounWord = noun?.word) {
   const article = lower(articleWord);
-  if (!article || !noun) return null;
+  if (!article || !nounWord) return null;
 
   if (article === "dem") return "dativ";
+  if (article === "der" && noun?.gender === "feminine") return "dativ";
+  if (article === "den") {
+    return looksLikePluralDativeNoun(nounWord, noun) ? "dativ" : "akkusativ";
+  }
   if (article === "das") return "akkusativ";
   if (article === "die") return "akkusativ";
-  if (article === "den") {
-    return noun.gender === "plural" ? "dativ" : "akkusativ";
-  }
-  if (article === "der") {
-    return noun.gender === "feminine" || noun.gender === "plural" ? "dativ" : "nominativ";
-  }
 
   return null;
 }
@@ -207,7 +213,7 @@ function buildArticleNounPhrase(tokens, articleIndex, nounIndex, adjectiveIndex 
     adjectiveWord,
     noun,
     hasArticle: true,
-    articleCase: classifyArticleCase(articleWord, noun),
+    articleCase: classifyArticleCase(articleWord, noun, nounWord),
     isBare: false
   };
 }
@@ -660,6 +666,29 @@ function findSubjectPhrase(tokens, usedIndexes, boundaryIndex = tokens.length) {
   return null;
 }
 
+function isDativeArticlePhrase(phrase) {
+  return Boolean(phrase && phrase.hasArticle && phrase.articleCase === "dativ");
+}
+
+function assignSequentialDativeThenAccusative(result, phrases) {
+  if (!Array.isArray(phrases) || phrases.length === 0) return;
+
+  const dativePhrase = phrases.find(isDativeArticlePhrase) || (phrases.length > 1 ? phrases[0] : null);
+
+  if (dativePhrase && !result.dativeBlock) {
+    assignPhraseToRole(result, dativePhrase, "dativeBlock", "dativ");
+  }
+
+  for (const phrase of phrases) {
+    if (result.dativeBlock === phrase.text) continue;
+
+    if (!result.object) {
+      assignPhraseToRole(result, phrase, "object", "akkusativ");
+      break;
+    }
+  }
+}
+
 function collectRemainingNounPhrases(tokens, usedIndexes) {
   const phrases = [];
 
@@ -677,64 +706,33 @@ function collectRemainingNounPhrases(tokens, usedIndexes) {
 }
 
 function assignByCasePattern(result, phrases, activeCasePattern) {
-  const ambiguous = [];
+  if (!Array.isArray(phrases) || phrases.length === 0) return;
 
-  for (const phrase of phrases) {
-    if (activeCasePattern === "dativ") {
-      if (assignPhraseToRole(result, phrase, "dativeBlock", "dativ")) continue;
-      continue;
+  if (activeCasePattern === "dativ") {
+    const phrase = phrases[0];
+    if (phrase) {
+      assignPhraseToRole(result, phrase, "dativeBlock", "dativ");
     }
-
-    if (activeCasePattern === "akkusativ") {
-      if (assignPhraseToRole(result, phrase, "object", "akkusativ")) continue;
-      continue;
-    }
-
-    if (activeCasePattern === "dativ+akkusativ") {
-      if (phrase.articleCase === "dativ" && assignPhraseToRole(result, phrase, "dativeBlock", "dativ")) {
-        continue;
-      }
-
-      if (phrase.articleCase === "akkusativ" && assignPhraseToRole(result, phrase, "object", "akkusativ")) {
-        continue;
-      }
-
-      ambiguous.push(phrase);
-      continue;
-    }
-
-    ambiguous.push(phrase);
-  }
-
-  if (activeCasePattern === "dativ+akkusativ") {
-    for (const phrase of ambiguous) {
-      if (!result.dativeBlock) {
-        assignPhraseToRole(result, phrase, "dativeBlock", "dativ");
-        continue;
-      }
-
-      if (!result.object) {
-        assignPhraseToRole(result, phrase, "object", "akkusativ");
-      }
-    }
-
     return;
   }
 
   if (activeCasePattern === "akkusativ") {
-    for (const phrase of ambiguous) {
-      if (!result.object) {
-        assignPhraseToRole(result, phrase, "object", "akkusativ");
-      }
+    const phrase = phrases[0];
+    if (phrase) {
+      assignPhraseToRole(result, phrase, "object", "akkusativ");
     }
     return;
   }
 
-  if (activeCasePattern === "dativ") {
-    for (const phrase of ambiguous) {
-      if (!result.dativeBlock) {
-        assignPhraseToRole(result, phrase, "dativeBlock", "dativ");
-      }
+  if (activeCasePattern === "dativ+akkusativ") {
+    assignSequentialDativeThenAccusative(result, phrases);
+    return;
+  }
+
+  for (const phrase of phrases) {
+    if (!result.object) {
+      assignPhraseToRole(result, phrase, "object", "akkusativ");
+      break;
     }
   }
 }
@@ -766,7 +764,7 @@ function analyzeSentence(sentence) {
   const usedIndexes = new Set();
   let mainVerbIndex = -1;
 
-  // PASS 1: main verb, subject pronoun, time
+  // PASS 1: subject pronoun, verb, time
   for (let i = 0; i < tokens.length; i += 1) {
     const raw = tokens[i];
 
@@ -797,6 +795,16 @@ function analyzeSentence(sentence) {
     }
   }
 
+  // PASS 2: first free noun phrase must be the subject
+  if (!result.subject) {
+    const subjectPhrase = findSubjectPhrase(tokens, usedIndexes);
+
+    if (subjectPhrase) {
+      result.subject = subjectPhrase.text;
+      markPhraseIndexes(usedIndexes, subjectPhrase);
+    }
+  }
+
   if (!result.verb) {
     addNote(result, "No known verb found.");
     return result;
@@ -804,7 +812,7 @@ function analyzeSentence(sentence) {
 
   let activeCasePattern = result.verb.casePattern;
 
-  // PASS 2: modal verb -> detect infinitive and use its pattern
+  // PASS 3: modal verb -> detect infinitive and use its pattern
   if (isModal(result.verb) && mainVerbIndex >= 0) {
     const modalInfinitive = findModalInfinitive(tokens, usedIndexes, mainVerbIndex);
 
@@ -815,7 +823,7 @@ function analyzeSentence(sentence) {
     }
   }
 
-  // PASS 3: prepositions
+  // PASS 4: prepositions
   for (let i = 0; i < tokens.length; i += 1) {
     if (usedIndexes.has(i)) continue;
 
@@ -833,16 +841,6 @@ function analyzeSentence(sentence) {
     }
 
     i = prepInfo.endIndex;
-  }
-
-  // PASS 4: first free noun phrase defaults to Nominativ subject
-  if (!result.subject) {
-    const subjectPhrase = findSubjectPhrase(tokens, usedIndexes);
-
-    if (subjectPhrase) {
-      result.subject = subjectPhrase.text;
-      markPhraseIndexes(usedIndexes, subjectPhrase);
-    }
   }
 
   // PASS 5: remaining noun phrases -> Dativ/Akkusativ roles
