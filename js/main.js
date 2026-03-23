@@ -126,12 +126,19 @@ function isCapitalized(word) {
   return first === first.toUpperCase() && first !== first.toLowerCase();
 }
 
-function isLikelyBareObject(word) {
+function isLikelyBareObject(word, previousWord = null) {
   const clean = normalize(word);
   if (!clean) return false;
 
-  const first = clean.charAt(0);
-  return first === first.toUpperCase() && first !== first.toLowerCase();
+  if (findNoun(clean)) {
+    return true;
+  }
+
+  if (!isCapitalized(clean)) {
+    return false;
+  }
+
+  return !findVerb(previousWord);
 }
 
 function isLikelyNounToken(word) {
@@ -220,14 +227,25 @@ function buildArticleNounPhrase(tokens, articleIndex, nounIndex, adjectiveIndex 
 
 function detectNounPhraseAt(tokens, index) {
   const current = tokens[index];
+  const previous = tokens[index - 1] || null;
   const next = tokens[index + 1];
   const third = tokens[index + 2];
 
-  if (isArticle(current) && next && third && isLikelyNounToken(third)) {
+  if (findVerb(current)) {
+    return null;
+  }
+
+  if (
+    isArticle(current) &&
+    next &&
+    third &&
+    !findVerb(next) &&
+    isLikelyNounToken(third)
+  ) {
     return buildArticleNounPhrase(tokens, index, index + 2, index + 1);
   }
 
-  if (isArticle(current) && next && isLikelyNounToken(next)) {
+  if (isArticle(current) && next && isLikelyNounToken(next) && !findVerb(next)) {
     return buildArticleNounPhrase(tokens, index, index + 1);
   }
 
@@ -235,7 +253,7 @@ function detectNounPhraseAt(tokens, index) {
     return buildBareNounPhrase(tokens, index);
   }
 
-  if (!findNoun(current) && isLikelyBareObject(current)) {
+  if (!findNoun(current) && isLikelyBareObject(current, previous)) {
     return buildBareNounPhrase(tokens, index);
   }
 
