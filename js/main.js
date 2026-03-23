@@ -129,6 +129,7 @@ function isCapitalized(word) {
 function isLikelyBareObject(word, previousWord = null) {
   const clean = normalize(word);
   if (!clean) return false;
+  if (findVerb(clean)) return false;
 
   if (findNoun(clean)) {
     return true;
@@ -231,6 +232,7 @@ function detectNounPhraseAt(tokens, index) {
   const next = tokens[index + 1];
   const third = tokens[index + 2];
 
+  // Verbs must never start a noun phrase.
   if (findVerb(current)) {
     return null;
   }
